@@ -18,8 +18,15 @@ document.addEventListener('DOMContentLoaded', function () {
         var nextBtn = document.getElementById('heroNext');
         var heading = document.getElementById('heroHeading');
         var subheading = document.getElementById('heroSubheading');
+        var count = document.getElementById('heroCount');
+        var textPanel = document.querySelector('.hero-text-panel');
         var slideIndex = 0;
         var timer = null;
+        var autoDelayMs = 5000;
+
+        if (!slides.length) {
+            return;
+        }
 
         function renderDots() {
             if (!dotsWrap) {
@@ -53,6 +60,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 subheading.textContent = slides[slideIndex].getAttribute('data-subtitle') || '';
             }
 
+            if (count) {
+                count.textContent = (slideIndex + 1) + ' / ' + slides.length;
+            }
+
+            if (textPanel) {
+                textPanel.classList.remove('hero-text-animate');
+                void textPanel.offsetWidth;
+                textPanel.classList.add('hero-text-animate');
+            }
+
             renderDots();
         }
 
@@ -67,22 +84,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         function startAuto() {
-            timer = window.setInterval(nextSlide, 5000);
+            if (slides.length > 1) {
+                timer = window.setInterval(nextSlide, autoDelayMs);
+            }
+        }
+
+        function stopAuto() {
+            window.clearInterval(timer);
+            timer = null;
         }
 
         function restartAuto() {
-            window.clearInterval(timer);
+            stopAuto();
             startAuto();
         }
 
-        if (nextBtn) {
+        if (nextBtn && slides.length > 1) {
             nextBtn.addEventListener('click', function () {
                 nextSlide();
                 restartAuto();
             });
         }
 
-        if (prevBtn) {
+        if (prevBtn && slides.length > 1) {
             prevBtn.addEventListener('click', function () {
                 prevSlide();
                 restartAuto();
@@ -91,6 +115,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
         showSlide();
         startAuto();
+
+        slider.addEventListener('mouseenter', stopAuto);
+        slider.addEventListener('mouseleave', startAuto);
+        slider.addEventListener('focusin', stopAuto);
+        slider.addEventListener('focusout', startAuto);
+
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) {
+                stopAuto();
+            } else {
+                startAuto();
+            }
+        });
     }
 
     var revealItems = document.querySelectorAll('.section-card, .page-hero .max-w-6xl');

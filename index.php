@@ -4,24 +4,31 @@ include 'includes/header.php';
 ?>
 <section class="hero-shell text-white">
     <div class="hero-slider" id="heroSlider" aria-label="Homepage highlights">
-        <div class="hero-slide active" data-title="Glorify. Grow. Go." data-subtitle="Welcome to Bridge Ministries International." style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Worship With Us" data-subtitle="Gather every Sunday for Christ-centered worship and teaching." style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Find Community" data-subtitle="Build meaningful relationships through ministries and fellowship." style="background-image: url('https://images.unsplash.com/photo-1490122417551-6ee9691429d0?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Grow In The Word" data-subtitle="Discover practical biblical teaching for everyday life." style="background-image: url('https://images.unsplash.com/photo-1468070454955-c5b6932bd08d?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Serve With Purpose" data-subtitle="Use your gifts to impact lives in church and community." style="background-image: url('https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Take Your Next Step" data-subtitle="Plan your visit, join a ministry, and walk with us in faith." style="background-image: url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide active" data-title="Glorify. Grow. Go." data-subtitle="A Bible-believing church family in Accra." style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide" data-title="Worship With Us" data-subtitle="Join us this Sunday for worship and the Word." style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide" data-title="Find Community" data-subtitle="Grow in faith with people who care." style="background-image: url('https://images.unsplash.com/photo-1490122417551-6ee9691429d0?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide" data-title="Grow In The Word" data-subtitle="Practical biblical teaching for daily life." style="background-image: url('https://images.unsplash.com/photo-1468070454955-c5b6932bd08d?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide" data-title="Serve With Purpose" data-subtitle="Use your gifts to impact lives for Christ." style="background-image: url('https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide" data-title="Take Your Next Step" data-subtitle="Plan your visit and get connected." style="background-image: url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1800&q=80');"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-controls" aria-label="Hero slider controls">
             <button class="hero-arrow" id="heroPrev" type="button" aria-label="Previous slide">&#10094;</button>
             <div class="hero-dots" id="heroDots" aria-label="Hero slide indicators"></div>
+            <span class="hero-count" id="heroCount">1 / 6</span>
             <button class="hero-arrow" id="heroNext" type="button" aria-label="Next slide">&#10095;</button>
         </div>
     </div>
 
     <div class="max-w-6xl mx-auto px-4 hero-content-wrap">
-        <h1 class="hero-title" id="heroHeading">Glorify. Grow. Go.</h1>
-        <p class="hero-subtitle" id="heroSubheading">Welcome to Bridge Ministries International.</p>
+        <div class="hero-text-panel">
+            <h1 class="hero-title" id="heroHeading">Glorify. Grow. Go.</h1>
+            <p class="hero-subtitle" id="heroSubheading">Welcome to Bridge Ministries International.</p>
+            <div class="hero-cta-wrap">
+                <a href="contact.php" class="primary-action">Plan Your Visit</a>
+                <a href="sermons.php" class="secondary-action">Watch Sermons</a>
+            </div>
+        </div>
     </div>
 </section>
 

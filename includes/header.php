@@ -13,6 +13,9 @@ $isHomePage = $currentPage === 'index.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
+    <link rel="icon" type="image/png" href="assets/image/bmi%20logo%20new.png">
+    <link rel="shortcut icon" type="image/png" href="assets/image/bmi%20logo%20new.png">
+    <link rel="apple-touch-icon" href="assets/image/bmi%20logo%20new.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
@@ -39,14 +42,7 @@ $isHomePage = $currentPage === 'index.php';
             </nav>
 
             <a href="index.php" class="wordmark" aria-label="Bridge Ministries International Home">
-                <svg class="wordmark-logo" viewBox="0 0 120 42" aria-hidden="true" focusable="false">
-                    <path d="M60 5v30" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M48 16h24" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M12 34c7-12 13-18 19-24 6 6 12 12 18 24" fill="none" stroke="currentColor" stroke-width="2"/>
-                    <path d="M71 34c6-11 12-17 17-22 6 5 11 11 18 22" fill="none" stroke="currentColor" stroke-width="2"/>
-                </svg>
-                <span class="wordmark-top">Bridge Ministries</span>
-                <span class="wordmark-sub">International</span>
+                <img class="wordmark-logo-img" src="assets/image/bmi%20logo%20new.png" alt="Bridge Ministries International logo">
             </a>
 
             <nav class="flex items-center justify-end gap-2 text-sm font-semibold header-split-nav" aria-label="Primary navigation right">
