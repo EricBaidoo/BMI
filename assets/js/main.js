@@ -16,6 +16,8 @@ document.addEventListener('DOMContentLoaded', function () {
         var dotsWrap = document.getElementById('heroDots');
         var prevBtn = document.getElementById('heroPrev');
         var nextBtn = document.getElementById('heroNext');
+        var heading = document.getElementById('heroHeading');
+        var subheading = document.getElementById('heroSubheading');
         var slideIndex = 0;
         var timer = null;
 
@@ -42,6 +44,15 @@ document.addEventListener('DOMContentLoaded', function () {
             slides.forEach(function (slide, idx) {
                 slide.classList.toggle('active', idx === slideIndex);
             });
+
+            if (heading) {
+                heading.textContent = slides[slideIndex].getAttribute('data-title') || '';
+            }
+
+            if (subheading) {
+                subheading.textContent = slides[slideIndex].getAttribute('data-subtitle') || '';
+            }
+
             renderDots();
         }
 
