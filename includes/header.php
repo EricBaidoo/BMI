@@ -20,16 +20,22 @@ $isHomePage = $currentPage === 'index.php';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Source+Sans+3:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo urlencode((string) filemtime(__DIR__ . '/../assets/css/styles.css')); ?>">
 </head>
 <body class="site-body text-slate-800">
 <a href="#main-content" class="skip-link">Skip to main content</a>
 <header class="site-header <?php echo $isHomePage ? 'home-overlay-header' : ''; ?>">
     <div class="max-w-6xl mx-auto px-4 py-4">
         <div class="flex items-center justify-between md:hidden">
-            <a href="index.php" class="brand-mark text-base"><?php echo htmlspecialchars($siteName); ?></a>
-            <button id="mobileMenuButton" type="button" class="menu-button" aria-label="Toggle navigation" aria-expanded="false" aria-controls="mobileMenu">
-                Menu
+            <a href="index.php" class="mobile-brand" aria-label="Bridge Ministries International Home">
+                <img class="mobile-logo-img" src="assets/image/bmi%20logo%20new.png" alt="Bridge Ministries International logo">
+            </a>
+            <button id="mobileMenuButton" type="button" class="menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
+                <span class="hamburger-icon" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
             </button>
         </div>
 

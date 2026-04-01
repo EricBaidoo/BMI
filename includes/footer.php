@@ -31,6 +31,6 @@
         &copy; <?php echo date('Y'); ?> Bridge Ministries International. All rights reserved.
     </div>
 </footer>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v=<?php echo urlencode((string) filemtime(__DIR__ . '/../assets/js/main.js')); ?>"></script>
 </body>
 </html>

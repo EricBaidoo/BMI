@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function () {
             var isHidden = mobileMenu.classList.contains('hidden');
             mobileMenu.classList.toggle('hidden');
             menuButton.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+            menuButton.setAttribute('aria-label', isHidden ? 'Close navigation' : 'Open navigation');
+            menuButton.classList.toggle('is-open', isHidden);
         });
     }
 

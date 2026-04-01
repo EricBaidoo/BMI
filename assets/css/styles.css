@@ -1,6 +1,9 @@
 :root {
-    --brand-blue: #0f1f3d;
-    --brand-accent: #1d4ed8;
+    --brand-blue: #1d4ed8;
+    --brand-blue-dark: #0b1f3b;
+    --brand-blue-mid: #2563eb;
+    --brand-blue-soft: #eff6ff;
+    --brand-blue-line: #bfdbfe;
     --text-main: #0f172a;
     --line: #e2e8f0;
 }
@@ -51,7 +54,7 @@ h1, h2, h3, .brand-mark {
 }
 
 .home-overlay-header .max-w-6xl {
-    padding-top: 2.9rem;
+    padding-top: 0.55rem;
 }
 
 .brand-mark {
@@ -59,6 +62,18 @@ h1, h2, h3, .brand-mark {
     line-height: 1.2;
     color: #111827;
     max-width: 17rem;
+}
+
+.mobile-brand {
+    display: inline-flex;
+    align-items: center;
+}
+
+.mobile-logo-img {
+    width: 9.2rem;
+    height: auto;
+    object-fit: contain;
+    filter: brightness(1.08) contrast(1.15) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.35));
 }
 
 .wordmark {
@@ -90,8 +105,41 @@ h1, h2, h3, .brand-mark {
     border: 1px solid #cbd5e1;
     background: white;
     border-radius: 0.4rem;
-    padding: 0.4rem 0.75rem;
-    font-weight: 600;
+    width: 2.9rem;
+    height: 2.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.hamburger-icon {
+    width: 1.15rem;
+    height: 0.92rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hamburger-icon span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: #0f172a;
+    border-radius: 999px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.menu-button.is-open .hamburger-icon span:nth-child(1) {
+    transform: translateY(5px) rotate(45deg);
+}
+
+.menu-button.is-open .hamburger-icon span:nth-child(2) {
+    opacity: 0;
+}
+
+.menu-button.is-open .hamburger-icon span:nth-child(3) {
+    transform: translateY(-5px) rotate(-45deg);
 }
 
 .mobile-menu {
@@ -115,13 +163,13 @@ h1, h2, h3, .brand-mark {
 .home-overlay-header .header-split-nav .nav-link:hover,
 .home-overlay-header .header-split-nav .nav-link.active {
     color: #ffffff;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(37, 99, 235, 0.28);
 }
 
 .nav-link:hover,
 .nav-link.active {
-    color: #111827;
-    background: #f1f5f9;
+    color: var(--brand-blue-dark);
+    background: var(--brand-blue-soft);
 }
 
 .primary-action {
@@ -130,19 +178,19 @@ h1, h2, h3, .brand-mark {
     padding: 0.55rem 0.9rem;
     font-weight: 700;
     color: white;
-    background: var(--brand-accent);
+    background: var(--brand-blue);
 }
 
-.primary-action:hover { background: #1e40af; }
+.primary-action:hover { background: var(--brand-blue-mid); }
 
 .secondary-action {
     display: inline-block;
     border-radius: 0.35rem;
     padding: 0.55rem 0.9rem;
     font-weight: 700;
-    color: #1e3a8a;
-    background: #eff6ff;
-    border: 1px solid #bfdbfe;
+    color: var(--brand-blue-dark);
+    background: var(--brand-blue-soft);
+    border: 1px solid var(--brand-blue-line);
 }
 
 .hero-shell {
@@ -178,7 +226,7 @@ h1, h2, h3, .brand-mark {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(15, 23, 42, 0.28), rgba(15, 23, 42, 0.72));
+    background: transparent;
 }
 
 .hero-content-wrap {
@@ -202,8 +250,8 @@ h1, h2, h3, .brand-mark {
 .hero-text-panel {
     max-width: 36rem;
     position: relative;
-    background: linear-gradient(135deg, rgba(2, 6, 23, 0.66), rgba(15, 23, 42, 0.36));
-    border: 0;
+    background: linear-gradient(135deg, rgba(11, 31, 59, 0.72), rgba(29, 78, 216, 0.28));
+    border: 1px solid rgba(191, 219, 254, 0.75);
     border-radius: 0;
     padding: 1.3rem 1.35rem 1.2rem;
     box-shadow: 0 18px 38px rgba(2, 6, 23, 0.35);
@@ -237,7 +285,7 @@ h1, h2, h3, .brand-mark {
 .hero-subtitle {
     margin-top: 0.7rem;
     font-size: clamp(1rem, 1.7vw, 1.12rem);
-    color: #dbeafe;
+    color: #eff6ff;
     line-height: 1.45;
     text-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     max-width: 32rem;
@@ -254,23 +302,23 @@ h1, h2, h3, .brand-mark {
 }
 
 .hero-cta-wrap .primary-action {
-    background: linear-gradient(120deg, #f59e0b, #f97316);
-    border: 1px solid rgba(251, 191, 36, 0.65);
-    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.32);
+    background: linear-gradient(120deg, var(--brand-blue), var(--brand-blue-mid));
+    border: 1px solid rgba(191, 219, 254, 0.55);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.32);
 }
 
 .hero-cta-wrap .primary-action:hover {
-    background: linear-gradient(120deg, #f97316, #ea580c);
+    background: linear-gradient(120deg, var(--brand-blue-mid), var(--brand-blue));
 }
 
 .hero-cta-wrap .secondary-action {
     color: #f8fafc;
-    background: rgba(15, 23, 42, 0.35);
-    border: 1px solid rgba(191, 219, 254, 0.45);
+    background: rgba(11, 31, 59, 0.36);
+    border: 1px solid rgba(191, 219, 254, 0.5);
 }
 
 .hero-cta-wrap .secondary-action:hover {
-    background: rgba(30, 41, 59, 0.55);
+    background: rgba(29, 78, 216, 0.34);
 }
 
 .hero-title,
@@ -289,7 +337,7 @@ h1, h2, h3, .brand-mark {
     display: flex;
     align-items: center;
     gap: 0.7rem;
-    background: rgba(15, 23, 42, 0.22);
+    background: rgba(11, 31, 59, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.22);
     border-radius: 999px;
     padding: 0.35rem 0.7rem;
@@ -301,7 +349,7 @@ h1, h2, h3, .brand-mark {
     border-radius: 999px;
     border: 1px solid rgba(255, 255, 255, 0.5);
     color: white;
-    background: rgba(15, 23, 42, 0.35);
+    background: rgba(11, 31, 59, 0.45);
     line-height: 1;
     font-size: 1.55rem;
 }
@@ -367,9 +415,9 @@ h1, h2, h3, .brand-mark {
     font-size: 0.73rem;
     text-transform: uppercase;
     letter-spacing: 0.07em;
-    border: 1px solid #cbd5e1;
-    color: #334155;
-    background: white;
+    border: 1px solid var(--brand-blue-line);
+    color: var(--brand-blue-dark);
+    background: var(--brand-blue-soft);
     border-radius: 999px;
     padding: 0.2rem 0.5rem;
 }
@@ -386,13 +434,13 @@ h1, h2, h3, .brand-mark {
 }
 
 .icon-card {
-    border-left: 4px solid #bfdbfe;
+    border-left: 4px solid var(--brand-blue-line);
 }
 
 .site-footer {
     margin-top: 4rem;
     color: #e2e8f0;
-    background: #0f172a;
+    background: var(--brand-blue-dark);
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -405,6 +453,10 @@ h1, h2, h3, .brand-mark {
     .wordmark-logo-img {
         width: 18.5rem;
         max-height: 6.6rem;
+    }
+
+    .home-overlay-header .max-w-6xl {
+        padding-top: 0.25rem;
     }
 
     .hero-shell {
@@ -424,9 +476,8 @@ h1, h2, h3, .brand-mark {
     }
 
     .hero-text-panel {
-        max-width: 94vw;
-        padding: 1rem 1rem 0.95rem;
-        border-radius: 0.8rem;
+        max-width: 36rem;
+        padding: 1.3rem 1.35rem 1.2rem;
     }
 
     .hero-subtitle {
@@ -444,6 +495,12 @@ h1, h2, h3, .brand-mark {
         width: 2.85rem;
         height: 2.85rem;
         font-size: 1.35rem;
+    }
+}
+
+@media (min-width: 769px) {
+    .home-overlay-header .max-w-6xl {
+        padding-top: 2.9rem;
     }
 }
 
