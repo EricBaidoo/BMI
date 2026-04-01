@@ -4,12 +4,12 @@ include 'includes/header.php';
 ?>
 <section class="hero-shell text-white">
     <div class="hero-slider" id="heroSlider" aria-label="Homepage highlights">
-        <div class="hero-slide active" data-title="Glorify. Grow. Go." data-subtitle="A Bible-believing church family in Accra." style="background-image: url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Worship With Us" data-subtitle="Join us this Sunday for worship and the Word." style="background-image: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Find Community" data-subtitle="Grow in faith with people who care." style="background-image: url('https://images.unsplash.com/photo-1490122417551-6ee9691429d0?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Grow In The Word" data-subtitle="Practical biblical teaching for daily life." style="background-image: url('https://images.unsplash.com/photo-1468070454955-c5b6932bd08d?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Serve With Purpose" data-subtitle="Use your gifts to impact lives for Christ." style="background-image: url('https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=1800&q=80');"></div>
-        <div class="hero-slide" data-title="Take Your Next Step" data-subtitle="Plan your visit and get connected." style="background-image: url('https://images.unsplash.com/photo-1504052434569-70ad5836ab65?auto=format&fit=crop&w=1800&q=80');"></div>
+        <div class="hero-slide active" data-title="Glorify. Grow. Go." data-subtitle="A Bible-believing church family in Accra." style="background-image: url('assets/image/aaron-burden-535Npq1wFG8-unsplash.jpg');"></div>
+        <div class="hero-slide" data-title="Worship With Us" data-subtitle="Join us this Sunday for worship and the Word." style="background-image: url('assets/image/tim-wildsmith-sjHDn0oakCc-unsplash.jpg');"></div>
+        <div class="hero-slide" data-title="Find Community" data-subtitle="Grow in faith with people who care." style="background-image: url('assets/image/chad-kirchoff-ivqGyYLtBI8-unsplash.jpg');"></div>
+        <div class="hero-slide" data-title="Grow In The Word" data-subtitle="Practical biblical teaching for daily life." style="background-image: url('assets/image/edward-cisneros-KoKAXLKJwhk-unsplash.jpg');"></div>
+        <div class="hero-slide" data-title="Serve With Purpose" data-subtitle="Use your gifts to impact lives for Christ." style="background-image: url('assets/image/edward-cisneros-QSa-uv4WJ0k-unsplash.jpg');"></div>
+        <div class="hero-slide" data-title="Take Your Next Step" data-subtitle="Plan your visit and get connected." style="background-image: url('assets/image/akira-hojo-_86u_Y0oAaM-unsplash.jpg');"></div>
         <div class="hero-overlay"></div>
 
         <div class="hero-controls" aria-label="Hero slider controls">
