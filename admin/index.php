@@ -15,10 +15,16 @@ session_start();
         <p class="mt-2 text-slate-600">This is the initial admin area placeholder. Authentication and CRUD modules are next.</p>
 
         <div class="mt-6 grid md:grid-cols-2 gap-4">
-            <a href="#" class="bg-white rounded border border-slate-200 p-4 block">Manage Sermons</a>
+            <a href="sermons.php" class="bg-white rounded border border-slate-200 p-4 block">Manage Sermons</a>
             <a href="#" class="bg-white rounded border border-slate-200 p-4 block">Manage Ministries</a>
-            <a href="#" class="bg-white rounded border border-slate-200 p-4 block">Manage Events</a>
+            <a href="events.php" class="bg-white rounded border border-slate-200 p-4 block">Manage Events</a>
             <a href="#" class="bg-white rounded border border-slate-200 p-4 block">Manage Posts</a>
+        </div>
+
+        <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            <a href="../sermons.php" class="text-blue-700 hover:underline">View Public Sermons</a>
+            <a href="../events.php" class="text-blue-700 hover:underline">View Public Events</a>
+            <a href="../index.php" class="text-blue-700 hover:underline">Back to Website</a>
         </div>
     </div>
 </body>

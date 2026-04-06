@@ -1,5 +1,22 @@
 <?php
 $pageTitle = 'Sermons | Bridge Ministries International';
+require_once __DIR__ . '/includes/db.php';
+
+$sermons = [];
+$sermonsError = null;
+
+try {
+    $pdo = db_connect();
+    $stmt = $pdo->query(
+        "SELECT id, title, speaker, sermon_date, topic, media_type, media_url, content
+         FROM sermons
+         ORDER BY sermon_date DESC, id DESC"
+    );
+    $sermons = $stmt->fetchAll();
+} catch (Throwable $e) {
+    $sermonsError = 'Sermons are temporarily unavailable.';
+}
+
 include 'includes/header.php';
 ?>
 <section class="page-hero">
@@ -14,42 +31,35 @@ include 'includes/header.php';
     <div class="section-card">
         <h2 class="text-xl font-semibold">Latest Messages</h2>
         <div class="mt-4 grid md:grid-cols-2 gap-4">
-            <article class="rounded-xl border border-slate-200 p-4">
-                <h3 class="font-semibold">Faith That Endures</h3>
-                <div class="detail-row">
-                    <span>Speaker: Pastor Daniel</span>
-                    <span>Date: 2026-03-29</span>
-                    <span>Topic: Faith</span>
+            <?php if ($sermonsError): ?>
+                <div class="rounded-xl border border-red-200 bg-red-50 text-red-800 p-4 md:col-span-2">
+                    <?php echo htmlspecialchars($sermonsError); ?>
                 </div>
-                <a href="#" class="inline-block mt-3 text-teal-700 text-sm font-semibold">View Details</a>
-            </article>
-            <article class="rounded-xl border border-slate-200 p-4">
-                <h3 class="font-semibold">Living with Purpose</h3>
-                <div class="detail-row">
-                    <span>Speaker: Rev. Grace</span>
-                    <span>Date: 2026-03-22</span>
-                    <span>Topic: Discipleship</span>
+            <?php elseif (empty($sermons)): ?>
+                <div class="rounded-xl border border-slate-200 p-4 md:col-span-2">
+                    No sermons have been published yet.
                 </div>
-                <a href="#" class="inline-block mt-3 text-teal-700 text-sm font-semibold">View Details</a>
-            </article>
-            <article class="rounded-xl border border-slate-200 p-4">
-                <h3 class="font-semibold">The Responsibility of Unity</h3>
-                <div class="detail-row">
-                    <span>Speaker: Pastor Daniel</span>
-                    <span>Date: 2026-03-15</span>
-                    <span>Topic: Church Life</span>
-                </div>
-                <a href="#" class="inline-block mt-3 text-teal-700 text-sm font-semibold">View Details</a>
-            </article>
-            <article class="rounded-xl border border-slate-200 p-4">
-                <h3 class="font-semibold">Trusting God in Global Unrest</h3>
-                <div class="detail-row">
-                    <span>Speaker: Rev. Grace</span>
-                    <span>Date: 2026-03-01</span>
-                    <span>Topic: Hope</span>
-                </div>
-                <a href="#" class="inline-block mt-3 text-teal-700 text-sm font-semibold">View Details</a>
-            </article>
+            <?php else: ?>
+                <?php foreach ($sermons as $sermon): ?>
+                    <article class="rounded-xl border border-slate-200 p-4">
+                        <h3 class="font-semibold"><?php echo htmlspecialchars((string) $sermon['title']); ?></h3>
+                        <div class="detail-row">
+                            <span>Speaker: <?php echo htmlspecialchars((string) $sermon['speaker']); ?></span>
+                            <span>Date: <?php echo htmlspecialchars(date('Y-m-d', strtotime((string) $sermon['sermon_date']))); ?></span>
+                            <?php if (!empty($sermon['topic'])): ?>
+                                <span>Topic: <?php echo htmlspecialchars((string) $sermon['topic']); ?></span>
+                            <?php endif; ?>
+                            <span>Type: <?php echo htmlspecialchars(strtoupper((string) $sermon['media_type'])); ?></span>
+                        </div>
+                        <?php if (!empty($sermon['content'])): ?>
+                            <p class="text-sm mt-2 muted-copy"><?php echo htmlspecialchars((string) $sermon['content']); ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($sermon['media_url'])): ?>
+                            <a href="<?php echo htmlspecialchars((string) $sermon['media_url']); ?>" target="_blank" rel="noopener" class="inline-block mt-3 text-teal-700 text-sm font-semibold">Open Media</a>
+                        <?php endif; ?>
+                    </article>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 
