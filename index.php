@@ -8,11 +8,10 @@ $latestSermons = [];
 try {
     $pdo = db_connect();
     $stmt = $pdo->query(
-        "SELECT id, title, description, event_date, event_time, venue
+        "SELECT id, title, description, event_date, event_time, venue, event_image
          FROM events
          WHERE event_date >= CURDATE()
-         ORDER BY event_date ASC, event_time ASC, id DESC
-         LIMIT 3"
+         ORDER BY event_date ASC, event_time ASC, id DESC"
     );
     $upcomingEvents = $stmt->fetchAll();
 
@@ -63,18 +62,18 @@ include 'includes/header.php';
 <section class="welcome-section">
     <div class="max-w-6xl mx-auto px-4 py-12 md:py-16">
         <div class="welcome-intro text-center max-w-4xl mx-auto">
-            <p class="welcome-eyebrow">Welcome</p>
-            <h2 class="welcome-heading mt-3">Welcome to Bridge Ministries International.</h2>
-            <p class="welcome-lead mt-4 mx-auto">
-                We are glad you are here. Bridge Ministries International is a Bible-centered church family in Accra,
-                and our heart is to help people know Christ, grow in faith, and live with purpose.
+        
+            <h2 class="welcome-heading">We're glad you're here.</h2>
+            <p class="welcome-lead mt-6">
+                Bridge Ministries International is a Bible-centered church family in Accra committed to helping people
+                know Christ, grow in faith, and live with purpose. Whether you're visiting for the first time or looking
+                for a church home, we want you to feel at home here.
             </p>
-            <p class="welcome-body mt-3 mx-auto">
-                Whether you are visiting for the first time or looking for a church home, we want you to feel at home.
-                We pray you will encounter God, find genuine fellowship, and take your next step in faith with confidence.
+            <p class="welcome-subtext mt-5">
+                We pray you will encounter God, find genuine fellowship, and take your next step with confidence.
             </p>
 
-            <div class="mt-6 flex flex-wrap justify-center gap-3">
+            <div class="welcome-actions mt-8">
                 <a href="contact.php" class="primary-action">Plan Your Visit</a>
                 <a href="about.php" class="secondary-action">Learn More About Us</a>
             </div>
@@ -83,114 +82,180 @@ include 'includes/header.php';
 </section>
 
 <section class="overseer-section">
-    <div class="max-w-6xl mx-auto px-4 py-12">
-        <div class="overseer-card grid lg:grid-cols-[0.75fr_1.25fr] gap-6 lg:gap-8 items-center">
+    <div class="max-w-6xl mx-auto px-4 py-16 md:py-20">
+        <div class="overseer-card grid lg:grid-cols-[1fr_1.6fr] gap-10 lg:gap-12 items-center lg:items-start">
             <div class="overseer-profile">
-                <div class="overseer-avatar" aria-hidden="true">GO</div>
-                <p class="overseer-label mt-4">General Overseer</p>
-                <h3 class="overseer-name mt-2">Rev. Dr. [General Overseer Name]</h3>
-                <p class="overseer-title mt-1">Bridge Ministries International</p>
+                <img src="assets/image/IMG_1061.jpg" alt="Rev. Francis Duane Yalley, General Overseer" class="overseer-avatar">
+                <p class="overseer-label mt-6">General Overseer</p>
+                <h3 class="overseer-name mt-3">Rev. Francis Duane Yalley</h3>
+            
             </div>
 
-            <div>
+            <div class="overseer-content">
                 <p class="overseer-copy">
-                    Our General Overseer serves with a commitment to sound doctrine, servant leadership, and a clear
-                    vision for discipleship. His heart is to see believers strengthened in the Word and active in ministry.
+                    Rev. Francis Duane Yalley is the Presiding General Overseer of Bridge Ministries International, headquartered in Accra, Ghana. A visionary leader with unwavering commitment to sound doctrine, he has dedicated his ministry to teaching the Word of God with clarity and power, building a movement rooted in faith, discipleship, and transformational leadership.
                 </p>
-                <p class="overseer-copy mt-3">
-                    Through teaching, pastoral care, and a focus on spiritual growth, he continues to help the church
-                    build mature disciples who live out their faith with confidence and purpose.
+                <p class="overseer-copy mt-5">
+                    Bridge Ministries International has grown to encompass multiple thriving congregations and cell-based ministries, reaching thousands of believers across Ghana and beyond. Known throughout the region as a passionate advocate for biblical truth and strategic prayer, Rev. Yalley continues to shepherd the church with a clear vision: to develop mature believers who influence their communities, strengthen families, and advance God's kingdom with purpose and conviction.
                 </p>
             </div>
         </div>
     </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold">Weekly Services</h2>
-    <div class="grid md:grid-cols-3 gap-4 mt-5">
-        <div class="section-card icon-card">
-            <p class="font-semibold">RESTORERS</p>
-            <p class="text-sm mt-1 muted-copy">Celebration Service</p>
-            <p class="text-sm mt-1 muted-copy">Sunday 8:45 AM</p>
+<section class="weekly-services-section">
+    <div class="max-w-7xl mx-auto px-4 py-16 md:py-24">
+        <div class="section-header mb-14 text-center">
+            <h2 class="section-title-alt">Our Weekly Services</h2>
         </div>
-        <div class="section-card icon-card">
-            <p class="font-semibold">REPAIRERS</p>
-            <p class="text-sm mt-1 muted-copy">Cell Meetings</p>
-            <p class="text-sm mt-1 muted-copy">Wednesdays</p>
-        </div>
-        <div class="section-card icon-card">
-            <p class="font-semibold">SWITCH ON</p>
-            <p class="text-sm mt-1 muted-copy">Youth Service</p>
-            <p class="text-sm mt-1 muted-copy">Sunday 8:45 AM</p>
-        </div>
-        <div class="section-card icon-card">
-            <p class="font-semibold">BUILDERS</p>
-            <p class="text-sm mt-1 muted-copy">Leadership Meeting</p>
-            <p class="text-sm mt-1 muted-copy">Fridays 7:00 PM</p>
+
+        <div class="carousel-wrapper">
+            <div class="services-carousel" id="servicesCarousel">
+                <div class="service-image-card">
+                    <img src="assets/image/IMG_1099.jpg" alt="RESTORERS - Celebration Service" class="service-image">
+                    <div class="service-overlay">
+                        <h3 class="service-label">RESTORERS</h3>
+                        <p class="service-detail">Celebration Service</p>
+                        <p class="service-detail">Sunday 8:45 AM</p>
+                    </div>
+                </div>
+                <div class="service-image-card">
+                    <img src="assets/image/IMG_1104.jpg" alt="REPAIRERS - Cell Meetings" class="service-image">
+                    <div class="service-overlay">
+                        <h3 class="service-label">REPAIRERS</h3>
+                        <p class="service-detail">Cell Meetings</p>
+                        <p class="service-detail">Wednesdays</p>
+                    </div>
+                </div>
+                <div class="service-image-card">
+                    <img src="assets/image/IMG_1111.jpg" alt="SWITCH ON - Youth Service" class="service-image">
+                    <div class="service-overlay">
+                        <h3 class="service-label">SWITCH ON</h3>
+                        <p class="service-detail">Youth Service</p>
+                        <p class="service-detail">Sunday 8:45 AM</p>
+                    </div>
+                </div>
+                <div class="service-image-card">
+                    <img src="assets/image/IMG_1094.jpg" alt="BUILDERS - Leadership Meeting" class="service-image">
+                    <div class="service-overlay">
+                        <h3 class="service-label">BUILDERS</h3>
+                        <p class="service-detail">Leadership Meeting</p>
+                        <p class="service-detail">Fridays 7:00 PM</p>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-btn carousel-prev" id="carouselPrev" aria-label="Previous service">&#10094;</button>
+            <button class="carousel-btn carousel-next" id="carouselNext" aria-label="Next service">&#10095;</button>
         </div>
     </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold">Upcoming Events</h2>
-    <p class="muted-copy mt-2">Join us for these upcoming moments of worship, growth, and fellowship.</p>
+<section class="upcoming-events-section">
+    <div class="max-w-7xl mx-auto px-4 py-20 md:py-24">
+        <div class="events-header text-center mb-16 md:mb-20">
+            <h2 class="events-title">Upcoming Events</h2>
+            <p class="events-subtitle">Mark your calendars for these great events coming up.</p>
+        </div>
 
-    <div class="grid md:grid-cols-3 gap-4 mt-5">
         <?php if (empty($upcomingEvents)): ?>
-            <div class="section-card md:col-span-3">No upcoming events are available at the moment.</div>
+            <div class="text-center py-12">
+                <p class="text-white text-lg">No upcoming events are available at the moment.</p>
+            </div>
+        <?php else: ?>
+            <div class="events-grid">
+                <?php foreach ($upcomingEvents as $event): ?>
+                    <?php
+                        $chipDay = date('d', strtotime((string) $event['event_date']));
+                        $chipMonth = date('M', strtotime((string) $event['event_date']));
+                        $eventTime = !empty($event['event_time']) ? date('g:i A', strtotime((string) $event['event_time'])) : null;
+                        $venue = trim((string) ($event['venue'] ?? ''));
+                    ?>
+                    <div class="event-card">
+                        <div class="event-image-container">
+                            <?php if ($event['event_image']): ?>
+                                <img src="<?php echo htmlspecialchars($event['event_image']); ?>" alt="<?php echo htmlspecialchars((string) $event['title']); ?>" class="event-image">
+                            <?php else: ?>
+                                <div class="event-image-placeholder"></div>
+                            <?php endif; ?>
+                            <div class="event-date-badge">
+                                <span class="badge-day"><?php echo htmlspecialchars($chipDay); ?></span>
+                                <span class="badge-month"><?php echo htmlspecialchars($chipMonth); ?></span>
+                            </div>
+                        </div>
+                        <div class="event-content">
+                            <h3 class="event-title"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
+                            <div class="event-details">
+                                <?php if ($eventTime): ?>
+                                    <p class="event-detail-item">
+                                        <span class="detail-icon">⏰</span>
+                                        <?php echo htmlspecialchars($eventTime); ?>
+                                    </p>
+                                <?php endif; ?>
+                                <?php if ($venue): ?>
+                                    <p class="event-detail-item">
+                                        <span class="detail-icon">📍</span>
+                                        <?php echo htmlspecialchars($venue); ?>
+                                    </p>
+                                <?php endif; ?>
+                            </div>
+                            <?php if (!empty($event['description'])): ?>
+                                <p class="event-description"><?php echo htmlspecialchars(substr((string) $event['description'], 0, 120)); ?></p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php endif; ?>
 
-        <?php foreach ($upcomingEvents as $event): ?>
-            <?php
-                $chipDate = date('M d', strtotime((string) $event['event_date']));
-                $eventTime = !empty($event['event_time']) ? date('g:i A', strtotime((string) $event['event_time'])) : null;
-                $venue = trim((string) ($event['venue'] ?? ''));
-                $metaParts = [];
-                if ($eventTime) {
-                    $metaParts[] = $eventTime;
-                }
-                if ($venue !== '') {
-                    $metaParts[] = $venue;
-                }
-            ?>
-            <div class="section-card">
-                <span class="tag-chip"><?php echo htmlspecialchars($chipDate); ?></span>
-                <h3 class="text-lg font-bold mt-3"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
-                <p class="muted-copy mt-2"><?php echo htmlspecialchars((string) ($event['description'] ?? '')); ?></p>
-                <?php if (!empty($metaParts)): ?>
-                    <p class="text-sm mt-3 muted-copy"><?php echo htmlspecialchars(implode(' | ', $metaParts)); ?></p>
-                <?php endif; ?>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
-    <div class="mt-6">
-        <a href="events.php" class="secondary-action">View All Events</a>
+        <div class="events-footer">
+            <a href="events.php" class="primary-action">View All Events</a>
+        </div>
     </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 py-12">
-    <h2 class="text-3xl font-bold">Latest Sermons</h2>
-    <p class="muted-copy mt-2">Catch up on recent messages from our pulpit.</p>
-    <div class="section-card mt-5">
-        <div class="divide-y divide-slate-200 text-sm">
-            <?php if (empty($latestSermons)): ?>
-                <p class="py-3 muted-copy">No sermons have been published yet.</p>
-            <?php endif; ?>
+<section class="latest-sermons-section">
+    <div class="max-w-7xl mx-auto px-4 py-20 md:py-24">
+        <div class="sermons-header text-center mb-16 md:mb-20">
+            <h2 class="sermons-title">Latest Sermons</h2>
+            <p class="sermons-subtitle">Catch up on recent messages from our pulpit.</p>
+        </div>
 
-            <?php foreach ($latestSermons as $sermon): ?>
-                <?php
-                    $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
-                    $topic = trim((string) ($sermon['topic'] ?? ''));
-                    $line = (string) $sermon['title'];
-                    if ($topic !== '') {
-                        $line .= ' (' . $topic . ')';
-                    }
-                    $line .= ' | ' . $dateText;
-                ?>
-                <a href="sermons.php" class="block py-3 hover:text-blue-700"><?php echo htmlspecialchars($line); ?></a>
-            <?php endforeach; ?>
+        <?php if (empty($latestSermons)): ?>
+            <div class="text-center py-12">
+                <p class="text-neutral-600 text-lg">No sermons have been published yet.</p>
+            </div>
+        <?php else: ?>
+            <div class="sermons-grid">
+                <?php foreach ($latestSermons as $sermon): ?>
+                    <?php
+                        $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
+                        $dateDay = date('d', strtotime((string) $sermon['sermon_date']));
+                        $dateMonth = date('M', strtotime((string) $sermon['sermon_date']));
+                        $topic = trim((string) ($sermon['topic'] ?? ''));
+                        $title = (string) $sermon['title'];
+                    ?>
+                    <a href="sermons.php" class="sermon-card">
+                        <div class="sermon-image-container">
+                            <div class="sermon-image-placeholder"></div>
+                            <div class="sermon-date-badge">
+                                <span class="sermon-badge-day"><?php echo htmlspecialchars($dateDay); ?></span>
+                                <span class="sermon-badge-month"><?php echo htmlspecialchars($dateMonth); ?></span>
+                            </div>
+                        </div>
+                        <div class="sermon-content">
+                            <h3 class="sermon-title"><?php echo htmlspecialchars($title); ?></h3>
+                            <?php if ($topic !== ''): ?>
+                                <p class="sermon-topic"><?php echo htmlspecialchars($topic); ?></p>
+                            <?php endif; ?>
+                            <p class="sermon-date"><?php echo htmlspecialchars($dateText); ?></p>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="sermons-footer">
+            <a href="sermons.php" class="primary-action">Browse All Sermons</a>
         </div>
     </div>
 </section>
@@ -261,4 +326,58 @@ include 'includes/header.php';
         </div>
     </div>
 </section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const carousel = document.getElementById('servicesCarousel');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    const cards = carousel.querySelectorAll('.service-image-card');
+    
+    if (!carousel || !prevBtn || !nextBtn || cards.length === 0) return;
+    
+    const cardWidth = cards[0].offsetWidth;
+    const gap = 24; // 1.5rem in pixels (1rem = 16px)
+    const cardTotalWidth = cardWidth + gap;
+    const autoPlayInterval = 4000; // 4 seconds
+    
+    function scrollToCard(index) {
+        const maxIndex = cards.length;
+        const normalizedIndex = ((index % maxIndex) + maxIndex) % maxIndex;
+        const scrollAmount = normalizedIndex * cardTotalWidth;
+        carousel.scrollLeft = scrollAmount;
+    }
+    
+    let currentIndex = 0;
+    let autoPlayTimer;
+    
+    function startAutoPlay() {
+        autoPlayTimer = setInterval(function() {
+            currentIndex = (currentIndex + 1) % cards.length;
+            scrollToCard(currentIndex);
+        }, autoPlayInterval);
+    }
+    
+    function resetAutoPlay() {
+        clearInterval(autoPlayTimer);
+        startAutoPlay();
+    }
+    
+    prevBtn.addEventListener('click', function() {
+        currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+        scrollToCard(currentIndex);
+        resetAutoPlay();
+    });
+    
+    nextBtn.addEventListener('click', function() {
+        currentIndex = (currentIndex + 1) % cards.length;
+        scrollToCard(currentIndex);
+        resetAutoPlay();
+    });
+    
+    // Start auto-play on load
+    startAutoPlay();
+});
+</script>
+
 <?php include 'includes/footer.php'; ?>
