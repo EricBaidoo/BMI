@@ -16,10 +16,9 @@ try {
     $upcomingEvents = $stmt->fetchAll();
 
     $stmt = $pdo->query(
-        "SELECT id, title, sermon_date, topic
+        "SELECT id, title, sermon_date, topic, sermon_image
          FROM sermons
-         ORDER BY sermon_date DESC, id DESC
-         LIMIT 3"
+         ORDER BY sermon_date DESC, id DESC"
     );
     $latestSermons = $stmt->fetchAll();
 } catch (Throwable $e) {
@@ -228,15 +227,19 @@ include 'includes/header.php';
             <div class="sermons-grid">
                 <?php foreach ($latestSermons as $sermon): ?>
                     <?php
-                        $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
                         $dateDay = date('d', strtotime((string) $sermon['sermon_date']));
                         $dateMonth = date('M', strtotime((string) $sermon['sermon_date']));
+                        $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
                         $topic = trim((string) ($sermon['topic'] ?? ''));
                         $title = (string) $sermon['title'];
                     ?>
                     <a href="sermons.php" class="sermon-card">
                         <div class="sermon-image-container">
-                            <div class="sermon-image-placeholder"></div>
+                            <?php if ($sermon['sermon_image']): ?>
+                                <img src="<?php echo htmlspecialchars($sermon['sermon_image']); ?>" alt="<?php echo htmlspecialchars($title); ?>" class="sermon-image">
+                            <?php else: ?>
+                                <div class="sermon-image-placeholder"></div>
+                            <?php endif; ?>
                             <div class="sermon-date-badge">
                                 <span class="sermon-badge-day"><?php echo htmlspecialchars($dateDay); ?></span>
                                 <span class="sermon-badge-month"><?php echo htmlspecialchars($dateMonth); ?></span>
