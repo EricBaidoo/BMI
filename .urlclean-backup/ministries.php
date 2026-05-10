@@ -27,7 +27,7 @@ include 'includes/header.php';
     <?php if (empty($ministries)): ?>
         <div class="section-card">
             <p class="muted-copy">Ministries will be listed here soon. Please contact the church office to learn how to get involved.</p>
-            <a href="contact" class="primary-action mt-4">Get Connected</a>
+            <a href="contact.php" class="primary-action mt-4">Get Connected</a>
         </div>
     <?php else: ?>
         <div class="mt-1 grid md:grid-cols-2 gap-4">
@@ -55,7 +55,7 @@ include 'includes/header.php';
             <h2 class="text-xl font-semibold">Take Your Next Step</h2>
             <p class="text-sm muted-copy mt-1">Not sure where to begin? We can help you find the right ministry fit.</p>
         </div>
-        <a href="contact" class="primary-action">Get Connected</a>
+        <a href="contact.php" class="primary-action">Get Connected</a>
     </div>
 </section>
 <?php include 'includes/footer.php'; ?>

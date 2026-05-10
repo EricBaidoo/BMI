@@ -76,13 +76,13 @@ include 'includes/header.php';
                         </li>
                     <?php endforeach; ?>
                 </ul>
-                <a href="sermons" class="inline-block mt-4 text-sm font-semibold text-teal-700 hover:underline">Browse all sermons &rarr;</a>
+                <a href="sermons.php" class="inline-block mt-4 text-sm font-semibold text-teal-700 hover:underline">Browse all sermons &rarr;</a>
             <?php endif; ?>
         </div>
         <div class="section-card">
             <h2 class="font-semibold text-xl">Need Prayer While Watching?</h2>
             <p class="text-sm mt-2 muted-copy">Our team is available to pray with you and respond to prayer requests.</p>
-            <a href="contact" class="primary-action mt-4">Send Prayer Request</a>
+            <a href="contact.php" class="primary-action mt-4">Send Prayer Request</a>
         </div>
     </div>
 </section>

@@ -81,7 +81,7 @@ include 'includes/header.php';
                     <?php if ($i === $page): ?>
                         <span class="px-3 py-2 rounded bg-slate-900 text-white"><?php echo $i; ?></span>
                     <?php else: ?>
-                        <a href="sermons?page=<?php echo $i; ?>" class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-100"><?php echo $i; ?></a>
+                        <a href="sermons.php?page=<?php echo $i; ?>" class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-100"><?php echo $i; ?></a>
                     <?php endif; ?>
                 <?php endfor; ?>
             </nav>
@@ -94,8 +94,8 @@ include 'includes/header.php';
             <p class="text-sm muted-copy mt-1">Join us in person or online each week.</p>
         </div>
         <div class="flex flex-wrap gap-2">
-            <a href="livestream" class="primary-action">Watch Live</a>
-            <a href="contact" class="secondary-action">Plan Your Visit</a>
+            <a href="livestream.php" class="primary-action">Watch Live</a>
+            <a href="contact.php" class="secondary-action">Plan Your Visit</a>
         </div>
     </div>
 </section>

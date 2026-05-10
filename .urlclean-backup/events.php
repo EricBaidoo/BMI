@@ -80,7 +80,7 @@ include 'includes/header.php';
                     <?php if ($i === $page): ?>
                         <span class="px-3 py-2 rounded bg-slate-900 text-white"><?php echo $i; ?></span>
                     <?php else: ?>
-                        <a href="events?page=<?php echo $i; ?>" class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-100"><?php echo $i; ?></a>
+                        <a href="events.php?page=<?php echo $i; ?>" class="px-3 py-2 rounded border border-slate-200 hover:bg-slate-100"><?php echo $i; ?></a>
                     <?php endif; ?>
                 <?php endfor; ?>
             </nav>
@@ -92,7 +92,7 @@ include 'includes/header.php';
             <h2 class="text-xl font-semibold">Do Not Miss an Event</h2>
             <p class="text-sm muted-copy mt-1">Get event reminders and ministry updates directly in your inbox.</p>
         </div>
-        <a href="contact" class="secondary-action">Request Weekly Updates</a>
+        <a href="contact.php" class="secondary-action">Request Weekly Updates</a>
     </div>
 </section>
 <?php include 'includes/footer.php'; ?>

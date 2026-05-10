@@ -66,15 +66,15 @@ $socialIcons = [
         <div>
             <p class="font-semibold">Quick Links</p>
             <div class="mt-2 flex flex-col gap-1 text-sm">
-                <a href="about" class="footer-link">About</a>
-                <a href="beliefs" class="footer-link">Our Beliefs</a>
-                <a href="visit" class="footer-link">Plan Your Visit</a>
-                <a href="sermons" class="footer-link">Sermons</a>
-                <a href="events" class="footer-link">Events</a>
-                <a href="ministries" class="footer-link">Ministries</a>
-                <a href="blog" class="footer-link">Good News</a>
-                <a href="donate" class="footer-link">Give</a>
-                <a href="contact" class="footer-link">Contact</a>
+                <a href="about.php" class="footer-link">About</a>
+                <a href="beliefs.php" class="footer-link">Our Beliefs</a>
+                <a href="visit.php" class="footer-link">Plan Your Visit</a>
+                <a href="sermons.php" class="footer-link">Sermons</a>
+                <a href="events.php" class="footer-link">Events</a>
+                <a href="ministries.php" class="footer-link">Ministries</a>
+                <a href="blog.php" class="footer-link">Good News</a>
+                <a href="donate.php" class="footer-link">Give</a>
+                <a href="contact.php" class="footer-link">Contact</a>
             </div>
         </div>
 

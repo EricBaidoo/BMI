@@ -7,6 +7,7 @@ require_once __DIR__ . '/includes/csrf.php';
 require_once __DIR__ . '/includes/settings.php';
 require_once __DIR__ . '/includes/helpers.php';
 
+$contactSuccess = false;
 $contactError = '';
 $old = ['name' => '', 'email' => '', 'subject' => '', 'message' => '', 'type' => 'contact'];
 
@@ -14,56 +15,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
     try {
         csrf_check();
 
-        // Honeypot — bots fill it, humans don't see it. Pretend success silently.
+        // Honeypot — bots fill it, humans don't see it.
         if (!empty($_POST['website_url'])) {
-            flash('contact', 'success');
-            header('Location: contact#contact-form');
-            exit;
-        }
+            $contactSuccess = true;
+        } else {
+            $name = trim((string) ($_POST['name'] ?? ''));
+            $email = trim((string) ($_POST['email'] ?? ''));
+            $subject = trim((string) ($_POST['subject'] ?? ''));
+            $message = trim((string) ($_POST['message'] ?? ''));
+            $type = (string) ($_POST['type'] ?? 'contact');
+            $type = in_array($type, ['contact', 'prayer'], true) ? $type : 'contact';
 
-        $name = trim((string) ($_POST['name'] ?? ''));
-        $email = trim((string) ($_POST['email'] ?? ''));
-        $subject = trim((string) ($_POST['subject'] ?? ''));
-        $message = trim((string) ($_POST['message'] ?? ''));
-        $type = (string) ($_POST['type'] ?? 'contact');
-        $type = in_array($type, ['contact', 'prayer'], true) ? $type : 'contact';
+            $old = compact('name', 'email', 'subject', 'message', 'type');
 
-        $old = compact('name', 'email', 'subject', 'message', 'type');
+            if ($name === '' || $email === '' || $message === '') {
+                throw new RuntimeException('Please fill in your name, email, and message.');
+            }
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new RuntimeException('Please enter a valid email address.');
+            }
+            if (mb_strlen($message) < 5) {
+                throw new RuntimeException('Your message is too short.');
+            }
+            if (mb_strlen($message) > 5000) {
+                throw new RuntimeException('Your message is too long (max 5000 characters).');
+            }
 
-        if ($name === '' || $email === '' || $message === '') {
-            throw new RuntimeException('Please fill in your name, email, and message.');
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new RuntimeException('Please enter a valid email address.');
-        }
-        if (mb_strlen($message) < 5) {
-            throw new RuntimeException('Your message is too short.');
-        }
-        if (mb_strlen($message) > 5000) {
-            throw new RuntimeException('Your message is too long (max 5000 characters).');
-        }
+            $pdo = db_connect();
+            $stmt = $pdo->prepare(
+                'INSERT INTO messages (full_name, email, subject, message, type) VALUES (:n, :e, :s, :m, :t)'
+            );
+            $stmt->execute([
+                ':n' => $name,
+                ':e' => $email,
+                ':s' => $subject !== '' ? $subject : null,
+                ':m' => $message,
+                ':t' => $type,
+            ]);
 
-        $pdo = db_connect();
-        $stmt = $pdo->prepare(
-            'INSERT INTO messages (full_name, email, subject, message, type) VALUES (:n, :e, :s, :m, :t)'
-        );
-        $stmt->execute([
-            ':n' => $name,
-            ':e' => $email,
-            ':s' => $subject !== '' ? $subject : null,
-            ':m' => $message,
-            ':t' => $type,
-        ]);
-
-        flash('contact', 'success');
-        header('Location: contact#contact-form');
-        exit;
+            $contactSuccess = true;
+            $old = ['name' => '', 'email' => '', 'subject' => '', 'message' => '', 'type' => 'contact'];
+        }
     } catch (Throwable $e) {
         $contactError = $e->getMessage();
     }
 }
-
-$contactSuccess = flash('contact') === 'success';
 
 include 'includes/header.php';
 ?>
@@ -77,7 +73,7 @@ include 'includes/header.php';
 
 <section class="max-w-6xl mx-auto px-4 py-12">
     <div class="grid md:grid-cols-2 gap-6">
-        <form method="post" action="contact#contact-form" id="contact-form" class="section-card icon-card space-y-3" data-icon="@" novalidate>
+        <form method="post" action="contact.php#contact-form" id="contact-form" class="section-card icon-card space-y-3" data-icon="@" novalidate>
             <h2 class="text-xl font-semibold">Send a Message</h2>
 
             <?php if ($contactSuccess): ?>
@@ -188,7 +184,7 @@ include 'includes/header.php';
             <h2 class="text-xl font-semibold">First Time at BMI?</h2>
             <p class="text-sm muted-copy mt-1">Let us know you are coming and we will make your visit smooth and welcoming.</p>
         </div>
-        <a href="./" class="secondary-action">Back to Home</a>
+        <a href="index.php" class="secondary-action">Back to Home</a>
     </div>
 </section>
 <?php include 'includes/footer.php'; ?>

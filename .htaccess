@@ -1,0 +1,90 @@
+# Bridge Ministries International — Apache configuration
+
+# ------------------------------------------------------------------------------
+# Default character set
+# ------------------------------------------------------------------------------
+AddDefaultCharset utf-8
+
+# ------------------------------------------------------------------------------
+# URL rewrites
+# ------------------------------------------------------------------------------
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Map /sitemap.xml to sitemap.php
+    RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+    # Block direct access to dotfiles (.env, .git, etc.)
+    RewriteRule "(^|/)\." - [F]
+
+    # ------------------------------------------------------------------
+    # Hide .php extensions on public pages (admin/ keeps .php as-is)
+    # ------------------------------------------------------------------
+
+    # Redirect /index or /index.php  ->  /
+    RewriteCond %{THE_REQUEST} \s/+(?:BMI/)?index(?:\.php)?[?\s] [NC]
+    RewriteRule ^ /BMI/ [R=301,L]
+
+    # Redirect any visible /something.php  ->  /something  (skip admin/)
+    RewriteCond %{REQUEST_URI} !^/BMI/admin/
+    RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php([?\s]) [NC]
+    RewriteRule ^ /%1 [R=301,L,NE,QSA]
+
+    # Internally rewrite /something  ->  /something.php  when the file exists
+    RewriteCond %{REQUEST_URI} !^/BMI/admin/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}.php -f
+    RewriteRule ^(.+?)/?$ $1.php [L]
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# Custom error pages
+# ------------------------------------------------------------------------------
+ErrorDocument 404 /BMI/404.php
+
+# ------------------------------------------------------------------------------
+# Security headers
+# ------------------------------------------------------------------------------
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+    # HSTS — only enable once site is fully on HTTPS:
+    # Header set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # Loose CSP — adjust as third-party origins are added (Plausible, Paystack, YouTube, etc.)
+    Header set Content-Security-Policy "default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.tailwindcss.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://js.paystack.co https://plausible.io; frame-src https://www.youtube.com https://www.google.com https://www.facebook.com https://checkout.paystack.com; connect-src 'self' https://api.paystack.co https://plausible.io"
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# Block direct access to sensitive files
+# ------------------------------------------------------------------------------
+<FilesMatch "^(\.env|\.gitignore|composer\.(json|lock)|package\.json|package-lock\.json|README\.md)$">
+    Require all denied
+</FilesMatch>
+
+# ------------------------------------------------------------------------------
+# Compression
+# ------------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css application/javascript application/json image/svg+xml
+</IfModule>
+
+# ------------------------------------------------------------------------------
+# Browser caching
+# ------------------------------------------------------------------------------
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# Disable directory listing
+Options -Indexes

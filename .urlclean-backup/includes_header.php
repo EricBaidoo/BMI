@@ -89,7 +89,7 @@ $ogImage = $siteUrl . '/assets/image/bmi%20logo%20new.png';
 <header class="site-header <?php echo $isHomePage ? 'home-overlay-header' : ''; ?>">
     <div class="max-w-6xl mx-auto px-4 py-4">
         <div class="flex items-center justify-between md:hidden">
-            <a href="./" class="mobile-brand" aria-label="Bridge Ministries International Home">
+            <a href="index.php" class="mobile-brand" aria-label="Bridge Ministries International Home">
                 <img class="mobile-logo-img" src="assets/image/bmi%20logo%20new.png" alt="Bridge Ministries International logo">
             </a>
             <button id="mobileMenuButton" type="button" class="menu-button" aria-label="Open navigation" aria-expanded="false" aria-controls="mobileMenu">
@@ -103,38 +103,38 @@ $ogImage = $siteUrl . '/assets/image/bmi%20logo%20new.png';
 
         <div class="hidden md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-5">
             <nav class="flex items-center gap-2 text-sm font-semibold header-split-nav" aria-label="Primary navigation left">
-                <a href="about" class="nav-link <?php echo in_array($currentPage, ['about.php','beliefs.php']) ? 'active' : ''; ?>">About</a>
-                <a href="visit" class="nav-link <?php echo $currentPage === 'visit.php' ? 'active' : ''; ?>">Visit</a>
-                <a href="ministries" class="nav-link <?php echo $currentPage === 'ministries.php' ? 'active' : ''; ?>">Ministries</a>
-                <a href="sermons" class="nav-link <?php echo in_array($currentPage, ['sermons.php','livestream.php']) ? 'active' : ''; ?>">Sermons</a>
+                <a href="about.php" class="nav-link <?php echo in_array($currentPage, ['about.php','beliefs.php']) ? 'active' : ''; ?>">About</a>
+                <a href="visit.php" class="nav-link <?php echo $currentPage === 'visit.php' ? 'active' : ''; ?>">Visit</a>
+                <a href="ministries.php" class="nav-link <?php echo $currentPage === 'ministries.php' ? 'active' : ''; ?>">Ministries</a>
+                <a href="sermons.php" class="nav-link <?php echo in_array($currentPage, ['sermons.php','livestream.php']) ? 'active' : ''; ?>">Sermons</a>
             </nav>
 
-            <a href="./" class="wordmark" aria-label="Bridge Ministries International Home">
+            <a href="index.php" class="wordmark" aria-label="Bridge Ministries International Home">
                 <img class="wordmark-logo-img" src="assets/image/bmi%20logo%20new.png" alt="Bridge Ministries International logo">
             </a>
 
             <nav class="flex items-center justify-end gap-2 text-sm font-semibold header-split-nav" aria-label="Primary navigation right">
-                <a href="events" class="nav-link <?php echo $currentPage === 'events.php' ? 'active' : ''; ?>">Events</a>
-                <a href="blog" class="nav-link <?php echo $currentPage === 'blog.php' ? 'active' : ''; ?>">Good News</a>
-                <a href="contact" class="nav-link <?php echo $currentPage === 'contact.php' ? 'active' : ''; ?>">Contact</a>
-                <a href="donate" class="primary-action ml-2">Give</a>
+                <a href="events.php" class="nav-link <?php echo $currentPage === 'events.php' ? 'active' : ''; ?>">Events</a>
+                <a href="blog.php" class="nav-link <?php echo $currentPage === 'blog.php' ? 'active' : ''; ?>">Good News</a>
+                <a href="contact.php" class="nav-link <?php echo $currentPage === 'contact.php' ? 'active' : ''; ?>">Contact</a>
+                <a href="donate.php" class="primary-action ml-2">Give</a>
             </nav>
         </div>
     </div>
 
     <nav id="mobileMenu" class="mobile-menu hidden md:hidden" aria-label="Mobile navigation">
         <div class="max-w-6xl mx-auto px-4 pb-4 grid grid-cols-2 gap-2 text-sm">
-            <a href="./" class="nav-link <?php echo $currentPage === 'index.php' ? 'active' : ''; ?>">Home</a>
-            <a href="about" class="nav-link <?php echo $currentPage === 'about.php' ? 'active' : ''; ?>">About</a>
-            <a href="beliefs" class="nav-link <?php echo $currentPage === 'beliefs.php' ? 'active' : ''; ?>">Beliefs</a>
-            <a href="visit" class="nav-link <?php echo $currentPage === 'visit.php' ? 'active' : ''; ?>">Visit</a>
-            <a href="ministries" class="nav-link <?php echo $currentPage === 'ministries.php' ? 'active' : ''; ?>">Ministries</a>
-            <a href="events" class="nav-link <?php echo $currentPage === 'events.php' ? 'active' : ''; ?>">Events</a>
-            <a href="sermons" class="nav-link <?php echo $currentPage === 'sermons.php' ? 'active' : ''; ?>">Sermons</a>
-            <a href="livestream" class="nav-link <?php echo $currentPage === 'livestream.php' ? 'active' : ''; ?>">Live</a>
-            <a href="blog" class="nav-link <?php echo $currentPage === 'blog.php' ? 'active' : ''; ?>">Good News</a>
-            <a href="contact" class="nav-link <?php echo $currentPage === 'contact.php' ? 'active' : ''; ?>">Contact</a>
-            <a href="donate" class="primary-action text-center col-span-2">Give</a>
+            <a href="index.php" class="nav-link <?php echo $currentPage === 'index.php' ? 'active' : ''; ?>">Home</a>
+            <a href="about.php" class="nav-link <?php echo $currentPage === 'about.php' ? 'active' : ''; ?>">About</a>
+            <a href="beliefs.php" class="nav-link <?php echo $currentPage === 'beliefs.php' ? 'active' : ''; ?>">Beliefs</a>
+            <a href="visit.php" class="nav-link <?php echo $currentPage === 'visit.php' ? 'active' : ''; ?>">Visit</a>
+            <a href="ministries.php" class="nav-link <?php echo $currentPage === 'ministries.php' ? 'active' : ''; ?>">Ministries</a>
+            <a href="events.php" class="nav-link <?php echo $currentPage === 'events.php' ? 'active' : ''; ?>">Events</a>
+            <a href="sermons.php" class="nav-link <?php echo $currentPage === 'sermons.php' ? 'active' : ''; ?>">Sermons</a>
+            <a href="livestream.php" class="nav-link <?php echo $currentPage === 'livestream.php' ? 'active' : ''; ?>">Live</a>
+            <a href="blog.php" class="nav-link <?php echo $currentPage === 'blog.php' ? 'active' : ''; ?>">Good News</a>
+            <a href="contact.php" class="nav-link <?php echo $currentPage === 'contact.php' ? 'active' : ''; ?>">Contact</a>
+            <a href="donate.php" class="primary-action text-center col-span-2">Give</a>
         </div>
     </nav>
 </header>

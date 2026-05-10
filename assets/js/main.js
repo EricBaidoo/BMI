@@ -1,4 +1,18 @@
 document.addEventListener('DOMContentLoaded', function () {
+    // Sticky header scroll-state
+    var siteHeader = document.querySelector('.site-header');
+    if (siteHeader) {
+        var setScrolled = function () {
+            if (window.scrollY > 24) {
+                siteHeader.classList.add('scrolled');
+            } else {
+                siteHeader.classList.remove('scrolled');
+            }
+        };
+        setScrolled();
+        window.addEventListener('scroll', setScrolled, { passive: true });
+    }
+
     var menuButton = document.getElementById('mobileMenuButton');
     var mobileMenu = document.getElementById('mobileMenu');
 

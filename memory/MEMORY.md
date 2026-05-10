@@ -1,0 +1,2 @@
+- [User profile](user_profile.md) — Building BMI church website, aims for "international standard"
+- [Project overview](project_bmi.md) — Bridge Ministries International (Accra), PHP + MySQL on XAMPP

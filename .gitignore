@@ -1,0 +1,25 @@
+# Environment / secrets
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*~
+
+# Build artefacts
+node_modules/
+/assets/css/styles.tailwind.css
+
+# Logs
+*.log
+
+# User uploads (event/sermon images get committed by mistake otherwise)
+/assets/image/event_*
+/assets/image/sermon_*

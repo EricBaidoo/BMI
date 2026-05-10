@@ -101,7 +101,7 @@ include 'includes/header.php';
 
             <h3 class="font-semibold text-lg mt-6">Need Assistance?</h3>
             <p class="text-sm mt-2 muted-copy">For giving support or designated offerings, contact our finance team<?php if ($emailGiving !== ''): ?> at <a class="hover:underline" href="mailto:<?php echo e($emailGiving); ?>"><?php echo e($emailGiving); ?></a><?php endif; ?>.</p>
-            <a href="contact" class="secondary-action mt-4">Contact Finance Team</a>
+            <a href="contact.php" class="secondary-action mt-4">Contact Finance Team</a>
         </div>
     </div>
 

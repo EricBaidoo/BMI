@@ -53,8 +53,8 @@ include 'includes/header.php';
             <h1 class="hero-title" id="heroHeading">Glorify. Grow. Go.</h1>
             <p class="hero-subtitle" id="heroSubheading">A Christ-centered church family in Accra, committed to faith, fellowship, and purpose.</p>
             <div class="hero-cta-wrap">
-                <a href="contact" class="primary-action">Plan Your Visit</a>
-                <a href="sermons" class="secondary-action">Watch Sermons</a>
+                <a href="contact.php" class="primary-action">Plan Your Visit</a>
+                <a href="sermons.php" class="secondary-action">Watch Sermons</a>
             </div>
         </div>
     </div>
@@ -75,8 +75,8 @@ include 'includes/header.php';
             </p>
 
             <div class="welcome-actions mt-8">
-                <a href="visit" class="primary-action">Plan Your Visit</a>
-                <a href="about" class="secondary-action">Learn More About Us</a>
+                <a href="visit.php" class="primary-action">Plan Your Visit</a>
+                <a href="about.php" class="secondary-action">Learn More About Us</a>
             </div>
         </div>
     </div>
@@ -135,7 +135,7 @@ include 'includes/header.php';
         </div>
 
         <div class="section-cta">
-            <a href="visit" class="primary-action">See the Full Visit Guide</a>
+            <a href="visit.php" class="primary-action">See the Full Visit Guide</a>
         </div>
     </div>
 </section>
@@ -248,7 +248,7 @@ include 'includes/header.php';
                                 <p class="event-description"><?php echo htmlspecialchars(substr((string) $event['description'], 0, 120)); ?><?php echo strlen((string) $event['description']) > 120 ? '…' : ''; ?></p>
                             <?php endif; ?>
 
-                            <a href="events" class="event-link">View Details</a>
+                            <a href="events.php" class="event-link">View Details</a>
                         </div>
                     </article>
                 <?php endforeach; ?>
@@ -259,7 +259,7 @@ include 'includes/header.php';
         <?php endif; ?>
 
         <div class="events-footer">
-            <a href="events" class="primary-action">View All Events</a>
+            <a href="events.php" class="primary-action">View All Events</a>
         </div>
     </div>
 </section>
@@ -286,7 +286,7 @@ include 'includes/header.php';
                         $topic = trim((string) ($sermon['topic'] ?? ''));
                         $title = (string) $sermon['title'];
                     ?>
-                    <a href="sermons" class="sermon-card">
+                    <a href="sermons.php" class="sermon-card">
                         <div class="sermon-image-container">
                             <?php if ($sermon['sermon_image']): ?>
                                 <img src="<?php echo htmlspecialchars($sermon['sermon_image']); ?>" alt="<?php echo htmlspecialchars($title); ?>" class="sermon-image" loading="lazy">
@@ -314,7 +314,7 @@ include 'includes/header.php';
         <?php endif; ?>
 
         <div class="sermons-footer">
-            <a href="sermons" class="primary-action">Browse All Sermons</a>
+            <a href="sermons.php" class="primary-action">Browse All Sermons</a>
         </div>
     </div>
 </section>
@@ -329,8 +329,8 @@ include 'includes/header.php';
             </p>
         </div>
         <div class="flex flex-wrap gap-3 md:justify-end">
-            <a href="livestream" class="primary-action">Watch Live Service</a>
-            <a href="sermons" class="secondary-action">Browse Archive</a>
+            <a href="livestream.php" class="primary-action">Watch Live Service</a>
+            <a href="sermons.php" class="secondary-action">Browse Archive</a>
         </div>
     </div>
 </section>
@@ -394,21 +394,21 @@ include 'includes/header.php';
                 <p class="next-step-number">01</p>
                 <h3 class="next-step-title">Plan Your Visit</h3>
                 <p class="next-step-copy">First time? We'll help you know exactly what to expect and walk you through your first Sunday.</p>
-                <a href="visit" class="next-step-link">Plan a visit</a>
+                <a href="visit.php" class="next-step-link">Plan a visit</a>
             </article>
 
             <article class="next-step-card">
                 <p class="next-step-number">02</p>
                 <h3 class="next-step-title">Find Your Community</h3>
                 <p class="next-step-copy">From cell groups to age-based ministries, there is a place for you to belong and grow.</p>
-                <a href="ministries" class="next-step-link">Explore ministries</a>
+                <a href="ministries.php" class="next-step-link">Explore ministries</a>
             </article>
 
             <article class="next-step-card">
                 <p class="next-step-number">03</p>
                 <h3 class="next-step-title">Send a Prayer Request</h3>
                 <p class="next-step-copy">Whatever you're carrying, we'd be honoured to stand with you in prayer this week.</p>
-                <a href="contact" class="next-step-link">Request prayer</a>
+                <a href="contact.php" class="next-step-link">Request prayer</a>
             </article>
         </div>
     </div>

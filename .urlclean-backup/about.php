@@ -45,7 +45,7 @@ include 'includes/header.php';
             <span class="tag-chip">Visit This Sunday</span>
             <p class="mt-3 text-sm muted-copy"><?php echo e($svcSunday !== '' ? $svcSunday : 'Join us at our weekly celebration service.'); ?></p>
             <p class="text-sm muted-copy mt-2">Come as you are — we'll save you a seat.</p>
-            <a href="visit" class="primary-action mt-4">Plan Your Visit</a>
+            <a href="visit.php" class="primary-action mt-4">Plan Your Visit</a>
         </div>
     </div>
 
@@ -146,17 +146,17 @@ include 'includes/header.php';
         <div class="section-card">
             <h2 class="text-xl font-semibold">What We Believe</h2>
             <p class="mt-2 text-sm muted-copy">Read our full statement of faith — what we hold to be true about God, Scripture, and salvation.</p>
-            <a href="beliefs" class="secondary-action mt-4">Our Beliefs</a>
+            <a href="beliefs.php" class="secondary-action mt-4">Our Beliefs</a>
         </div>
         <div class="section-card">
             <h2 class="text-xl font-semibold">Find Your Community</h2>
             <p class="mt-2 text-sm muted-copy">From cell groups to age-based ministries, there is a place for you to belong, serve, and grow.</p>
-            <a href="ministries" class="secondary-action mt-4">Explore Ministries</a>
+            <a href="ministries.php" class="secondary-action mt-4">Explore Ministries</a>
         </div>
         <div class="section-card">
             <h2 class="text-xl font-semibold">Need Prayer?</h2>
             <p class="mt-2 text-sm muted-copy">Whatever you are facing, we'd be honoured to stand with you in prayer.</p>
-            <a href="contact" class="secondary-action mt-4">Send a Request</a>
+            <a href="contact.php" class="secondary-action mt-4">Send a Request</a>
         </div>
     </div>
 </section>

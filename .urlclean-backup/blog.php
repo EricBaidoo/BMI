@@ -54,7 +54,7 @@ include 'includes/header.php';
             <div class="prose max-w-none text-slate-800">
                 <?php echo nl2br(e($single['content'])); ?>
             </div>
-            <p class="mt-6 text-sm"><a href="blog" class="text-teal-700 hover:underline">&larr; Back to all posts</a></p>
+            <p class="mt-6 text-sm"><a href="blog.php" class="text-teal-700 hover:underline">&larr; Back to all posts</a></p>
         </article>
     <?php elseif (empty($posts)): ?>
         <div class="section-card">
@@ -65,10 +65,10 @@ include 'includes/header.php';
             <?php foreach ($posts as $p): ?>
                 <article class="section-card">
                     <span class="tag-chip"><?php echo e(ucfirst($p['category'])); ?></span>
-                    <h2 class="font-semibold text-xl mt-3"><a href="blog?post=<?php echo e($p['slug']); ?>" class="hover:underline"><?php echo e($p['title']); ?></a></h2>
+                    <h2 class="font-semibold text-xl mt-3"><a href="blog.php?post=<?php echo e($p['slug']); ?>" class="hover:underline"><?php echo e($p['title']); ?></a></h2>
                     <p class="text-sm mt-2 muted-copy">Posted on <?php echo e(date('Y-m-d', strtotime((string) $p['published_at']))); ?></p>
                     <p class="text-sm mt-2"><?php echo e(excerpt($p['content'], 40)); ?></p>
-                    <a href="blog?post=<?php echo e($p['slug']); ?>" class="inline-block mt-3 text-teal-700 text-sm font-semibold hover:underline">Read article &rarr;</a>
+                    <a href="blog.php?post=<?php echo e($p['slug']); ?>" class="inline-block mt-3 text-teal-700 text-sm font-semibold hover:underline">Read article &rarr;</a>
                 </article>
             <?php endforeach; ?>
         </div>
@@ -79,7 +79,7 @@ include 'includes/header.php';
             <h2 class="text-xl font-semibold">Get New Posts by Email</h2>
             <p class="text-sm muted-copy mt-1">Subscribe to updates and never miss church news.</p>
         </div>
-        <a href="contact" class="secondary-action">Subscribe</a>
+        <a href="contact.php" class="secondary-action">Subscribe</a>
     </div>
 </section>
 <?php include 'includes/footer.php'; ?>
