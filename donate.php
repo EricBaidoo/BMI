@@ -1,166 +1,124 @@
 <?php
-$pageTitle = 'Give | Bridge Ministries International';
-$pageDescription = 'Support the mission of Bridge Ministries International with a secure online gift.';
+$pageTitle = 'Give Online | Bridge Ministries International';
+$pageDescription = 'Partner with us financially to spread the Gospel and empower communities globally.';
 
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/csrf.php';
+require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/settings.php';
 
-// Settings override env defaults
-$paystackPublicKey = setting('giving.paystack_public_key', $paystackPublicKey);
-$givingCurrency    = setting('giving.currency', 'GHS');
-$bankName          = setting('giving.bank_name');
-$bankAccountName   = setting('giving.bank_account_name');
-$bankAccountNum    = setting('giving.bank_account_number');
-$bankBranch        = setting('giving.bank_branch');
-$momoMtn           = setting('giving.momo_mtn');
-$momoVoda          = setting('giving.momo_vodafone');
-$momoAt            = setting('giving.momo_airteltigo');
-$emailGiving       = setting('contact.email_giving');
-
-$paystackEnabled = $paystackPublicKey !== '';
 include 'includes/header.php';
 ?>
-<section class="page-hero">
-    <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
-        <span class="tag-chip">Give</span>
-        <h1 class="text-4xl md:text-5xl font-bold mt-3">Support the Mission</h1>
-        <p class="mt-4 text-lg muted-copy max-w-3xl">Your giving helps us preach the Gospel, disciple believers, and serve people in practical ways.</p>
+
+<!-- HERO SECTION -->
+<div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+    <!-- Abstract Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#c49a45]/10 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#c49a45]/30 to-transparent"></div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
+            Give Online
+        </h1>
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium mb-10">
+            Your generosity helps us build the church, preach the Gospel, and make a lasting impact in communities around the world.
+        </p>
+        
+        <a href="#give-now" class="inline-flex items-center justify-center px-8 py-4 bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold rounded-sm transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_rgba(196,154,69,0.3)] text-lg">
+            Give Securely Now
+        </a>
     </div>
-</section>
+</div>
 
-<section class="max-w-6xl mx-auto px-4 py-12">
-    <div class="grid md:grid-cols-2 gap-6">
-        <div class="section-card">
-            <h2 class="font-semibold text-2xl">Give Online</h2>
-            <?php if ($paystackEnabled): ?>
-                <p class="text-sm mt-2 muted-copy">Secure card and mobile-money giving via Paystack. You will receive an email receipt.</p>
-
-                <form id="give-form" class="mt-4 space-y-3" onsubmit="return false;">
-                    <div>
-                        <label class="text-sm font-medium" for="give-name">Full Name</label>
-                        <input id="give-name" type="text" required maxlength="120"
-                               class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium" for="give-email">Email</label>
-                        <input id="give-email" type="email" required maxlength="150"
-                               class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium" for="give-amount">Amount (<?php echo e($givingCurrency); ?>)</label>
-                        <input id="give-amount" type="number" min="1" step="1" required
-                               class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium" for="give-purpose">Purpose</label>
-                        <select id="give-purpose" class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-                            <option value="tithe">Tithe</option>
-                            <option value="offering">Offering</option>
-                            <option value="missions">Missions</option>
-                            <option value="building">Building Fund</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                    <button id="give-submit" type="submit" class="primary-action">Give Securely</button>
-                    <p id="give-status" class="text-sm mt-2" role="status" aria-live="polite"></p>
-                </form>
-            <?php else: ?>
-                <p class="text-sm mt-2 muted-copy">Online giving is being set up. In the meantime, please use one of the channels listed on the right, or contact our finance team.</p>
-            <?php endif; ?>
+<!-- WAYS TO GIVE SECTION -->
+<div class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-3xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">3 Ways to Give</h2>
         </div>
 
-        <div class="section-card">
-            <h2 class="font-semibold text-2xl">Other Ways to Give</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Online -->
+            <div class="bg-slate-50 p-10 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-[#c49a45] flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-[#c49a45] group-hover:text-white transition-colors duration-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Give Online</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6">
+                    Simple and secure. Give a single gift, or schedule recurring giving using your checking account, debit, or credit card.
+                </p>
+                <a href="#give-now" class="text-[#c49a45] font-bold hover:text-[#d4ac57] flex items-center justify-center">
+                    Give Online <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
 
-            <ul class="list-disc pl-5 mt-3 text-sm space-y-2">
-                <li>In person during any church service.</li>
-                <?php if ($bankName !== '' || $bankAccountNum !== ''): ?>
-                    <li>
-                        <strong>Bank transfer:</strong>
-                        <?php if ($bankName !== ''): ?><?php echo e($bankName); ?><?php endif; ?>
-                        <?php if ($bankAccountName !== ''): ?> &middot; <?php echo e($bankAccountName); ?><?php endif; ?>
-                        <?php if ($bankAccountNum !== ''): ?> &middot; A/C <?php echo e($bankAccountNum); ?><?php endif; ?>
-                        <?php if ($bankBranch !== ''): ?> &middot; <?php echo e($bankBranch); ?> Branch<?php endif; ?>
-                    </li>
-                <?php else: ?>
-                    <li>Bank transfer (account details available from the church office).</li>
-                <?php endif; ?>
+            <!-- In Person -->
+            <div class="bg-slate-50 p-10 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-[#c49a45] flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-[#c49a45] group-hover:text-white transition-colors duration-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">In Person</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6">
+                    You can give in person at any of our campuses during the weekend worship experiences. Envelopes are provided.
+                </p>
+                <a href="visit" class="text-[#c49a45] font-bold hover:text-[#d4ac57] flex items-center justify-center">
+                    Plan a Visit <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
 
-                <?php if ($momoMtn !== '' || $momoVoda !== '' || $momoAt !== ''): ?>
-                    <li>
-                        <strong>Mobile money:</strong>
-                        <?php $mm = []; if ($momoMtn !== '') $mm[] = 'MTN MoMo ' . $momoMtn; if ($momoVoda !== '') $mm[] = 'Vodafone Cash ' . $momoVoda; if ($momoAt !== '') $mm[] = 'AirtelTigo ' . $momoAt; ?>
-                        <?php echo e(implode(' · ', $mm)); ?>
-                    </li>
-                <?php else: ?>
-                    <li>Mobile money (MTN MoMo, Vodafone Cash, AirtelTigo).</li>
-                <?php endif; ?>
-            </ul>
-
-            <h3 class="font-semibold text-lg mt-6">Need Assistance?</h3>
-            <p class="text-sm mt-2 muted-copy">For giving support or designated offerings, contact our finance team<?php if ($emailGiving !== ''): ?> at <a class="hover:underline" href="mailto:<?php echo e($emailGiving); ?>"><?php echo e($emailGiving); ?></a><?php endif; ?>.</p>
-            <a href="contact" class="secondary-action mt-4">Contact Finance Team</a>
+            <!-- Mail -->
+            <div class="bg-slate-50 p-10 rounded-2xl border border-slate-100 text-center shadow-sm hover:shadow-md transition-shadow group">
+                <div class="w-16 h-16 rounded-2xl bg-white border border-slate-100 text-[#c49a45] flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-[#c49a45] group-hover:text-white transition-colors duration-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Mail a Check</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6">
+                    Make checks payable to "Bridge Ministries International" and mail them to our central office address.
+                </p>
+                <span class="text-slate-900 font-bold block bg-white py-2 px-4 rounded-lg border border-slate-200">
+                    PO Box 12345, Faith City
+                </span>
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="section-card mt-6">
-        <h2 class="font-semibold text-xl">Thank You for Giving</h2>
-        <p class="text-sm mt-2">Every contribution makes a meaningful difference in worship services, outreach projects, and ministry development.</p>
+<!-- GIVE NOW WIDGET (Placeholder) -->
+<div id="give-now" class="py-24 bg-slate-900 relative overflow-hidden">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        
+        <h2 class="text-3xl md:text-5xl font-display font-black text-white tracking-tight mb-6">Secure Giving Portal</h2>
+        <p class="text-lg text-slate-400 font-medium mb-12">
+            Select an amount below or enter a custom amount to proceed to our secure checkout.
+        </p>
+
+        <div class="bg-white p-8 md:p-12 rounded-3xl shadow-2xl">
+            <!-- Simulated Giving UI -->
+            <div class="mb-8">
+                <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4">Choose Amount</h3>
+                <div class="grid grid-cols-3 gap-4 mb-4">
+                    <button class="py-4 border-2 border-slate-200 rounded-xl font-bold text-xl text-slate-700 hover:border-[#c49a45] hover:text-[#c49a45] transition-colors focus:border-[#c49a45] focus:bg-[#c49a45]/5 focus:text-[#c49a45]">$50</button>
+                    <button class="py-4 border-2 border-[#c49a45] bg-[#c49a45]/5 rounded-xl font-bold text-xl text-[#c49a45] transition-colors">$100</button>
+                    <button class="py-4 border-2 border-slate-200 rounded-xl font-bold text-xl text-slate-700 hover:border-[#c49a45] hover:text-[#c49a45] transition-colors focus:border-[#c49a45] focus:bg-[#c49a45]/5 focus:text-[#c49a45]">$250</button>
+                </div>
+                <div class="relative">
+                    <span class="absolute left-6 top-1/2 -translate-y-1/2 text-slate-400 font-bold text-xl">$</span>
+                    <input type="number" placeholder="Custom Amount" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl py-4 pl-12 pr-6 font-bold text-xl text-slate-900 focus:outline-none focus:border-[#c49a45] transition-colors">
+                </div>
+            </div>
+
+            <button class="w-full bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold text-xl py-5 rounded-xl shadow-lg hover:-translate-y-1 transition-all duration-300 mb-6">
+                Continue to Payment
+            </button>
+            
+            <div class="flex items-center justify-center gap-2 text-slate-400 text-sm font-medium">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                <span>Encrypted & Secure Transaction</span>
+            </div>
+        </div>
+
     </div>
-</section>
-
-<?php if ($paystackEnabled): ?>
-<script src="https://js.paystack.co/v1/inline.js"></script>
-<script>
-(function () {
-    var form = document.getElementById('give-form');
-    if (!form) return;
-
-    var btn = document.getElementById('give-submit');
-    var status = document.getElementById('give-status');
-
-    btn.addEventListener('click', function () {
-        var name = document.getElementById('give-name').value.trim();
-        var email = document.getElementById('give-email').value.trim();
-        var amount = parseInt(document.getElementById('give-amount').value, 10);
-        var purpose = document.getElementById('give-purpose').value;
-
-        if (!name || !email || !amount || amount < 1) {
-            status.textContent = 'Please fill in all fields with a valid amount.';
-            status.className = 'text-sm mt-2 text-red-700';
-            return;
-        }
-
-        status.textContent = 'Opening secure payment...';
-        status.className = 'text-sm mt-2 text-slate-600';
-
-        var handler = PaystackPop.setup({
-            key: <?php echo json_encode($paystackPublicKey); ?>,
-            email: email,
-            amount: amount * 100, // smallest currency unit
-            currency: <?php echo json_encode($givingCurrency); ?>,
-            ref: 'bmi-' + Date.now() + '-' + Math.floor(Math.random() * 1e6),
-            metadata: {
-                custom_fields: [
-                    { display_name: 'Donor Name', variable_name: 'donor_name', value: name },
-                    { display_name: 'Purpose', variable_name: 'purpose', value: purpose }
-                ]
-            },
-            callback: function (response) {
-                status.textContent = 'Thank you! Reference: ' + response.reference;
-                status.className = 'text-sm mt-2 text-emerald-700';
-            },
-            onClose: function () {
-                status.textContent = 'Payment window closed. You may try again any time.';
-                status.className = 'text-sm mt-2 text-slate-600';
-            }
-        });
-        handler.openIframe();
-    });
-})();
-</script>
-<?php endif; ?>
+</div>
 
 <?php include 'includes/footer.php'; ?>

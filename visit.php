@@ -1,233 +1,206 @@
 <?php
-$pageTitle = 'Plan Your Visit | Bridge Ministries International';
-$pageDescription = 'Planning your first visit to Bridge Ministries International? Here\'s everything you need to know about service times, parking, kids, and what to expect.';
+$pageTitle = 'Plan a Visit | Bridge Ministries International';
+$pageDescription = 'Join us this Sunday at Bridge Ministries International. Find service times, location, and what to expect.';
 
 require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/csrf.php';
-require_once __DIR__ . '/includes/settings.php';
 require_once __DIR__ . '/includes/helpers.php';
-
-// Reuse the contact form mechanics for the "Connect Card" submission
-$visitError = '';
-$old = ['name' => '', 'email' => '', 'message' => '', 'phone' => ''];
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['connect_card'])) {
-    try {
-        csrf_check();
-
-        // Honeypot — bots fill it, humans don't see it. Silent success.
-        if (!empty($_POST['website_url'])) {
-            flash('visit', 'success');
-            header('Location: visit#connect-form');
-            exit;
-        }
-
-        $name = trim((string) ($_POST['name'] ?? ''));
-        $email = trim((string) ($_POST['email'] ?? ''));
-        $phone = trim((string) ($_POST['phone'] ?? ''));
-        $message = trim((string) ($_POST['message'] ?? 'Plans to visit BMI.'));
-
-        $old = compact('name', 'email', 'phone', 'message');
-
-        if ($name === '' || $email === '') {
-            throw new RuntimeException('Please fill in your name and email.');
-        }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            throw new RuntimeException('Please enter a valid email address.');
-        }
-
-        $compiled = "Connect card submission.\n\nName: $name\nEmail: $email\nPhone: $phone\n\nNotes:\n" . $message;
-
-        $pdo = db_connect();
-        $stmt = $pdo->prepare(
-            'INSERT INTO messages (full_name, email, subject, message, type) VALUES (:n, :e, :s, :m, "contact")'
-        );
-        $stmt->execute([
-            ':n' => $name,
-            ':e' => $email,
-            ':s' => 'Connect Card · Plan Your Visit',
-            ':m' => $compiled,
-        ]);
-
-        flash('visit', 'success');
-        header('Location: visit#connect-form');
-        exit;
-    } catch (Throwable $e) {
-        $visitError = $e->getMessage();
-    }
-}
-
-$visitSuccess = flash('visit') === 'success';
-
-$svcSunday = setting('service.sunday_worship');
-$svcBible = setting('service.bible_study');
-$svcPrayer = setting('service.prayer_service');
-$address = setting('contact.address');
-$phone = setting('contact.phone_primary');
-$mapQuery = setting('contact.map_query', $address);
+require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/includes/settings.php';
 
 include 'includes/header.php';
 ?>
-<section class="page-hero">
-    <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
-        <span class="tag-chip">Plan Your Visit</span>
-        <h1 class="text-4xl md:text-5xl font-bold mt-3">We've saved you a seat.</h1>
-        <p class="mt-4 text-lg muted-copy max-w-3xl">
-            Thinking about visiting? You're already welcome. Here's everything you need to know about your first time at BMI —
-            from where to park to what to wear, and what your kids can expect.
+
+<!-- HERO SECTION -->
+<div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img src="assets/image/PXL_20240329_213926615.jpg" alt="Church Worship" class="w-full h-full object-cover opacity-20" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=2000&auto=format&fit=crop';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
+    </div>
+    
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <span class="inline-block py-1 px-3 rounded-full bg-[#1a1f2e] border border-white/10 text-[#c49a45] text-sm font-bold tracking-widest uppercase mb-6">You Belong Here</span>
+        <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
+            Plan a Visit
+        </h1>
+        <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
+            We can't wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.
         </p>
     </div>
-</section>
+</div>
 
-<section class="max-w-6xl mx-auto px-4 py-12 space-y-10">
+<!-- WHEN & WHERE SECTION -->
+<div class="py-24 bg-white relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+            <!-- Text Content -->
+            <div>
+                <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-8">When & Where</h2>
+                
+                <div class="space-y-8">
+                    <!-- Service Times -->
+                    <div class="flex gap-6">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 border border-slate-200">
+                            <svg class="w-6 h-6 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Service Times</h3>
+                            <ul class="space-y-3 text-slate-600 font-medium">
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
+                                    <span>Sunday Celebration — 9:00 AM</span>
+                                </li>
+                                <li class="flex items-center gap-3">
+                                    <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
+                                    <span>Wednesday Midweek — 6:30 PM</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
 
-    <!-- At-a-glance row -->
-    <div class="grid md:grid-cols-3 gap-4">
-        <div class="section-card icon-card" data-icon="•">
-            <p class="text-xs uppercase tracking-wide muted-copy">When</p>
-            <p class="font-semibold mt-1"><?php echo e($svcSunday !== '' ? $svcSunday : 'Sundays'); ?></p>
-            <?php if ($svcBible !== '' || $svcPrayer !== ''): ?>
-                <p class="text-xs muted-copy mt-2">
-                    <?php $other = array_filter([$svcBible, $svcPrayer]); echo e(implode(' · ', $other)); ?>
+                    <!-- Location -->
+                    <div class="flex gap-6">
+                        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 border border-slate-200">
+                            <svg class="w-6 h-6 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-2">Location</h3>
+                            <p class="text-slate-600 font-medium leading-relaxed mb-4">
+                                <?php echo htmlspecialchars(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>
+                            </p>
+                            <a href="#" class="inline-flex items-center font-bold text-[#c49a45] hover:text-[#d4ac57] transition-colors group">
+                                Get Directions
+                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Image/Map Container -->
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-square md:aspect-video lg:aspect-square group">
+                <img src="assets/image/church-building.jpg" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
+                <div class="absolute inset-0 border border-black/10 rounded-2xl pointer-events-none"></div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<!-- WHAT TO EXPECT SECTION -->
+<div class="py-24 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">What to Expect</h2>
+            <p class="text-lg text-slate-600 font-medium leading-relaxed">
+                Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Item 1 -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Passionate Worship</h3>
+                <p class="text-slate-600 font-medium leading-relaxed">
+                    Our services begin with dynamic, Spirit-led worship. We sing contemporary songs and hymns designed to exalt Jesus.
                 </p>
-            <?php endif; ?>
-        </div>
-        <div class="section-card icon-card" data-icon="•">
-            <p class="text-xs uppercase tracking-wide muted-copy">Where</p>
-            <p class="font-semibold mt-1"><?php echo e($address !== '' ? $address : 'Accra, Ghana'); ?></p>
-        </div>
-        <div class="section-card icon-card" data-icon="•">
-            <p class="text-xs uppercase tracking-wide muted-copy">Need help finding us?</p>
-            <p class="font-semibold mt-1"><?php echo e($phone !== '' ? $phone : 'Call the church office'); ?></p>
-            <p class="text-xs muted-copy mt-2">Call or WhatsApp on the day — someone will guide you in.</p>
-        </div>
-    </div>
-
-    <!-- What to expect -->
-    <div>
-        <div class="text-center max-w-2xl mx-auto">
-            <span class="tag-chip">What to Expect</span>
-            <h2 class="text-3xl font-bold mt-3">Your First Sunday at BMI</h2>
-            <p class="mt-3 muted-copy">No pressure. No surprises. Just a warm family ready to welcome you.</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6 mt-8">
-            <div class="section-card">
-                <p class="text-sm font-semibold text-blue-700">Step 1</p>
-                <h3 class="text-lg font-semibold mt-1">Arrive a few minutes early</h3>
-                <p class="mt-3 text-sm muted-copy">Aim to arrive about 15 minutes before service. Look for our hosts at the entrance — they're easy to spot and ready to help you find a seat, the kids' area, or the restrooms.</p>
             </div>
-            <div class="section-card">
-                <p class="text-sm font-semibold text-blue-700">Step 2</p>
-                <h3 class="text-lg font-semibold mt-1">Worship with us</h3>
-                <p class="mt-3 text-sm muted-copy">Our service runs about 90&nbsp;minutes and includes singing, prayer, scripture reading, and a Bible-centred message you can take with you into the week.</p>
-            </div>
-            <div class="section-card">
-                <p class="text-sm font-semibold text-blue-700">Step 3</p>
-                <h3 class="text-lg font-semibold mt-1">Stay and connect</h3>
-                <p class="mt-3 text-sm muted-copy">After the service, stop by the welcome desk. Fill out a quick connect card and one of our pastors will follow up to answer any question, big or small.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- FAQ grid -->
-    <div>
-        <div class="text-center max-w-2xl mx-auto">
-            <span class="tag-chip">FAQ</span>
-            <h2 class="text-3xl font-bold mt-3">Common Questions</h2>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-4 mt-8">
-            <div class="section-card">
-                <h3 class="font-semibold">What should I wear?</h3>
-                <p class="mt-2 text-sm muted-copy">Whatever you're comfortable in. Some come in suits, others in jeans — both are welcome. Come as you are.</p>
-            </div>
-            <div class="section-card">
-                <h3 class="font-semibold">Is there parking?</h3>
-                <p class="mt-2 text-sm muted-copy">Yes — free parking is available on-site. Look out for our parking attendants on Sundays.</p>
-            </div>
-            <div class="section-card">
-                <h3 class="font-semibold">What about my kids?</h3>
-                <p class="mt-2 text-sm muted-copy">We have a vibrant, age-appropriate Children's Ministry running during the Sunday service. It's safe, fun, and Bible-centred — your kids will love it.</p>
-            </div>
-            <div class="section-card">
-                <h3 class="font-semibold">Will I be asked to give?</h3>
-                <p class="mt-2 text-sm muted-copy">Giving is part of our worship, but we never want guests to feel pressured. As a first-time visitor, our gift to you is the seat — no expectation to give.</p>
-            </div>
-            <div class="section-card">
-                <h3 class="font-semibold">Do you have a livestream?</h3>
-                <p class="mt-2 text-sm muted-copy">Yes — if you can't make it in person, you can join us live online. <a href="livestream" class="text-teal-700 hover:underline">Watch live &rarr;</a></p>
-            </div>
-            <div class="section-card">
-                <h3 class="font-semibold">I'm not sure I believe yet — can I still come?</h3>
-                <p class="mt-2 text-sm muted-copy">Absolutely. You don't have to have it all figured out. Whether you're exploring, doubting, or just curious — there's a seat with your name on it.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Connect card -->
-    <div class="grid md:grid-cols-2 gap-6">
-        <form method="post" id="connect-form" class="section-card icon-card space-y-3" data-icon="@" novalidate>
-            <h2 class="text-xl font-semibold">Send a Connect Card</h2>
-            <p class="text-sm muted-copy">Let us know you're coming or have a question — a pastor will reach out personally.</p>
-
-            <?php if ($visitSuccess): ?>
-                <div class="rounded border border-emerald-200 bg-emerald-50 text-emerald-800 px-3 py-2 text-sm">
-                    Thank you. We've received your card and one of our pastors will be in touch soon.
+            
+            <!-- Item 2 -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
-            <?php endif; ?>
-            <?php if ($visitError !== ''): ?>
-                <div class="rounded border border-red-200 bg-red-50 text-red-800 px-3 py-2 text-sm">
-                    <?php echo e($visitError); ?>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">Biblical Teaching</h3>
+                <p class="text-slate-600 font-medium leading-relaxed">
+                    You will hear an engaging, uncompromising message based entirely on the Word of God that applies directly to your life.
+                </p>
+            </div>
+
+            <!-- Item 3 -->
+            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-            <?php endif; ?>
-
-            <?php echo csrf_field(); ?>
-            <input type="hidden" name="connect_card" value="1">
-            <div style="position:absolute;left:-9999px;" aria-hidden="true">
-                <label>Leave this field blank: <input type="text" name="website_url" tabindex="-1" autocomplete="off"></label>
+                <h3 class="text-xl font-bold text-slate-900 mb-3">BMI Kids</h3>
+                <p class="text-slate-600 font-medium leading-relaxed">
+                    We offer a safe, fun, and educational environment for children (infants through 5th grade) during all main services.
+                </p>
             </div>
-
-            <div>
-                <label class="text-sm font-medium" for="vc-name">Full Name</label>
-                <input id="vc-name" type="text" name="name" required maxlength="120"
-                       value="<?php echo e($old['name']); ?>"
-                       class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-            </div>
-            <div>
-                <label class="text-sm font-medium" for="vc-email">Email</label>
-                <input id="vc-email" type="email" name="email" required maxlength="150"
-                       value="<?php echo e($old['email']); ?>"
-                       class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-            </div>
-            <div>
-                <label class="text-sm font-medium" for="vc-phone">Phone (optional)</label>
-                <input id="vc-phone" type="tel" name="phone" maxlength="40"
-                       value="<?php echo e($old['phone']); ?>"
-                       class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
-            </div>
-            <div>
-                <label class="text-sm font-medium" for="vc-message">Notes / Questions</label>
-                <textarea id="vc-message" name="message" rows="3" maxlength="2000"
-                          placeholder="e.g. I'd like to bring my family this Sunday."
-                          class="mt-1 w-full border border-slate-300 rounded px-3 py-2"><?php echo e($old['message']); ?></textarea>
-            </div>
-            <button type="submit" class="primary-action">Send Card</button>
-        </form>
-
-        <div class="section-card">
-            <h2 class="text-xl font-semibold">Find Us on the Map</h2>
-            <?php if ($mapQuery !== ''): ?>
-                <div class="mt-3 rounded-xl overflow-hidden">
-                    <iframe
-                        title="Bridge Ministries International location"
-                        src="https://www.google.com/maps?q=<?php echo urlencode($mapQuery); ?>&output=embed"
-                        width="100%" height="280" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                </div>
-            <?php endif; ?>
-            <p class="text-sm muted-copy mt-3">Lost? Call <?php echo e($phone !== '' ? $phone : 'the church office'); ?> on Sunday morning and we'll guide you in.</p>
         </div>
+
+    </div>
+</div>
+
+<!-- PLAN A VISIT FORM -->
+<div class="py-24 bg-slate-900 relative overflow-hidden" id="visit-form">
+    
+    <!-- Decorative SVG -->
+    <div class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-1/3 -translate-y-1/3">
+        <svg width="800" height="800" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="2"/></svg>
     </div>
 
-</section>
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        <div class="text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-display font-black text-white tracking-tight mb-6">Let Us Know You're Coming!</h2>
+            <p class="text-lg text-slate-400 font-medium">
+                Fill out the form below and our team will meet you at the door, show you around, and help get your kids checked in!
+            </p>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <form action="#" method="POST" class="space-y-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="first_name" class="block text-sm font-bold text-slate-700 mb-2">First Name</label>
+                        <input type="text" id="first_name" name="first_name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-sm font-bold text-slate-700 mb-2">Last Name</label>
+                        <input type="text" id="last_name" name="last_name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
+                        <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors">
+                    </div>
+                </div>
+
+                <div>
+                    <label for="date" class="block text-sm font-bold text-slate-700 mb-2">When are you planning to visit?</label>
+                    <input type="date" id="date" name="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700" required>
+                </div>
+
+                <div>
+                    <label for="kids" class="block text-sm font-bold text-slate-700 mb-2">Will you be bringing any children?</label>
+                    <select id="kids" name="kids" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700">
+                        <option value="no">No children this time</option>
+                        <option value="yes">Yes, I will bring my kids</option>
+                    </select>
+                </div>
+
+                <div class="pt-4">
+                    <button type="submit" class="w-full bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold text-lg py-4 rounded-lg shadow-lg hover:-translate-y-1 transition-all duration-300">
+                        Plan My Visit
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+    </div>
+</div>
+
 <?php include 'includes/footer.php'; ?>

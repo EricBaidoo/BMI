@@ -4,8 +4,8 @@
   "private": true,
   "description": "Bridge Ministries International church website",
   "scripts": {
-    "build:css": "tailwindcss -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.css --minify",
-    "watch:css": "tailwindcss -i ./assets/css/tailwind.input.css -o ./assets/css/tailwind.css --watch"
+    "build:css": "tailwindcss -i ./assets/css/tailwind.input.css -o ./assets/css/styles.css --minify",
+    "watch:css": "tailwindcss -i ./assets/css/tailwind.input.css -o ./assets/css/styles.css --watch"
   },
   "devDependencies": {
     "tailwindcss": "^3.4.10"

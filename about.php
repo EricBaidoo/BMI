@@ -11,153 +11,211 @@ $svcSunday = setting('service.sunday_worship');
 
 include 'includes/header.php';
 ?>
-<section class="page-hero">
-    <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
-        <span class="tag-chip">About <?php echo e($siteName); ?></span>
-        <h1 class="text-4xl md:text-5xl font-bold mt-3">Building Bridges. Building Lives.</h1>
-        <p class="mt-4 text-lg muted-copy max-w-3xl">
-            Bridge Ministries International is a Christ-centred church family in Accra, Ghana, committed to one calling:
-            <em>Glorify God, Grow disciples, and Go on mission.</em> We exist to bridge people to Jesus, to one another, and to a life of purpose.
+
+<!-- HERO SECTION -->
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=2000&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover opacity-30 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
+    </div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+        <div class="inline-flex items-center gap-4 mb-6">
+            <div class="h-px w-12 bg-[#c49a45]"></div>
+            <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">About Us</span>
+            <div class="h-px w-12 bg-[#c49a45]"></div>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
+            Building Bridges. <br/><span class="text-[#c49a45]">Building Lives.</span>
+        </h1>
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
+            Bridge Ministries International is a Christ-centred church family in Accra, Ghana, committed to one calling: Glorify God, Grow disciples, and Go on mission.
         </p>
     </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 py-12 space-y-10">
+<!-- OUR STORY & FOUNDER -->
+<section class="py-24 md:py-32 bg-slate-950 relative overflow-hidden border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+            
+            <!-- Biography Content -->
+            <div class="relative order-2 lg:order-1">
+                <div class="inline-flex items-center gap-4 mb-6">
+                    <div class="h-px w-12 bg-[#c49a45]"></div>
+                    <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our History</span>
+                </div>
+                
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-8 leading-tight">
+                    From a small fellowship <br>to a global movement.
+                </h2>
+                
+                <div class="text-slate-400 font-medium leading-relaxed space-y-6 text-lg">
+                    <p>
+                        Bridge Ministries International began in <?php echo e($founded); ?> as a small group of believers gathering with a single conviction: that the local church should be a bridge — between God and people, between generations, and between the church and the community it serves.
+                    </p>
+                    <p>
+                        Under the leadership of Rev. Francis Duane Yalley, that conviction has grown into a thriving movement of cell-based ministries and congregations reaching thousands of believers across Ghana and beyond.
+                    </p>
+                    <p>
+                        Today we remain anchored in the same simple commitments that defined our first gatherings: faithful preaching of the Word, strategic prayer, intentional discipleship, and a love for the city. 
+                    </p>
+                </div>
+            </div>
 
-    <!-- Our Story -->
-    <div class="grid md:grid-cols-3 gap-6">
-        <div class="section-card md:col-span-2">
-            <span class="tag-chip">Our Story</span>
-            <h2 class="text-2xl font-semibold mt-3">From a small fellowship to a movement</h2>
-            <p class="mt-4 text-sm muted-copy leading-relaxed">
-                Bridge Ministries International began in <?php echo e($founded); ?> as a small group of believers gathering with a single conviction:
-                that the local church should be a bridge — between God and people, between generations, and between the church and the community it serves.
-                Under the leadership of Rev. Francis Duane Yalley, that conviction has grown into a thriving movement of cell-based ministries
-                and congregations reaching thousands of believers across Ghana and beyond.
-            </p>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                Today we remain anchored in the same simple commitments that defined our first gatherings: faithful preaching of the Word,
-                strategic prayer, intentional discipleship, and a love for the city. Whether you are a long-time member, a first-time guest,
-                or a believer somewhere in between, you are welcome at the bridge.
-            </p>
-        </div>
-        <div class="section-card">
-            <span class="tag-chip">Visit This Sunday</span>
-            <p class="mt-3 text-sm muted-copy"><?php echo e($svcSunday !== '' ? $svcSunday : 'Join us at our weekly celebration service.'); ?></p>
-            <p class="text-sm muted-copy mt-2">Come as you are — we'll save you a seat.</p>
-            <a href="visit" class="primary-action mt-4">Plan Your Visit</a>
-        </div>
-    </div>
-
-    <!-- Mission, Vision, Values -->
-    <div class="grid md:grid-cols-3 gap-6">
-        <div class="section-card">
-            <span class="tag-chip">Mission</span>
-            <h2 class="text-xl font-semibold mt-3">Why we exist</h2>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                To lead people to Jesus Christ and shape mature disciples through Scripture, prayer, community, and service —
-                so that lives, families, and communities are transformed by the Gospel.
-            </p>
-        </div>
-        <div class="section-card">
-            <span class="tag-chip">Vision</span>
-            <h2 class="text-xl font-semibold mt-3">Where we are headed</h2>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                A Christ-centred, compassionate, and globally-engaged church reaching the city and the nations —
-                building bridges of faith that endure for generations.
-            </p>
-        </div>
-        <div class="section-card">
-            <span class="tag-chip">Motto</span>
-            <h2 class="text-xl font-semibold mt-3">Glorify. Grow. Go.</h2>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                Three words that shape every gathering, decision, and ministry. Worship that honours God,
-                discipleship that produces growth, and mission that sends us into the world.
-            </p>
-        </div>
-    </div>
-
-    <!-- Core Values -->
-    <div class="section-card">
-        <span class="tag-chip">Our Values</span>
-        <h2 class="text-2xl font-semibold mt-3">What we hold tightly</h2>
-        <div class="grid md:grid-cols-2 gap-x-10 gap-y-5 mt-5 text-sm">
-            <div>
-                <p class="font-semibold">1. Scripture, Above All</p>
-                <p class="muted-copy mt-1">The Bible is our final authority for faith and practice. We teach it, trust it, and live by it.</p>
+            <!-- Founder Portrait -->
+            <div class="relative group order-1 lg:order-2">
+                <div class="absolute inset-0 bg-[#c49a45] rounded-3xl blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity duration-700"></div>
+                <div class="relative w-full aspect-[4/5] rounded-sm overflow-hidden border border-slate-800 shadow-2xl bg-slate-800 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent z-10"></div>
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    
+                    <div class="absolute bottom-10 left-10 z-20">
+                        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-sm bg-slate-900/90 backdrop-blur-md border border-slate-700 mb-4 shadow-sm">
+                            <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
+                            <span class="text-white text-xs font-bold tracking-widest uppercase">General Overseer</span>
+                        </div>
+                        <h3 class="text-4xl font-display font-black text-white leading-tight">Rev. F.D.<br>Yalley</h3>
+                    </div>
+                </div>
             </div>
-            <div>
-                <p class="font-semibold">2. Prayer, Without Ceasing</p>
-                <p class="muted-copy mt-1">Prayer is not a programme — it is the engine of everything we do, both privately and corporately.</p>
-            </div>
-            <div>
-                <p class="font-semibold">3. Discipleship, On Purpose</p>
-                <p class="muted-copy mt-1">We don't just gather crowds; we build disciples who follow Jesus and form others to do the same.</p>
-            </div>
-            <div>
-                <p class="font-semibold">4. Family, Across Generations</p>
-                <p class="muted-copy mt-1">From children to elders, every age group has a seat at the table and a voice in the body.</p>
-            </div>
-            <div>
-                <p class="font-semibold">5. Mission, Beyond Walls</p>
-                <p class="muted-copy mt-1">We are sent — to our neighbours, our city, and the nations — with the love and message of Jesus.</p>
-            </div>
-            <div>
-                <p class="font-semibold">6. Integrity, At All Costs</p>
-                <p class="muted-copy mt-1">We pursue financial transparency, ethical leadership, and Christ-like character in private and in public.</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Leadership -->
-    <div>
-        <div class="text-center max-w-2xl mx-auto">
-            <span class="tag-chip">Leadership</span>
-            <h2 class="text-3xl font-bold mt-3">Meet Our Leaders</h2>
-            <p class="mt-3 muted-copy">A team of pastors, elders, and ministry leaders shepherding the church together.</p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-6 mt-8">
-            <div class="section-card text-center">
-                <img src="assets/image/IMG_1061.jpg" alt="Rev. Francis Duane Yalley" class="w-32 h-32 rounded-full object-cover mx-auto" loading="lazy">
-                <h3 class="font-semibold text-lg mt-4">Rev. Francis Duane Yalley</h3>
-                <p class="text-xs uppercase tracking-wide muted-copy mt-1">General Overseer</p>
-                <p class="mt-3 text-sm muted-copy">A teacher of the Word with a passion for biblical truth, strategic prayer, and raising mature disciples who influence their communities.</p>
-            </div>
-            <div class="section-card text-center">
-                <div class="w-32 h-32 rounded-full bg-slate-200 mx-auto flex items-center justify-center text-slate-400 text-3xl font-bold">+</div>
-                <h3 class="font-semibold text-lg mt-4">Pastoral Team</h3>
-                <p class="text-xs uppercase tracking-wide muted-copy mt-1">Associate Pastors</p>
-                <p class="mt-3 text-sm muted-copy">A faithful team of associate pastors serving alongside the General Overseer in teaching, counselling, and shepherding.</p>
-            </div>
-            <div class="section-card text-center">
-                <div class="w-32 h-32 rounded-full bg-slate-200 mx-auto flex items-center justify-center text-slate-400 text-3xl font-bold">+</div>
-                <h3 class="font-semibold text-lg mt-4">Ministry Leaders</h3>
-                <p class="text-xs uppercase tracking-wide muted-copy mt-1">Elders & Coordinators</p>
-                <p class="mt-3 text-sm muted-copy">Trusted men and women leading every ministry — from worship and discipleship to outreach, youth, and missions.</p>
-            </div>
-        </div>
-
-        <p class="text-xs muted-copy text-center mt-4">More leadership profiles coming soon.</p>
-    </div>
-
-    <!-- Closing CTA grid -->
-    <div class="grid md:grid-cols-3 gap-6">
-        <div class="section-card">
-            <h2 class="text-xl font-semibold">What We Believe</h2>
-            <p class="mt-2 text-sm muted-copy">Read our full statement of faith — what we hold to be true about God, Scripture, and salvation.</p>
-            <a href="beliefs" class="secondary-action mt-4">Our Beliefs</a>
-        </div>
-        <div class="section-card">
-            <h2 class="text-xl font-semibold">Find Your Community</h2>
-            <p class="mt-2 text-sm muted-copy">From cell groups to age-based ministries, there is a place for you to belong, serve, and grow.</p>
-            <a href="ministries" class="secondary-action mt-4">Explore Ministries</a>
-        </div>
-        <div class="section-card">
-            <h2 class="text-xl font-semibold">Need Prayer?</h2>
-            <p class="mt-2 text-sm muted-copy">Whatever you are facing, we'd be honoured to stand with you in prayer.</p>
-            <a href="contact" class="secondary-action mt-4">Send a Request</a>
+            
         </div>
     </div>
 </section>
+
+<!-- CORE VALUES -->
+<section class="py-24 md:py-32 bg-slate-900 relative overflow-hidden border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16 md:mb-20">
+            <div class="inline-flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-12 bg-[#c49a45]"></div>
+                <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Values</span>
+                <div class="h-px w-12 bg-[#c49a45]"></div>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl text-white font-display font-bold">What we hold tightly</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Value 1 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">01</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Scripture, Above All</h3>
+                <p class="text-slate-400 leading-relaxed">The Bible is our final authority for faith and practice. We teach it, trust it, and live by it without compromise.</p>
+            </div>
+            
+            <!-- Value 2 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">02</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Prayer, Without Ceasing</h3>
+                <p class="text-slate-400 leading-relaxed">Prayer is not a programme — it is the engine of everything we do, both privately and corporately as a church.</p>
+            </div>
+
+            <!-- Value 3 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">03</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Discipleship, On Purpose</h3>
+                <p class="text-slate-400 leading-relaxed">We don't just gather crowds; we build disciples who follow Jesus and form others to do exactly the same.</p>
+            </div>
+
+            <!-- Value 4 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">04</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Family, Across Generations</h3>
+                <p class="text-slate-400 leading-relaxed">From children to elders, every age group has a seat at the table and a powerful voice in the body of Christ.</p>
+            </div>
+
+            <!-- Value 5 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">05</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Mission, Beyond Walls</h3>
+                <p class="text-slate-400 leading-relaxed">We are sent — to our neighbours, our city, and the nations — with the love, compassion, and message of Jesus.</p>
+            </div>
+
+            <!-- Value 6 -->
+            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">06</div>
+                <h3 class="text-2xl font-bold text-white mb-3">Integrity, At All Costs</h3>
+                <p class="text-slate-400 leading-relaxed">We pursue financial transparency, ethical leadership, and Christ-like character in private and in public.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LEADERSHIP -->
+<section class="py-24 md:py-32 bg-slate-950 relative overflow-hidden border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="text-center mb-16 md:mb-20">
+            <div class="inline-flex items-center justify-center gap-4 mb-4">
+                <div class="h-px w-12 bg-[#c49a45]"></div>
+                <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Leadership</span>
+                <div class="h-px w-12 bg-[#c49a45]"></div>
+            </div>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl text-white font-display font-bold">Meet Our Leaders</h2>
+            <p class="mt-6 text-slate-400 text-lg max-w-2xl mx-auto">A team of pastors, elders, and ministry leaders shepherding the church together.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <!-- Leader 1 -->
+            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors">
+                    <img src="assets/image/IMG_1061.jpg" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop';">
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-1">Rev. F.D. Yalley</h3>
+                <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">General Overseer</p>
+                <p class="text-slate-400 text-sm leading-relaxed">A teacher of the Word with a passion for biblical truth, strategic prayer, and raising mature disciples who influence their communities.</p>
+            </div>
+
+            <!-- Leader 2 -->
+            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors bg-slate-950 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-1">Pastoral Team</h3>
+                <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">Associate Pastors</p>
+                <p class="text-slate-400 text-sm leading-relaxed">A faithful team of associate pastors serving alongside the General Overseer in teaching, counselling, and shepherding.</p>
+            </div>
+
+            <!-- Leader 3 -->
+            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors bg-slate-950 flex items-center justify-center">
+                    <svg class="w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+                </div>
+                <h3 class="text-2xl font-bold text-white mb-1">Ministry Leaders</h3>
+                <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">Elders & Coordinators</p>
+                <p class="text-slate-400 text-sm leading-relaxed">Trusted men and women leading every ministry — from worship and discipleship to outreach, youth, and missions.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA GRID -->
+<section class="py-24 bg-slate-900 relative overflow-hidden border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-slate-950 p-10 border border-slate-800 flex flex-col items-start text-left group hover:border-[#c49a45] transition-colors">
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-[#c49a45] transition-colors">What We Believe</h3>
+                <p class="text-slate-400 leading-relaxed mb-8 flex-grow">Read our full statement of faith — what we hold to be true about God, Scripture, and salvation.</p>
+                <a href="beliefs" class="inline-flex items-center text-[#c49a45] font-bold uppercase tracking-widest text-sm hover:text-white transition-colors">
+                    Our Beliefs <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+            <div class="bg-slate-950 p-10 border border-slate-800 flex flex-col items-start text-left group hover:border-[#c49a45] transition-colors">
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-[#c49a45] transition-colors">Find Your Community</h3>
+                <p class="text-slate-400 leading-relaxed mb-8 flex-grow">From cell groups to age-based ministries, there is a place for you to belong, serve, and grow.</p>
+                <a href="ministries" class="inline-flex items-center text-[#c49a45] font-bold uppercase tracking-widest text-sm hover:text-white transition-colors">
+                    Explore Ministries <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+            <div class="bg-slate-950 p-10 border border-slate-800 flex flex-col items-start text-left group hover:border-[#c49a45] transition-colors">
+                <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-[#c49a45] transition-colors">Need Prayer?</h3>
+                <p class="text-slate-400 leading-relaxed mb-8 flex-grow">Whatever you are facing, we'd be honoured to stand with you in prayer.</p>
+                <a href="contact" class="inline-flex items-center text-[#c49a45] font-bold uppercase tracking-widest text-sm hover:text-white transition-colors">
+                    Send a Request <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
 <?php include 'includes/footer.php'; ?>

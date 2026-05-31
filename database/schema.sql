@@ -45,13 +45,17 @@ CREATE TABLE IF NOT EXISTS ministries (
 CREATE TABLE IF NOT EXISTS events (
     id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(200) NOT NULL,
+    slug VARCHAR(220) UNIQUE,
     description TEXT,
+    event_type ENUM('flagship', 'special') DEFAULT 'special',
     event_date DATE NOT NULL,
+    end_date DATE DEFAULT NULL,
     event_time TIME,
     venue VARCHAR(200),
     event_image VARCHAR(255) DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_events_date (event_date)
+    INDEX idx_events_date (event_date),
+    INDEX idx_events_type (event_type)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS posts (
