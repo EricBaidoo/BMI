@@ -42,7 +42,7 @@ include 'includes/header.php';
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
         <div class="inline-flex items-center gap-4 mb-6">
             <div class="h-px w-12 bg-[#c49a45]"></div>
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Archive</span>
@@ -58,37 +58,37 @@ include 'includes/header.php';
 </section>
 
 <!-- SERMONS LIST -->
-<section class="py-24 md:py-32 bg-slate-950 relative overflow-hidden border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section class="py-24 md:py-32 bg-slate-50 relative overflow-hidden border-t border-slate-200">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
         <!-- Search / Filter UI Placeholder -->
-        <div class="mb-12 bg-slate-900 border border-slate-800 p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div class="mb-12 bg-white border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="flex-grow w-full md:w-auto relative">
-                <svg class="w-5 h-5 text-slate-500 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" placeholder="Search messages..." class="w-full bg-slate-950 border border-slate-800 text-white pl-12 pr-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors rounded-sm placeholder-slate-600">
+                <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input type="text" placeholder="Search messages..." class="w-full bg-slate-50 border border-slate-200 text-slate-900 pl-12 pr-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  placeholder-slate-400">
             </div>
             <div class="w-full md:w-auto flex gap-4">
-                <select class="w-full md:w-48 bg-slate-950 border border-slate-800 text-slate-300 px-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors rounded-sm appearance-none">
+                <select class="w-full md:w-48 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  appearance-none">
                     <option value="">All Topics</option>
                     <option value="faith">Faith</option>
                     <option value="prayer">Prayer</option>
                     <option value="purpose">Purpose</option>
                 </select>
-                <button class="bg-[#c49a45] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#d4ac57] transition-colors rounded-sm">Filter</button>
+                <button class="bg-[#c49a45] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#d4ac57] transition-colors ">Filter</button>
             </div>
         </div>
 
         <?php if ($sermonsError): ?>
-            <div class="bg-red-900/20 border border-red-900/50 text-red-400 p-6 rounded-sm text-center">
+            <div class="bg-red-900/20 border border-red-900/50 text-red-400 p-6  text-center">
                 <?php echo e($sermonsError); ?>
             </div>
         <?php elseif (empty($sermons)): ?>
             <div class="text-center py-10">
-                <div class="max-w-2xl mx-auto bg-slate-900 p-12 border border-slate-800 flex flex-col items-center justify-center">
-                    <div class="w-20 h-20 bg-slate-800 border border-slate-700 flex items-center justify-center mb-6 text-slate-500 rounded-full">
+                <div class="max-w-2xl mx-auto bg-white p-12 border border-slate-200 shadow-sm flex flex-col items-center justify-center">
+                    <div class="w-20 h-20 bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 text-slate-400 rounded-full">
                         <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                     </div>
-                    <p class="text-slate-400 text-lg mb-8 font-light">No sermons have been published yet. Please check back soon.</p>
+                    <p class="text-slate-600 text-lg mb-8 font-light">No sermons have been published yet. Please check back soon.</p>
                 </div>
             </div>
         <?php else: ?>
@@ -97,10 +97,10 @@ include 'includes/header.php';
                     $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
                     $link = !empty($sermon['media_url']) ? htmlspecialchars($sermon['media_url']) : '#';
                 ?>
-                    <a href="<?php echo $link; ?>" <?php echo !empty($sermon['media_url']) ? 'target="_blank" rel="noopener"' : ''; ?> class="group relative bg-slate-800 border border-slate-700 hover:border-[#c49a45] rounded-md transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.4)] hover:shadow-[0_20px_40px_rgba(196,154,69,0.15)]">
+                    <a href="<?php echo $link; ?>" <?php echo !empty($sermon['media_url']) ? 'target="_blank" rel="noopener"' : ''; ?> class="group relative bg-white border border-slate-200 hover:border-[#c49a45] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(196,154,69,0.15)]">
                         
                         <!-- Thumbnail Area -->
-                        <div class="aspect-[16/10] relative bg-slate-900 overflow-hidden mb-6">
+                        <div class="aspect-[16/10] relative bg-slate-100 overflow-hidden mb-6">
                             <?php if (!empty($sermon['sermon_image'])): ?>
                                 <img src="<?php echo htmlspecialchars($sermon['sermon_image']); ?>" alt="<?php echo htmlspecialchars((string) $sermon['title']); ?>" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
                                 <div class="absolute inset-0 bg-slate-900/10 group-hover:bg-transparent transition-colors duration-300"></div>
@@ -120,23 +120,23 @@ include 'includes/header.php';
                         <!-- Card Content -->
                         <div class="px-4 pb-4 flex flex-col flex-grow relative z-10">
                             <div class="flex items-center gap-3 mb-4 flex-wrap">
-                                <span class="px-3 py-1 bg-slate-900/50 text-[#c49a45] text-[10px] sm:text-xs font-bold uppercase tracking-wider border border-slate-700"><?php echo htmlspecialchars($dateText); ?></span>
+                                <span class="px-3 py-1 bg-slate-50 text-[#c49a45] text-[0.625rem] sm:text-xs font-bold uppercase tracking-wider border border-slate-200"><?php echo htmlspecialchars($dateText); ?></span>
                                 <?php if (!empty($sermon['topic'])): ?>
-                                    <span class="text-slate-400 text-[10px] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                                    <span class="text-slate-600 text-[0.625rem] sm:text-xs font-bold uppercase tracking-widest flex items-center gap-2">
                                         <span class="w-1 h-1 rounded-full bg-[#c49a45]"></span>
                                         <?php echo htmlspecialchars($sermon['topic']); ?>
                                     </span>
                                 <?php endif; ?>
-                                <span class="text-slate-500 text-[10px] sm:text-xs font-bold uppercase tracking-widest ml-auto"><?php echo htmlspecialchars($sermon['speaker']); ?></span>
+                                <span class="text-slate-500 text-[0.625rem] sm:text-xs font-bold uppercase tracking-widest ml-auto"><?php echo htmlspecialchars($sermon['speaker']); ?></span>
                             </div>
                             
-                            <h3 class="text-xl sm:text-2xl font-bold text-white mb-3 group-hover:text-[#c49a45] transition-colors leading-tight line-clamp-2"><?php echo htmlspecialchars((string) $sermon['title']); ?></h3>
+                            <h3 class="text-xl sm:text-2xl font-bold text-slate-900 mb-3 group-hover:text-[#c49a45] transition-colors leading-tight line-clamp-2"><?php echo htmlspecialchars((string) $sermon['title']); ?></h3>
                             
                             <?php if (!empty($sermon['content'])): ?>
-                                <p class="text-slate-400 text-sm mb-4 line-clamp-3 leading-relaxed"><?php echo e(excerpt($sermon['content'], 20)); ?></p>
+                                <p class="text-slate-600 text-sm mb-4 line-clamp-3 leading-relaxed"><?php echo e(excerpt($sermon['content'], 20)); ?></p>
                             <?php endif; ?>
 
-                            <p class="text-slate-500 text-sm mt-auto flex items-center gap-2 group-hover:text-white font-bold transition-colors uppercase tracking-widest">
+                            <p class="text-[#c49a45] text-sm mt-auto flex items-center gap-2 group-hover:text-slate-900 font-bold transition-colors uppercase tracking-widest">
                                 Watch Message <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </p>
                         </div>
@@ -149,9 +149,9 @@ include 'includes/header.php';
                 <nav class="mt-16 flex items-center justify-center gap-2 text-sm font-bold" aria-label="Pagination">
                     <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                         <?php if ($i === $page): ?>
-                            <span class="w-10 h-10 flex items-center justify-center rounded-sm bg-[#c49a45] text-white shadow-md"><?php echo $i; ?></span>
+                            <span class="w-10 h-10 flex items-center justify-center  bg-[#c49a45] text-white shadow-md"><?php echo $i; ?></span>
                         <?php else: ?>
-                            <a href="sermons?page=<?php echo $i; ?>" class="w-10 h-10 flex items-center justify-center rounded-sm border border-slate-700 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"><?php echo $i; ?></a>
+                            <a href="sermons?page=<?php echo $i; ?>" class="w-10 h-10 flex items-center justify-center  border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"><?php echo $i; ?></a>
                         <?php endif; ?>
                     <?php endfor; ?>
                 </nav>

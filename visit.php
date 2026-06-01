@@ -18,7 +18,7 @@ include 'includes/header.php';
         <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
     </div>
     
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <span class="inline-block py-1 px-3 rounded-full bg-[#1a1f2e] border border-white/10 text-[#c49a45] text-sm font-bold tracking-widest uppercase mb-6">You Belong Here</span>
         <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
             Plan a Visit
@@ -31,7 +31,7 @@ include 'includes/header.php';
 
 <!-- WHEN & WHERE SECTION -->
 <div class="py-24 bg-white relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto">
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <!-- Text Content -->
@@ -79,9 +79,9 @@ include 'includes/header.php';
             </div>
 
             <!-- Image/Map Container -->
-            <div class="relative rounded-2xl overflow-hidden shadow-2xl aspect-square md:aspect-video lg:aspect-square group">
+            <div class="relative  overflow-hidden shadow-2xl aspect-square md:aspect-video lg:aspect-square group">
                 <img src="assets/image/church-building.jpg" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
-                <div class="absolute inset-0 border border-black/10 rounded-2xl pointer-events-none"></div>
+                <div class="absolute inset-0 border border-black/10  pointer-events-none"></div>
             </div>
         </div>
         
@@ -90,7 +90,7 @@ include 'includes/header.php';
 
 <!-- WHAT TO EXPECT SECTION -->
 <div class="py-24 bg-slate-50 border-t border-slate-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto">
         
         <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">What to Expect</h2>
@@ -101,8 +101,8 @@ include 'includes/header.php';
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Item 1 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3">Passionate Worship</h3>
@@ -112,8 +112,8 @@ include 'includes/header.php';
             </div>
             
             <!-- Item 2 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3">Biblical Teaching</h3>
@@ -123,8 +123,8 @@ include 'includes/header.php';
             </div>
 
             <!-- Item 3 -->
-            <div class="bg-white p-8 rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12 rounded-xl bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
+            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-3">BMI Kids</h3>
@@ -154,46 +154,46 @@ include 'includes/header.php';
             </p>
         </div>
 
-        <div class="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+        <div class="bg-white  shadow-xl p-8 md:p-12">
             <form action="#" method="POST" class="space-y-6">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="first_name" class="block text-sm font-bold text-slate-700 mb-2">First Name</label>
-                        <input type="text" id="first_name" name="first_name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                        <input type="text" id="first_name" name="first_name" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
                     </div>
                     <div>
                         <label for="last_name" class="block text-sm font-bold text-slate-700 mb-2">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                        <input type="text" id="last_name" name="last_name" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
-                        <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                        <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
                     </div>
                     <div>
                         <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors">
+                        <input type="tel" id="phone" name="phone" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors">
                     </div>
                 </div>
 
                 <div>
                     <label for="date" class="block text-sm font-bold text-slate-700 mb-2">When are you planning to visit?</label>
-                    <input type="date" id="date" name="date" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700" required>
+                    <input type="date" id="date" name="date" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700" required>
                 </div>
 
                 <div>
                     <label for="kids" class="block text-sm font-bold text-slate-700 mb-2">Will you be bringing any children?</label>
-                    <select id="kids" name="kids" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700">
+                    <select id="kids" name="kids" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700">
                         <option value="no">No children this time</option>
                         <option value="yes">Yes, I will bring my kids</option>
                     </select>
                 </div>
 
                 <div class="pt-4">
-                    <button type="submit" class="w-full bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold text-lg py-4 rounded-lg shadow-lg hover:-translate-y-1 transition-all duration-300">
+                    <button type="submit" class="w-full bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold text-lg py-4  shadow-lg hover:-translate-y-1 transition-all duration-300">
                         Plan My Visit
                     </button>
                 </div>

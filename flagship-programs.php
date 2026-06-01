@@ -34,7 +34,7 @@ include 'includes/header.php';
         <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/90 via-[#06080f]/80 to-[#06080f]"></div>
     </div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
         <div class="inline-flex items-center gap-4 mb-6">
             <div class="h-px w-12 bg-[#c49a45]"></div>
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Milestones</span>
@@ -51,7 +51,7 @@ include 'includes/header.php';
 
 <!-- FLAGSHIP PROGRAMS CATALOG -->
 <section class="py-24 bg-white relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto">
         <div class="text-center max-w-4xl mx-auto mb-20">
             <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">Experience Transformation Through BMI's Flagship Programs</h2>
             <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
@@ -63,11 +63,11 @@ include 'includes/header.php';
         </div>
 
         <?php if ($eventsError): ?>
-            <div class="bg-red-50 text-red-600 p-6 rounded-none font-bold text-center border border-red-200">
+            <div class="bg-red-50 text-red-600 p-6 -none font-bold text-center border border-red-200">
                 <?php echo e($eventsError); ?>
             </div>
         <?php elseif (empty($flagships)): ?>
-            <div class="text-center py-12 bg-slate-50 rounded-none border border-slate-100">
+            <div class="text-center py-12 bg-slate-50 -none border border-slate-100">
                 <p class="text-slate-500 font-medium text-lg">No flagship programs are currently published.</p>
             </div>
         <?php else: ?>
@@ -78,7 +78,7 @@ include 'includes/header.php';
                     $isReversed = $index % 2 !== 0;
                     $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop';
                 ?>
-                <div class="flex flex-col <?php echo $isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'; ?> gap-12 items-center bg-slate-50 rounded-none overflow-hidden border border-slate-100 group shadow-sm hover:shadow-2xl transition-all duration-500">
+                <div class="flex flex-col <?php echo $isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'; ?> gap-12 items-center bg-slate-50 -none overflow-hidden border border-slate-100 group shadow-sm hover:shadow-2xl transition-all duration-500">
                     
                     <!-- Image -->
                     <div class="w-full lg:w-1/2 aspect-video lg:aspect-square relative overflow-hidden">
@@ -88,7 +88,7 @@ include 'includes/header.php';
 
                     <!-- Content -->
                     <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                        <div class="inline-flex items-center gap-3 mb-6 bg-[#c49a45]/10 px-4 py-2 rounded-none border border-[#c49a45]/20">
+                        <div class="inline-flex items-center gap-3 mb-6 bg-[#c49a45]/10 px-4 py-2 -none border border-[#c49a45]/20">
                             <svg class="w-5 h-5 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             <span class="text-[#c49a45] font-bold tracking-widest text-sm uppercase"><?php echo $startDate . $endDate; ?></span>
                         </div>
@@ -108,7 +108,7 @@ include 'includes/header.php';
                         <div class="mb-10"></div>
                         <?php endif; ?>
 
-                        <a href="event-detail.php?slug=<?php echo urlencode((string)$event['slug']); ?>" class="inline-flex items-center justify-center bg-slate-900 text-white hover:bg-[#c49a45] px-8 py-4 rounded-none font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                        <a href="event-detail.php?slug=<?php echo urlencode((string)$event['slug']); ?>" class="inline-flex items-center justify-center bg-slate-900 text-white hover:bg-[#c49a45] px-8 py-4 -none font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                             Learn More
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </a>

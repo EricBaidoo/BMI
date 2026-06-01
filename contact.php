@@ -32,10 +32,10 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
     <!-- Abstract Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#c49a45]/10 blur-[120px] rounded-full pointer-events-none"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#c49a45]/10 blur-[7.5rem] rounded-full pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#c49a45]/30 to-transparent"></div>
 
-    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
             Get in Touch
         </h1>
@@ -47,7 +47,7 @@ include 'includes/header.php';
 
 <!-- CONTACT SECTION -->
 <div class="py-24 bg-white relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto">
         
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8">
             
@@ -100,7 +100,7 @@ include 'includes/header.php';
                 </div>
 
                 <!-- Office Hours -->
-                <div class="p-8 bg-slate-50 rounded-2xl border border-slate-100">
+                <div class="p-8 bg-slate-50  border border-slate-100">
                     <h3 class="text-lg font-bold text-slate-900 mb-4">Office Hours</h3>
                     <ul class="space-y-3 text-slate-600 font-medium text-sm">
                         <li class="flex justify-between"><span>Monday - Thursday</span> <span>9:00 AM - 5:00 PM</span></li>
@@ -113,20 +113,20 @@ include 'includes/header.php';
 
             <!-- Contact Form -->
             <div class="lg:col-span-7">
-                <div class="bg-white rounded-2xl shadow-2xl shadow-slate-200/50 border border-slate-100 p-8 md:p-12 h-full">
+                <div class="bg-white  shadow-2xl shadow-slate-200/50 border border-slate-100 p-8 md:p-12 h-full">
                     
                     <h2 class="text-3xl font-display font-black text-slate-900 tracking-tight mb-2">Send us a Message</h2>
                     <p class="text-slate-500 font-medium mb-8">We would love to hear from you. Please fill out the form below.</p>
 
                     <?php if ($successMessage): ?>
-                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-xl mb-8 flex items-start">
+                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4  mb-8 flex items-start">
                             <svg class="w-6 h-6 text-emerald-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <p class="font-medium"><?php echo htmlspecialchars($successMessage); ?></p>
                         </div>
                     <?php endif; ?>
 
                     <?php if ($errorMessage): ?>
-                        <div class="bg-red-50 border border-red-200 text-red-800 p-4 rounded-xl mb-8 flex items-start">
+                        <div class="bg-red-50 border border-red-200 text-red-800 p-4  mb-8 flex items-start">
                             <svg class="w-6 h-6 text-red-500 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                             <p class="font-medium"><?php echo htmlspecialchars($errorMessage); ?></p>
                         </div>
@@ -136,18 +136,18 @@ include 'includes/header.php';
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label for="name" class="block text-sm font-bold text-slate-700 mb-2">Full Name</label>
-                                <input type="text" id="name" name="name" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                                <input type="text" id="name" name="name" class="w-full bg-slate-50 border border-slate-200  px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
                             </div>
                             <div>
                                 <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
-                                <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                                <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200  px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
                             </div>
                         </div>
 
                         <div>
                             <label for="type" class="block text-sm font-bold text-slate-700 mb-2">How can we help you?</label>
                             <div class="relative">
-                                <select id="type" name="type" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors appearance-none">
+                                <select id="type" name="type" class="w-full bg-slate-50 border border-slate-200  px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors appearance-none">
                                     <option>General Inquiry</option>
                                     <option>Prayer Request</option>
                                     <option>Testimony</option>
@@ -162,10 +162,10 @@ include 'includes/header.php';
 
                         <div>
                             <label for="message" class="block text-sm font-bold text-slate-700 mb-2">Your Message</label>
-                            <textarea id="message" name="message" rows="5" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors resize-none" required></textarea>
+                            <textarea id="message" name="message" rows="5" class="w-full bg-slate-50 border border-slate-200  px-4 py-3.5 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors resize-none" required></textarea>
                         </div>
 
-                        <button type="submit" class="w-full bg-slate-900 hover:bg-[#c49a45] text-white font-bold text-lg py-4 rounded-xl shadow-lg hover:-translate-y-1 transition-all duration-300">
+                        <button type="submit" class="w-full bg-slate-900 hover:bg-[#c49a45] text-white font-bold text-lg py-4  shadow-lg hover:-translate-y-1 transition-all duration-300">
                             Send Message
                         </button>
                     </form>

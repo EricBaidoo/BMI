@@ -19,7 +19,7 @@ include 'includes/header.php';
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
         <div class="inline-flex items-center gap-4 mb-6">
             <div class="h-px w-12 bg-[#c49a45]"></div>
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">About Us</span>
@@ -35,8 +35,8 @@ include 'includes/header.php';
 </section>
 
 <!-- OUR STORY & FOUNDER -->
-<section class="py-24 md:py-32 bg-slate-950 relative overflow-hidden border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section class="py-24 md:py-32 bg-white relative overflow-hidden border-t border-slate-200">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             
             <!-- Biography Content -->
@@ -46,11 +46,11 @@ include 'includes/header.php';
                     <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our History</span>
                 </div>
                 
-                <h2 class="text-4xl md:text-5xl font-display font-bold text-white mb-8 leading-tight">
+                <h2 class="text-4xl md:text-5xl font-display font-bold text-slate-900 mb-8 leading-tight">
                     From a small fellowship <br>to a global movement.
                 </h2>
                 
-                <div class="text-slate-400 font-medium leading-relaxed space-y-6 text-lg">
+                <div class="text-slate-600 font-medium leading-relaxed space-y-6 text-lg">
                     <p>
                         Bridge Ministries International began in <?php echo e($founded); ?> as a small group of believers gathering with a single conviction: that the local church should be a bridge — between God and people, between generations, and between the church and the community it serves.
                     </p>
@@ -65,15 +65,15 @@ include 'includes/header.php';
 
             <!-- Founder Portrait -->
             <div class="relative group order-1 lg:order-2">
-                <div class="absolute inset-0 bg-[#c49a45] rounded-3xl blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity duration-700"></div>
-                <div class="relative w-full aspect-[4/5] rounded-sm overflow-hidden border border-slate-800 shadow-2xl bg-slate-800 flex items-center justify-center">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/20 to-transparent z-10"></div>
+                <div class="absolute inset-0 bg-[#c49a45] blur-[6.25rem] opacity-10 group-hover:opacity-20 transition-opacity duration-700"></div>
+                <div class="relative w-full aspect-[4/5] overflow-hidden border-4 border-white shadow-xl bg-slate-100 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent z-10"></div>
                     <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
                     
                     <div class="absolute bottom-10 left-10 z-20">
-                        <div class="inline-flex items-center gap-3 px-4 py-2 rounded-sm bg-slate-900/90 backdrop-blur-md border border-slate-700 mb-4 shadow-sm">
+                        <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-md border border-slate-200 mb-4 shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
-                            <span class="text-white text-xs font-bold tracking-widest uppercase">General Overseer</span>
+                            <span class="text-slate-900 text-xs font-bold tracking-widest uppercase">General Overseer</span>
                         </div>
                         <h3 class="text-4xl font-display font-black text-white leading-tight">Rev. F.D.<br>Yalley</h3>
                     </div>
@@ -85,105 +85,105 @@ include 'includes/header.php';
 </section>
 
 <!-- CORE VALUES -->
-<section class="py-24 md:py-32 bg-slate-900 relative overflow-hidden border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section class="py-24 md:py-32 bg-slate-50 relative overflow-hidden border-t border-slate-200">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="text-center mb-16 md:mb-20">
             <div class="inline-flex items-center justify-center gap-4 mb-4">
                 <div class="h-px w-12 bg-[#c49a45]"></div>
                 <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Values</span>
                 <div class="h-px w-12 bg-[#c49a45]"></div>
             </div>
-            <h2 class="text-4xl md:text-5xl lg:text-6xl text-white font-display font-bold">What we hold tightly</h2>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl text-slate-900 font-display font-bold">What we hold tightly</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <!-- Value 1 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">01</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Scripture, Above All</h3>
-                <p class="text-slate-400 leading-relaxed">The Bible is our final authority for faith and practice. We teach it, trust it, and live by it without compromise.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">01</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Scripture, Above All</h3>
+                <p class="text-slate-600 leading-relaxed">The Bible is our final authority for faith and practice. We teach it, trust it, and live by it without compromise.</p>
             </div>
             
             <!-- Value 2 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">02</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Prayer, Without Ceasing</h3>
-                <p class="text-slate-400 leading-relaxed">Prayer is not a programme — it is the engine of everything we do, both privately and corporately as a church.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">02</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Prayer, Without Ceasing</h3>
+                <p class="text-slate-600 leading-relaxed">Prayer is not a programme — it is the engine of everything we do, both privately and corporately as a church.</p>
             </div>
 
             <!-- Value 3 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">03</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Discipleship, On Purpose</h3>
-                <p class="text-slate-400 leading-relaxed">We don't just gather crowds; we build disciples who follow Jesus and form others to do exactly the same.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">03</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Discipleship, On Purpose</h3>
+                <p class="text-slate-600 leading-relaxed">We don't just gather crowds; we build disciples who follow Jesus and form others to do exactly the same.</p>
             </div>
 
             <!-- Value 4 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">04</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Family, Across Generations</h3>
-                <p class="text-slate-400 leading-relaxed">From children to elders, every age group has a seat at the table and a powerful voice in the body of Christ.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">04</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Family, Across Generations</h3>
+                <p class="text-slate-600 leading-relaxed">From children to elders, every age group has a seat at the table and a powerful voice in the body of Christ.</p>
             </div>
 
             <!-- Value 5 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">05</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Mission, Beyond Walls</h3>
-                <p class="text-slate-400 leading-relaxed">We are sent — to our neighbours, our city, and the nations — with the love, compassion, and message of Jesus.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">05</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Mission, Beyond Walls</h3>
+                <p class="text-slate-600 leading-relaxed">We are sent — to our neighbours, our city, and the nations — with the love, compassion, and message of Jesus.</p>
             </div>
 
             <!-- Value 6 -->
-            <div class="bg-slate-950 p-8 border border-slate-800 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
-                <div class="text-5xl font-display font-black text-slate-800 mb-6 group-hover:text-[#c49a45] transition-colors">06</div>
-                <h3 class="text-2xl font-bold text-white mb-3">Integrity, At All Costs</h3>
-                <p class="text-slate-400 leading-relaxed">We pursue financial transparency, ethical leadership, and Christ-like character in private and in public.</p>
+            <div class="bg-white p-8 border border-slate-200 hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_8px_30px_rgba(196,154,69,0.15)] group">
+                <div class="text-5xl font-display font-black text-slate-200 mb-6 group-hover:text-[#c49a45] transition-colors">06</div>
+                <h3 class="text-2xl font-bold text-slate-900 mb-3">Integrity, At All Costs</h3>
+                <p class="text-slate-600 leading-relaxed">We pursue financial transparency, ethical leadership, and Christ-like character in private and in public.</p>
             </div>
         </div>
     </div>
 </section>
 
 <!-- LEADERSHIP -->
-<section class="py-24 md:py-32 bg-slate-950 relative overflow-hidden border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+<section class="py-24 md:py-32 bg-white relative overflow-hidden border-t border-slate-200">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="text-center mb-16 md:mb-20">
             <div class="inline-flex items-center justify-center gap-4 mb-4">
                 <div class="h-px w-12 bg-[#c49a45]"></div>
                 <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Leadership</span>
                 <div class="h-px w-12 bg-[#c49a45]"></div>
             </div>
-            <h2 class="text-4xl md:text-5xl lg:text-6xl text-white font-display font-bold">Meet Our Leaders</h2>
-            <p class="mt-6 text-slate-400 text-lg max-w-2xl mx-auto">A team of pastors, elders, and ministry leaders shepherding the church together.</p>
+            <h2 class="text-4xl md:text-5xl lg:text-6xl text-slate-900 font-display font-bold">Meet Our Leaders</h2>
+            <p class="mt-6 text-slate-600 text-lg max-w-2xl mx-auto">A team of pastors, elders, and ministry leaders shepherding the church together.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
             <!-- Leader 1 -->
-            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors">
+            <div class="group bg-slate-50 border border-slate-200 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-200 group-hover:border-[#c49a45] transition-colors">
                     <img src="assets/image/IMG_1061.jpg" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop';">
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-1">Rev. F.D. Yalley</h3>
+                <h3 class="text-2xl font-bold text-slate-900 mb-1">Rev. F.D. Yalley</h3>
                 <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">General Overseer</p>
-                <p class="text-slate-400 text-sm leading-relaxed">A teacher of the Word with a passion for biblical truth, strategic prayer, and raising mature disciples who influence their communities.</p>
+                <p class="text-slate-600 text-sm leading-relaxed">A teacher of the Word with a passion for biblical truth, strategic prayer, and raising mature disciples who influence their communities.</p>
             </div>
 
             <!-- Leader 2 -->
-            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors bg-slate-950 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+            <div class="group bg-slate-50 border border-slate-200 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-200 group-hover:border-[#c49a45] transition-colors bg-white flex items-center justify-center">
+                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-1">Pastoral Team</h3>
+                <h3 class="text-2xl font-bold text-slate-900 mb-1">Pastoral Team</h3>
                 <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">Associate Pastors</p>
-                <p class="text-slate-400 text-sm leading-relaxed">A faithful team of associate pastors serving alongside the General Overseer in teaching, counselling, and shepherding.</p>
+                <p class="text-slate-600 text-sm leading-relaxed">A faithful team of associate pastors serving alongside the General Overseer in teaching, counselling, and shepherding.</p>
             </div>
 
             <!-- Leader 3 -->
-            <div class="group bg-slate-900 border border-slate-800 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
-                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-800 group-hover:border-[#c49a45] transition-colors bg-slate-950 flex items-center justify-center">
-                    <svg class="w-12 h-12 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
+            <div class="group bg-slate-50 border border-slate-200 p-8 text-center hover:border-[#c49a45] transition-all duration-300">
+                <div class="w-40 h-40 mx-auto mb-6 rounded-full overflow-hidden border-4 border-slate-200 group-hover:border-[#c49a45] transition-colors bg-white flex items-center justify-center">
+                    <svg class="w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-1">Ministry Leaders</h3>
+                <h3 class="text-2xl font-bold text-slate-900 mb-1">Ministry Leaders</h3>
                 <p class="text-[#c49a45] text-xs font-bold uppercase tracking-widest mb-4">Elders & Coordinators</p>
-                <p class="text-slate-400 text-sm leading-relaxed">Trusted men and women leading every ministry — from worship and discipleship to outreach, youth, and missions.</p>
+                <p class="text-slate-600 text-sm leading-relaxed">Trusted men and women leading every ministry — from worship and discipleship to outreach, youth, and missions.</p>
             </div>
         </div>
     </div>
@@ -191,7 +191,7 @@ include 'includes/header.php';
 
 <!-- CTA GRID -->
 <section class="py-24 bg-slate-900 relative overflow-hidden border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div class="bg-slate-950 p-10 border border-slate-800 flex flex-col items-start text-left group hover:border-[#c49a45] transition-colors">
                 <h3 class="text-2xl font-bold text-white mb-3 group-hover:text-[#c49a45] transition-colors">What We Believe</h3>
