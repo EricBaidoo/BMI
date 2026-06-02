@@ -36,7 +36,7 @@
                 <a href="./" class="inline-flex items-center gap-4 mb-8 group">
                     <div class="relative">
                         <div class="absolute inset-0 bg-[#c49a45] blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <img class="h-12 w-auto relative z-10" src="assets/image/bmi%20logo%20new.png" alt="BMI Logo" onerror="this.style.display='none';">
+                        <img class="h-12 w-auto relative z-10" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
                     </div>
                     <span class="font-display font-black text-2xl tracking-tight text-white">Bridge Ministries</span>
                 </a>

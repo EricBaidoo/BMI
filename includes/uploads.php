@@ -10,7 +10,7 @@
  * Returns the public-relative path (e.g., "assets/image/foo.jpg") or null when no file uploaded.
  * Throws RuntimeException on validation/IO failure.
  */
-function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 5 * 1024 * 1024): ?string
+function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 20 * 1024 * 1024): ?string
 {
     if (!is_array($file) || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
         return null;
@@ -34,12 +34,15 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 5
         'image/png' => 'png',
         'image/gif' => 'gif',
         'image/webp' => 'webp',
+        'image/x-icon' => 'ico',
+        'image/vnd.microsoft.icon' => 'ico',
+        'image/svg+xml' => 'svg',
     ];
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime = (string) $finfo->file($file['tmp_name']);
     if (!isset($allowed[$mime])) {
-        throw new RuntimeException('Only JPG, PNG, GIF, and WebP images are allowed.');
+        throw new RuntimeException('Only JPG, PNG, GIF, WebP, SVG, and ICO images are allowed.');
     }
     $ext = $allowed[$mime];
 
@@ -48,11 +51,46 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 5
         throw new RuntimeException('Upload directory is not writable.');
     }
 
-    $name = sprintf('%s_%s_%s.%s', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)), $ext);
-    $destination = $uploadDir . $name;
+    if (in_array($ext, ['webp', 'ico', 'svg'])) {
+        $name = sprintf('%s_%s_%s.%s', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)), $ext);
+        $destination = $uploadDir . $name;
+        if (!move_uploaded_file($file['tmp_name'], $destination)) {
+            throw new RuntimeException('Could not save uploaded image.');
+        }
+    } else {
+        $name = sprintf('%s_%s_%s.webp', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)));
+        $destination = $uploadDir . $name;
+        
+        $image = false;
+        if ($ext === 'jpg') {
+            $image = @imagecreatefromjpeg($file['tmp_name']);
+        } elseif ($ext === 'png') {
+            $image = @imagecreatefrompng($file['tmp_name']);
+            if ($image) {
+                imagepalettetotruecolor($image);
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
+        } elseif ($ext === 'gif') {
+            $image = @imagecreatefromgif($file['tmp_name']);
+            if ($image) {
+                imagepalettetotruecolor($image);
+            }
+        }
 
-    if (!move_uploaded_file($file['tmp_name'], $destination)) {
-        throw new RuntimeException('Could not save uploaded image.');
+        if (!$image || !imagewebp($image, $destination, 80)) {
+            // Fallback: if conversion fails, just save the original file
+            if ($image) {
+                imagedestroy($image);
+            }
+            $name = sprintf('%s_%s_%s.%s', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)), $ext);
+            $destination = $uploadDir . $name;
+            if (!move_uploaded_file($file['tmp_name'], $destination)) {
+                throw new RuntimeException('Could not save uploaded image.');
+            }
+        } else {
+            imagedestroy($image);
+        }
     }
 
     @chmod($destination, 0644);
@@ -62,10 +100,11 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 5
 /**
  * Safely delete a previously-uploaded image given its public-relative path.
  * Refuses paths that escape the assets/image directory.
+ * Ignores absolute URLs (http:// or https://).
  */
 function upload_delete(?string $relativePath): void
 {
-    if (!$relativePath) {
+    if (!$relativePath || strpos($relativePath, 'http://') === 0 || strpos($relativePath, 'https://') === 0) {
         return;
     }
     $base = realpath(dirname(__DIR__) . '/assets/image');
@@ -77,4 +116,28 @@ function upload_delete(?string $relativePath): void
         return;
     }
     @unlink($absolute);
+}
+
+/**
+ * Handles logic for either uploading a new file, or using a provided URL.
+ * File upload takes precedence over URL.
+ *
+ * @param array|null $file The $_FILES['input_name'] array.
+ * @param string $url The provided URL string (from $_POST).
+ * @param string $prefix Prefix for the uploaded file.
+ * @return string|null The resulting path/URL or null.
+ */
+function handle_image_upload_or_link(?array $file, string $url, string $prefix = 'upload'): ?string
+{
+    $uploaded = upload_image($file, $prefix);
+    if ($uploaded !== null) {
+        return $uploaded;
+    }
+    
+    $url = trim($url);
+    if ($url !== '') {
+        return $url;
+    }
+
+    return null;
 }

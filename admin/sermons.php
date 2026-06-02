@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Media URL is not valid.');
             }
 
-            $sermonImage = upload_image($_FILES['sermon_image'] ?? null, 'sermon');
+            $sermonImage = handle_image_upload_or_link($_FILES['sermon_image'] ?? null, $_POST['sermon_image_url'] ?? '', 'sermon');
 
             if ($action === 'add') {
                 $stmt = $pdo->prepare(
@@ -143,26 +143,13 @@ try {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex,nofollow">
-    <title>Manage Sermons | BMI Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-100 text-slate-800">
-    <div class="max-w-6xl mx-auto py-10 px-4">
-        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-            <div>
-                <h1 class="text-3xl font-bold">Manage Sermons</h1>
-                <p class="mt-2 text-slate-600">Create and remove sermons displayed on the public website.</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="index.php" class="rounded bg-slate-200 text-slate-800 px-4 py-2 text-sm">Dashboard</a>
-                <a href="logout.php" class="rounded bg-slate-800 text-white px-4 py-2 text-sm">Sign out</a>
-            </div>
+<?php
+$pageTitle = 'Manage Sermons | BMI Admin';
+require_once __DIR__ . '/includes/header.php';
+?>
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-slate-800">Manage Sermons</h1>
+            <p class="mt-1 text-slate-500">Create and remove sermons displayed on the public website.</p>
         </div>
 
         <?php if ($feedback !== ''): ?>
@@ -172,72 +159,85 @@ try {
             <div class="mt-6 rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <div class="mt-6 bg-white border border-slate-200 rounded p-5">
-            <h2 class="text-xl font-semibold"><?php echo $editingSermon ? 'Edit Sermon' : 'Add New Sermon'; ?></h2>
-            <form method="post" enctype="multipart/form-data" class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="mt-6 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4"><?php echo $editingSermon ? 'Edit Sermon' : 'Add New Sermon'; ?></h2>
+            <form method="post" enctype="multipart/form-data" class="mt-6 grid md:grid-cols-2 gap-6">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="action" value="<?php echo $editingSermon ? 'edit' : 'add'; ?>">
                 <?php if ($editingSermon): ?>
                     <input type="hidden" name="id" value="<?php echo (int) $editingSermon['id']; ?>">
                 <?php endif; ?>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Title</span>
-                    <input type="text" name="title" required maxlength="200" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
+                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['title']) : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Speaker</span>
-                    <input type="text" name="speaker" required maxlength="120" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Speaker</label>
+                    <input type="text" name="speaker" required maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['speaker']) : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Date</span>
-                    <input type="date" name="sermon_date" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date</label>
+                    <input type="date" name="sermon_date" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         value="<?php echo $editingSermon ? (string) $editingSermon['sermon_date'] : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Topic</span>
-                    <input type="text" name="topic" maxlength="120" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Topic</label>
+                    <input type="text" name="topic" maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['topic']) : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Media Type</span>
-                    <select name="media_type" class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media Type</label>
+                    <select name="media_type" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                         <option value="audio" <?php echo $editingSermon && $editingSermon['media_type'] === 'audio' ? 'selected' : ''; ?>>Audio</option>
                         <option value="video" <?php echo $editingSermon && $editingSermon['media_type'] === 'video' ? 'selected' : ''; ?>>Video</option>
                         <option value="text" <?php echo $editingSermon && $editingSermon['media_type'] === 'text' ? 'selected' : ''; ?>>Text</option>
                     </select>
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Media URL</span>
-                    <input type="url" name="media_url" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media URL</label>
+                    <input type="url" name="media_url" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         placeholder="https://..." value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['media_url']) : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm md:col-span-2">
-                    <span class="font-medium">Sermon Image</span>
-                    <input type="file" name="sermon_image" accept="image/jpeg,image/png,image/gif,image/webp" class="mt-1 w-full border border-slate-300 rounded px-3 py-2 text-sm">
-                    <p class="mt-1 text-xs text-slate-600">JPG, PNG, GIF, WebP. Max 5MB.</p>
+                <div class="md:col-span-2 p-5 border border-slate-200 rounded-lg bg-slate-50/50">
+                    <label class="block text-sm font-semibold text-slate-700 mb-3">Sermon Image</label>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <span class="block text-xs font-medium text-slate-500 mb-1.5 uppercase tracking-wider">Upload File (Max 5MB)</span>
+                            <input type="file" name="sermon_image" accept="image/jpeg,image/png,image/gif,image/webp" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-white focus:bg-white transition-all text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                        </div>
+                        <div>
+                            <span class="block text-xs font-medium text-slate-500 mb-1.5 uppercase tracking-wider">OR Paste Image URL</span>
+                            <input type="url" name="sermon_image_url" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-white focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all text-sm">
+                        </div>
+                    </div>
                     <?php if ($editingSermon && $editingSermon['sermon_image']): ?>
-                        <img src="../<?php echo htmlspecialchars((string) $editingSermon['sermon_image']); ?>" alt="" class="mt-2 h-20 w-20 object-cover rounded">
+                        <div class="mt-4 relative inline-block">
+                            <span class="block text-xs font-medium text-slate-500 mb-1.5">Current Image:</span>
+                            <img src="<?php echo strpos($editingSermon['sermon_image'], 'http') === 0 ? htmlspecialchars($editingSermon['sermon_image']) : '../' . htmlspecialchars($editingSermon['sermon_image']); ?>" alt="" class="h-24 w-32 object-cover rounded-lg border border-slate-200 shadow-sm">
+                        </div>
                     <?php endif; ?>
-                </label>
+                </div>
 
-                <label class="block text-sm md:col-span-2">
-                    <span class="font-medium">Summary / Content</span>
-                    <textarea name="content" rows="4" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"><?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['content']) : ''; ?></textarea>
-                </label>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Summary / Content</label>
+                    <textarea name="content" rows="4" class="w-full border border-slate-300 rounded-lg px-4 py-3 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['content']) : ''; ?></textarea>
+                </div>
 
-                <div class="md:col-span-2 flex gap-2">
-                    <button type="submit" class="rounded bg-blue-700 text-white px-4 py-2 text-sm font-semibold hover:bg-blue-800"><?php echo $editingSermon ? 'Update Sermon' : 'Add Sermon'; ?></button>
+                <div class="md:col-span-2 pt-4 border-t border-slate-100 flex gap-3">
+                    <button type="submit" class="rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-2.5 text-sm font-semibold transition-all shadow-md shadow-blue-500/30">
+                        <?php echo $editingSermon ? 'Update Sermon' : 'Add Sermon'; ?>
+                    </button>
                     <?php if ($editingSermon): ?>
-                        <a href="sermons.php" class="rounded bg-slate-400 text-white px-4 py-2 text-sm font-semibold hover:bg-slate-500">Cancel</a>
+                        <a href="sermons.php" class="rounded-lg border border-slate-300 text-slate-700 px-6 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-all text-center">Cancel</a>
                     <?php endif; ?>
                 </div>
             </form>
@@ -252,7 +252,7 @@ try {
                     <?php foreach ($sermons as $sermon): ?>
                         <div class="border border-slate-200 rounded overflow-hidden hover:shadow-lg transition-shadow">
                             <?php if ($sermon['sermon_image']): ?>
-                                <img src="../<?php echo htmlspecialchars((string) $sermon['sermon_image']); ?>" alt="<?php echo htmlspecialchars((string) $sermon['title']); ?>" class="w-full h-40 object-cover" loading="lazy">
+                                <img src="<?php echo strpos($sermon['sermon_image'], 'http') === 0 ? htmlspecialchars((string) $sermon['sermon_image']) : '../' . htmlspecialchars((string) $sermon['sermon_image']); ?>" alt="<?php echo htmlspecialchars((string) $sermon['title']); ?>" class="w-full h-40 object-cover" loading="lazy">
                             <?php else: ?>
                                 <div class="w-full h-40 bg-slate-200 flex items-center justify-center text-slate-400">No image</div>
                             <?php endif; ?>
@@ -281,6 +281,4 @@ try {
                 </div>
             <?php endif; ?>
         </div>
-    </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

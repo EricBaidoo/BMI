@@ -23,14 +23,21 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
     <meta name="description" content="<?php echo htmlspecialchars($pageDescription); ?>">
+    <?php if (setting('site.favicon')): ?>
+        <link rel="icon" href="<?php echo htmlspecialchars(setting('site.favicon')); ?>">
+    <?php endif; ?>
     
     <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
     
+    <!-- Preconnect for external assets -->
+    <link rel="preconnect" href="https://images.unsplash.com">
+    <link rel="preconnect" href="https://source.unsplash.com">
+    
     <!-- Compiled Tailwind CSS -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo time(); ?>">
+    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/styles.css') ?: time(); ?>">
 
     <!-- AOS Animation CSS -->
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
@@ -62,6 +69,11 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
     <?php if (!empty($analyticsDomain)): ?>
         <script defer data-domain="<?php echo htmlspecialchars($analyticsDomain); ?>" src="https://plausible.io/js/script.js"></script>
     <?php endif; ?>
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 </head>
 <body class="bg-slate-900 text-slate-300 font-sans antialiased flex flex-col min-h-screen">
 
@@ -77,9 +89,9 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
                 <a href="./" class="flex items-center gap-3">
                     <div class="relative">
                         <div class="absolute inset-0 bg-[#c49a45] blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <img class="h-10 md:h-12 w-auto relative z-10 transform group-hover:scale-105 transition-transform duration-500" src="assets/image/bmi%20logo%20new.png" alt="BMI Logo" onerror="this.style.display='none';">
+                        <img class="h-10 md:h-12 w-auto relative z-10 transform group-hover:scale-105 transition-transform duration-500" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
                     </div>
-                    <span class="font-display font-black text-xl lg:text-2xl tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap">Bridge Ministries</span>
+                    <span class="font-display font-black text-xl lg:text-2xl tracking-tight text-white group-hover:text-slate-200 transition-colors whitespace-nowrap"><?php echo htmlspecialchars($siteName ?? 'Bridge Ministries'); ?></span>
                 </a>
             </div>
 

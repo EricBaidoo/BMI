@@ -30,7 +30,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=2000&auto=format&fit=crop" alt="Flagship Programs Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
+        <img src="<?= setting('flagship.hero_bg_image', 'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop') ?>" alt="Flagship Programs Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
         <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/90 via-[#06080f]/80 to-[#06080f]"></div>
     </div>
     
@@ -41,17 +41,17 @@ include 'includes/header.php';
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
         <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
-            Flagship <br/><span class="text-[#c49a45]">Programs.</span>
+            <?= setting('flagship.hero_title', 'Flagship <br/><span class="text-[#c49a45]">Programs.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
-            Discover the core annual events that define our spiritual journey and community life.
+            <?= setting('flagship.hero_subtitle', 'Discover the core annual events that define our spiritual journey and community life.') ?>
         </p>
     </div>
 </section>
 
 <!-- FLAGSHIP PROGRAMS CATALOG -->
 <section class="py-24 bg-white relative overflow-hidden">
-    <div class="w-[90%] max-w-[112.5rem] mx-auto">
+    <div class="w-[90%] max-w-6xl mx-auto">
         <div class="text-center max-w-4xl mx-auto mb-20">
             <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">Experience Transformation Through BMI's Flagship Programs</h2>
             <p class="text-lg text-slate-600 font-medium leading-relaxed mb-6">
@@ -76,7 +76,7 @@ include 'includes/header.php';
                     $startDate = date('M j', strtotime((string)$event['event_date']));
                     $endDate = !empty($event['end_date']) ? ' - ' . date('M j, Y', strtotime((string)$event['end_date'])) : ', ' . date('Y', strtotime((string)$event['event_date']));
                     $isReversed = $index % 2 !== 0;
-                    $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop';
+                    $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop';
                 ?>
                 <div class="flex flex-col <?php echo $isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'; ?> gap-12 items-center bg-slate-50 -none overflow-hidden border border-slate-100 group shadow-sm hover:shadow-2xl transition-all duration-500">
                     
@@ -87,13 +87,13 @@ include 'includes/header.php';
                     </div>
 
                     <!-- Content -->
-                    <div class="w-full lg:w-1/2 p-8 lg:p-16">
+                    <div class="w-full lg:w-1/2 p-8 lg:p-12">
                         <div class="inline-flex items-center gap-3 mb-6 bg-[#c49a45]/10 px-4 py-2 -none border border-[#c49a45]/20">
                             <svg class="w-5 h-5 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                             <span class="text-[#c49a45] font-bold tracking-widest text-sm uppercase"><?php echo $startDate . $endDate; ?></span>
                         </div>
                         
-                        <h3 class="text-4xl lg:text-5xl font-display font-black text-slate-900 leading-tight mb-6"><?php echo htmlspecialchars((string)$event['title']); ?></h3>
+                        <h3 class="text-3xl lg:text-4xl font-display font-black text-slate-900 leading-tight mb-6"><?php echo htmlspecialchars((string)$event['title']); ?></h3>
                         
                         <p class="text-lg text-slate-600 font-medium leading-relaxed mb-8">
                             <?php echo nl2br(htmlspecialchars((string)$event['description'])); ?>

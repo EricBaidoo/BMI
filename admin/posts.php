@@ -5,6 +5,7 @@ auth_require();
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/uploads.php';
 
 $feedback = '';
 $error = '';
@@ -43,9 +44,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $slug = $base . '-' . $i++;
                 }
 
+                // Handle image upload
+                $postImage = handle_image_upload_or_link('post_image_file', 'post_image_url');
+
                 $stmt = $pdo->prepare(
-                    'INSERT INTO posts (title, slug, content, category, published_at)
-                     VALUES (:t, :s, :c, :cat, :p)'
+                    'INSERT INTO posts (title, slug, content, category, published_at, post_image)
+                     VALUES (:t, :s, :c, :cat, :p, :img)'
                 );
                 $stmt->execute([
                     ':t' => $title,
@@ -53,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':c' => $content,
                     ':cat' => $category,
                     ':p' => $publish ? date('Y-m-d H:i:s') : null,
+                    ':img' => $postImage,
                 ]);
                 header('Location: posts.php?status=added');
                 exit;
@@ -63,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Invalid post ID.');
             }
             // Keep existing slug to preserve URLs
-            $existing = $pdo->prepare('SELECT slug, published_at FROM posts WHERE id = :id');
+            $existing = $pdo->prepare('SELECT slug, published_at, post_image FROM posts WHERE id = :id');
             $existing->execute([':id' => $id]);
             $row = $existing->fetch();
             if (!$row) {
@@ -76,8 +81,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $publishedAt = null;
             }
 
+            // Handle image upload
+            $postImage = handle_image_upload_or_link('post_image_file', 'post_image_url', $row['post_image']);
+
             $stmt = $pdo->prepare(
-                'UPDATE posts SET title = :t, content = :c, category = :cat, published_at = :p WHERE id = :id'
+                'UPDATE posts SET title = :t, content = :c, category = :cat, published_at = :p, post_image = :img WHERE id = :id'
             );
             $stmt->execute([
                 ':id' => $id,
@@ -85,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':c' => $content,
                 ':cat' => $category,
                 ':p' => $publishedAt,
+                ':img' => $postImage,
             ]);
             header('Location: posts.php?status=updated');
             exit;
@@ -95,7 +104,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id <= 0) {
                 throw new RuntimeException('Invalid ID.');
             }
+            $existing = $pdo->prepare('SELECT post_image FROM posts WHERE id = :id');
+            $existing->execute([':id' => $id]);
+            $row = $existing->fetch();
+            
             $pdo->prepare('DELETE FROM posts WHERE id = :id')->execute([':id' => $id]);
+            
+            if ($row && $row['post_image']) {
+                upload_delete($row['post_image']);
+            }
+            
             header('Location: posts.php?status=deleted');
             exit;
         }
@@ -131,26 +149,13 @@ try {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex,nofollow">
-    <title>Manage Posts | BMI Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-100 text-slate-800">
-    <div class="max-w-6xl mx-auto py-10 px-4">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div>
-                <h1 class="text-3xl font-bold">Manage Posts</h1>
-                <p class="mt-2 text-slate-600">Blog, announcements, and devotionals shown on the public Good News page.</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="index.php" class="rounded bg-slate-200 px-4 py-2 text-sm">Dashboard</a>
-                <a href="logout.php" class="rounded bg-slate-800 text-white px-4 py-2 text-sm">Sign out</a>
-            </div>
+<?php
+$pageTitle = 'Manage Posts | BMI Admin';
+require_once __DIR__ . '/includes/header.php';
+?>
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-slate-800">Manage Posts</h1>
+            <p class="mt-1 text-slate-500">Blog, announcements, and devotionals shown on the public Good News page.</p>
         </div>
 
         <?php if ($feedback !== ''): ?>
@@ -160,91 +165,111 @@ try {
             <div class="mt-6 rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><?php echo e($error); ?></div>
         <?php endif; ?>
 
-        <div class="mt-6 bg-white border border-slate-200 rounded p-5">
-            <h2 class="text-xl font-semibold"><?php echo $editing ? 'Edit Post' : 'Add New Post'; ?></h2>
-            <form method="post" class="mt-4 grid md:grid-cols-2 gap-4">
+        <div class="mt-6 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4"><?php echo $editing ? 'Edit Post' : 'Add New Post'; ?></h2>
+            <form method="post" enctype="multipart/form-data" class="mt-6 grid md:grid-cols-2 gap-6">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="action" value="<?php echo $editing ? 'edit' : 'add'; ?>">
                 <?php if ($editing): ?>
                     <input type="hidden" name="id" value="<?php echo (int) $editing['id']; ?>">
                 <?php endif; ?>
 
-                <label class="block text-sm md:col-span-2">
-                    <span class="font-medium">Title *</span>
-                    <input type="text" name="title" required maxlength="200" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title *</label>
+                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         value="<?php echo $editing ? e($editing['title']) : ''; ?>">
-                </label>
+                </div>
 
-                <label class="block text-sm">
-                    <span class="font-medium">Category</span>
-                    <select name="category" class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Category</label>
+                    <select name="category" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                         <?php foreach (['blog' => 'Blog', 'announcement' => 'Announcement', 'devotional' => 'Devotional'] as $val => $label): ?>
                             <option value="<?php echo $val; ?>" <?php echo $editing && $editing['category'] === $val ? 'selected' : ''; ?>><?php echo $label; ?></option>
                         <?php endforeach; ?>
                     </select>
-                </label>
+                </div>
 
-                <label class="flex items-center gap-2 text-sm pt-6">
-                    <input type="checkbox" name="publish" value="1" <?php echo (!$editing || $editing['published_at']) ? 'checked' : ''; ?> class="rounded">
-                    <span>Publish (visible on website)</span>
-                </label>
+                <div class="md:col-span-2 grid md:grid-cols-2 gap-6 p-4 border border-slate-200 rounded-lg bg-slate-50">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Image Upload (Local File)</label>
+                        <input type="file" name="post_image_file" accept="image/*" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all text-sm">
+                        <p class="mt-1 text-xs text-slate-500">Max size: 5MB. Formats: JPG, PNG, GIF.</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">OR Image URL (Remote Link)</label>
+                        <input type="url" name="post_image_url" placeholder="https://example.com/image.jpg" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all text-sm" value="<?php echo $editing && filter_var($editing['post_image'] ?? '', FILTER_VALIDATE_URL) ? e($editing['post_image']) : ''; ?>">
+                    </div>
+                    <?php if ($editing && !empty($editing['post_image'])): ?>
+                        <div class="md:col-span-2 flex items-center gap-4 mt-2">
+                            <span class="text-sm font-semibold text-slate-700">Current Image:</span>
+                            <img src="<?php echo e($editing['post_image']); ?>" alt="Current image" class="h-16 w-16 object-cover rounded border border-slate-300">
+                        </div>
+                    <?php endif; ?>
+                </div>
 
-                <label class="block text-sm md:col-span-2">
-                    <span class="font-medium">Content *</span>
-                    <textarea name="content" rows="10" required class="mt-1 w-full border border-slate-300 rounded px-3 py-2"><?php echo $editing ? e($editing['content']) : ''; ?></textarea>
-                    <p class="mt-1 text-xs text-slate-500">Plain text or basic HTML. Line breaks are preserved.</p>
-                </label>
+                <div class="flex items-center pt-8">
+                    <label class="flex items-center gap-3 text-sm cursor-pointer group">
+                        <input type="checkbox" name="publish" value="1" <?php echo (!$editing || $editing['published_at']) ? 'checked' : ''; ?> class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer">
+                        <span class="font-medium text-slate-700 group-hover:text-slate-900 transition-colors">Publish (visible on website)</span>
+                    </label>
+                </div>
 
-                <div class="md:col-span-2 flex gap-2">
-                    <button type="submit" class="rounded bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 text-sm font-semibold"><?php echo $editing ? 'Update' : 'Add'; ?></button>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Content *</label>
+                    <textarea name="content" rows="10" required class="w-full border border-slate-300 rounded-lg px-4 py-3 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all font-mono text-sm"><?php echo $editing ? e($editing['content']) : ''; ?></textarea>
+                    <p class="mt-1.5 text-xs text-slate-500">Plain text or basic HTML. Line breaks are preserved.</p>
+                </div>
+
+                <div class="md:col-span-2 pt-4 border-t border-slate-100 flex gap-3">
+                    <button type="submit" class="rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-2.5 text-sm font-semibold transition-all shadow-md shadow-blue-500/30"><?php echo $editing ? 'Update' : 'Add'; ?></button>
                     <?php if ($editing): ?>
-                        <a href="posts.php" class="rounded bg-slate-400 hover:bg-slate-500 text-white px-4 py-2 text-sm font-semibold">Cancel</a>
+                        <a href="posts.php" class="rounded-lg border border-slate-300 text-slate-700 px-6 py-2.5 text-sm font-semibold hover:bg-slate-50 transition-all text-center">Cancel</a>
                     <?php endif; ?>
                 </div>
             </form>
         </div>
 
-        <div class="mt-8 bg-white border border-slate-200 rounded p-5">
-            <h2 class="text-xl font-semibold">All Posts</h2>
+        <div class="mt-8 bg-white border border-slate-200 rounded-xl p-6 md:p-8 shadow-sm">
+            <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4">All Posts</h2>
             <?php if (empty($posts)): ?>
-                <p class="mt-3 text-sm text-slate-600">No posts yet.</p>
+                <p class="mt-4 text-sm text-slate-600">No posts yet.</p>
             <?php else: ?>
-                <table class="mt-4 w-full text-sm">
-                    <thead>
-                        <tr class="text-left text-slate-500 border-b">
-                            <th class="py-2">Title</th>
-                            <th class="py-2">Category</th>
-                            <th class="py-2">Status</th>
-                            <th class="py-2 text-right">Actions</th>
-                        </tr>
-                    </thead>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left text-slate-500 border-b border-slate-200 bg-slate-50/50">
+                                <th class="py-3 px-4 font-semibold rounded-tl-lg">Title</th>
+                                <th class="py-3 px-4 font-semibold">Category</th>
+                                <th class="py-3 px-4 font-semibold">Status</th>
+                                <th class="py-3 px-4 font-semibold text-right rounded-tr-lg">Actions</th>
+                            </tr>
+                        </thead>
                     <tbody>
                         <?php foreach ($posts as $p): ?>
-                            <tr class="border-b last:border-0">
-                                <td class="py-3 font-medium"><?php echo e($p['title']); ?></td>
-                                <td class="py-3 capitalize"><?php echo e($p['category']); ?></td>
-                                <td class="py-3">
+                            <tr class="border-b border-slate-100 hover:bg-slate-50/80 transition-colors last:border-0">
+                                <td class="py-3 px-4 font-medium text-slate-900"><?php echo e($p['title']); ?></td>
+                                <td class="py-3 px-4 capitalize text-slate-600"><?php echo e($p['category']); ?></td>
+                                <td class="py-3 px-4">
                                     <?php if ($p['published_at']): ?>
-                                        <span class="inline-block rounded bg-emerald-100 text-emerald-800 px-2 py-0.5 text-xs">Published</span>
+                                        <span class="inline-block rounded-full bg-emerald-100 text-emerald-800 px-3 py-1 text-xs font-semibold">Published</span>
                                     <?php else: ?>
-                                        <span class="inline-block rounded bg-slate-200 text-slate-700 px-2 py-0.5 text-xs">Draft</span>
+                                        <span class="inline-block rounded-full bg-slate-200 text-slate-700 px-3 py-1 text-xs font-semibold">Draft</span>
                                     <?php endif; ?>
                                 </td>
-                                <td class="py-3 text-right">
-                                    <a href="posts.php?edit=<?php echo (int) $p['id']; ?>" class="text-blue-700 hover:underline mr-3">Edit</a>
+                                <td class="py-3 px-4 text-right">
+                                    <a href="posts.php?edit=<?php echo (int) $p['id']; ?>" class="text-blue-600 hover:text-blue-800 font-medium mr-4">Edit</a>
                                     <form method="post" class="inline" onsubmit="return confirm('Delete this post?');">
                                         <?php echo csrf_field(); ?>
                                         <input type="hidden" name="action" value="delete">
                                         <input type="hidden" name="id" value="<?php echo (int) $p['id']; ?>">
-                                        <button type="submit" class="text-red-700 hover:underline">Delete</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-800 font-medium">Delete</button>
                                     </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+            </div>
             <?php endif; ?>
         </div>
-    </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

@@ -1,0 +1,85 @@
+Array
+(
+    [setting_files] => Array
+        (
+            [name] => Array
+                (
+                    [site_logo] => 
+                    [site_favicon] => 
+                )
+
+            [full_path] => Array
+                (
+                    [site_logo] => 
+                    [site_favicon] => 
+                )
+
+            [type] => Array
+                (
+                    [site_logo] => 
+                    [site_favicon] => 
+                )
+
+            [tmp_name] => Array
+                (
+                    [site_logo] => 
+                    [site_favicon] => 
+                )
+
+            [error] => Array
+                (
+                    [site_logo] => 4
+                    [site_favicon] => 4
+                )
+
+            [size] => Array
+                (
+                    [site_logo] => 0
+                    [site_favicon] => 0
+                )
+
+        )
+
+)
+
+Array
+(
+    [csrf_token] => f8fd1888a6de90aa32899b7503db10526949a6cf76e71807be16d8756b26e4d8
+    [active_group] => general
+    [setting] => Array
+        (
+            [site.name] => Bridge Ministries International
+            [site.tagline] => Be Switched On.
+            [site.description] => Bridge Ministries International is a Bible-believing church family in Accra, Ghana, helping people know Christ, grow in faith, and live on mission.
+            [site.founded_year] => 1995
+            [contact.address] => Behind Sel Fuel station, Anyaa-Awoshie Rd, Accra, Ghana
+            [contact.phone_primary] => 026 235 4383
+            [contact.phone_secondary] => 
+            [contact.email_general] => info@bmiglobal.org
+            [contact.email_prayer] => prayer@bmiglobal.org
+            [contact.email_giving] => giving@bmiglobal.org
+            [contact.map_query] => Anyaa-Awoshie Road, Accra, Ghana
+            [service.sunday_worship] => Sundays · 8:45 AM
+            [service.bible_study] => Wednesdays · 6:00 PM
+            [service.prayer_service] => Fridays · 5:30 PM
+            [service.notes] => All are welcome. Childcare available during the Sunday service.
+            [social.facebook] => https://www.facebook.com/TheBMIChurch/
+            [social.instagram] => 
+            [social.youtube] => https://www.youtube.com/@FDYALLEY
+            [social.x] => https://x.com/fdyalley
+            [social.tiktok] => 
+            [giving.bank_name] => 
+            [giving.bank_account_name] => 
+            [giving.bank_account_number] => 
+            [giving.bank_branch] => 
+            [giving.momo_mtn] => 
+            [giving.momo_vodafone] => 
+            [giving.momo_airteltigo] => 
+            [giving.paystack_public_key] => 
+            [giving.currency] => GHS
+            [live.embed_url] => https://www.youtube.com/live/GaZE70HAfAM?si=2rZrnEsqHUk8WySH
+            [live.youtube_channel_url] => https://www.youtube.com/live/GaZE70HAfAM?si=2rZrnEsqHUk8WySH
+            [analytics.plausible_domain] => 
+        )
+
+)

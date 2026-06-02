@@ -31,16 +31,22 @@ include 'includes/header.php';
 
 <!-- HERO SECTION -->
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img src="<?= setting('contact.hero_bg_image', 'https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop') ?>" alt="Contact Background" class="w-full h-full object-cover opacity-10" onerror="this.src='https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
+    </div>
+
     <!-- Abstract Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#c49a45]/10 blur-[7.5rem] rounded-full pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#c49a45]/30 to-transparent"></div>
 
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
-            Get in Touch
+            <?= setting('contact.hero_title', 'Get in Touch') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
-            Whether you have a question, need prayer, or want to learn more about our ministries, we are here for you.
+            <?= setting('contact.hero_subtitle', 'Whether you have a question, need prayer, or want to learn more about our ministries, we are here for you.') ?>
         </p>
     </div>
 </div>
@@ -76,8 +82,8 @@ include 'includes/header.php';
                             <div>
                                 <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-1">Email</h3>
                                 <p class="text-slate-900 font-medium text-lg">
-                                    <a href="mailto:<?php echo htmlspecialchars(setting('contact.email', 'info@bridge.test')); ?>" class="hover:text-[#c49a45] transition-colors">
-                                        <?php echo htmlspecialchars(setting('contact.email', 'info@bridge.test')); ?>
+                                    <a href="mailto:<?php echo htmlspecialchars(setting('contact.email_general', 'info@bridge.test')); ?>" class="hover:text-[#c49a45] transition-colors">
+                                        <?php echo htmlspecialchars(setting('contact.email_general', 'info@bridge.test')); ?>
                                     </a>
                                 </p>
                             </div>
