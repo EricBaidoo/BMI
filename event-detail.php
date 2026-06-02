@@ -38,7 +38,7 @@ include 'includes/header.php';
             <a href="events" class="inline-block bg-[#c49a45] text-white px-8 py-4  font-bold hover:bg-[#d4ac57] transition-colors">Return to Events</a>
         </div>
     <?php else: 
-        $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop';
+        $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop';
         $startDate = date('F j, Y', strtotime((string)$event['event_date']));
         $endDate = !empty($event['end_date']) ? date('F j, Y', strtotime((string)$event['end_date'])) : null;
         $eventTime = !empty($event['event_time']) ? date('g:i A', strtotime((string)$event['event_time'])) : null;

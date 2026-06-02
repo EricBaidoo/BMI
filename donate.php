@@ -12,16 +12,22 @@ include 'includes/header.php';
 
 <!-- HERO SECTION -->
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img src="<?= setting('donate.hero_bg_image', 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1200&auto=format&fit=crop') ?>" alt="Donate Background" class="w-full h-full object-cover opacity-10" onerror="this.src='https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1200&auto=format&fit=crop';">
+        <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
+    </div>
+
     <!-- Abstract Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#c49a45]/10 blur-[7.5rem] rounded-full pointer-events-none"></div>
     <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#c49a45]/30 to-transparent"></div>
 
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
-            Give Online
+            <?= setting('donate.hero_title', 'Give Online') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium mb-10">
-            Your generosity helps us build the church, preach the Gospel, and make a lasting impact in communities around the world.
+            <?= setting('donate.hero_subtitle', 'Your generosity helps us build the church, preach the Gospel, and make a lasting impact in communities around the world.') ?>
         </p>
         
         <a href="#give-now" class="inline-flex items-center justify-center px-8 py-4 bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold  transition-all duration-300 hover:-translate-y-1 shadow-[0_4px_20px_rgba(196,154,69,0.3)] text-lg">
@@ -53,32 +59,22 @@ include 'includes/header.php';
                 </a>
             </div>
 
-            <!-- In Person -->
+            <!-- Bank Transfer -->
             <div class="bg-slate-50 p-10  border border-slate-100 text-center shadow-sm hover:shadow-md transition-shadow group">
                 <div class="w-16 h-16  bg-white border border-slate-100 text-[#c49a45] flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-[#c49a45] group-hover:text-white transition-colors duration-300">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2-2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900 mb-4">In Person</h3>
-                <p class="text-slate-600 font-medium leading-relaxed mb-6">
-                    You can give in person at any of our campuses during the weekend worship experiences. Envelopes are provided.
-                </p>
-                <a href="visit" class="text-[#c49a45] font-bold hover:text-[#d4ac57] flex items-center justify-center">
-                    Plan a Visit <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </a>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Bank Transfer</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6 whitespace-pre-wrap"><?= setting('donate.bank_details', "Bank Name: Faith Bank\nAccount: 1234567890\nBranch: Main Branch") ?></p>
             </div>
 
-            <!-- Mail -->
+            <!-- Mobile Money -->
             <div class="bg-slate-50 p-10  border border-slate-100 text-center shadow-sm hover:shadow-md transition-shadow group">
                 <div class="w-16 h-16  bg-white border border-slate-100 text-[#c49a45] flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:bg-[#c49a45] group-hover:text-white transition-colors duration-300">
-                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
                 </div>
-                <h3 class="text-2xl font-bold text-slate-900 mb-4">Mail a Check</h3>
-                <p class="text-slate-600 font-medium leading-relaxed mb-6">
-                    Make checks payable to "Bridge Ministries International" and mail them to our central office address.
-                </p>
-                <span class="text-slate-900 font-bold block bg-white py-2 px-4  border border-slate-200">
-                    PO Box 12345, Faith City
-                </span>
+                <h3 class="text-2xl font-bold text-slate-900 mb-4">Mobile Money</h3>
+                <p class="text-slate-600 font-medium leading-relaxed mb-6 whitespace-pre-wrap"><?= setting('donate.momo_details', "MTN MoMo: 055 123 4567\nVodafone Cash: 020 123 4567\nName: Bridge Ministries") ?></p>
             </div>
         </div>
     </div>

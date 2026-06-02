@@ -8,7 +8,7 @@ require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/settings.php';
 
 // For now, we will use the setting from the .env or backend as a fallback.
-$liveEmbedUrl = ''; // Temporarily hardcoded to empty string to test offline graphic
+$liveEmbedUrl = setting('live.embed_url', '');
 
 
 include 'includes/header.php';

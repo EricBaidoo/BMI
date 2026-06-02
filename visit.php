@@ -14,17 +14,17 @@ include 'includes/header.php';
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0">
-        <img src="assets/image/PXL_20240329_213926615.jpg" alt="Church Worship" class="w-full h-full object-cover opacity-20" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=2000&auto=format&fit=crop';">
+        <img src="<?= setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg') ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
         <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
     </div>
     
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <span class="inline-block py-1 px-3 rounded-full bg-[#1a1f2e] border border-white/10 text-[#c49a45] text-sm font-bold tracking-widest uppercase mb-6">You Belong Here</span>
         <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
-            Plan a Visit
+            <?= setting('visit.hero_title', 'Plan a Visit') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
-            We can't wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.
+            <?= setting('visit.hero_subtitle', 'We can\'t wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.') ?>
         </p>
     </div>
 </div>
@@ -47,14 +47,15 @@ include 'includes/header.php';
                         <div>
                             <h3 class="text-xl font-bold text-slate-900 mb-2">Service Times</h3>
                             <ul class="space-y-3 text-slate-600 font-medium">
+                                <?php
+                                $services = db_connect()->query("SELECT title, time_info FROM weekly_services ORDER BY sort_order ASC, id ASC")->fetchAll();
+                                foreach ($services as $svc):
+                                ?>
                                 <li class="flex items-center gap-3">
                                     <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
-                                    <span>Sunday Celebration — 9:00 AM</span>
+                                    <span><?php echo htmlspecialchars($svc['title'] . ' — ' . $svc['time_info']); ?></span>
                                 </li>
-                                <li class="flex items-center gap-3">
-                                    <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
-                                    <span>Wednesday Midweek — 6:30 PM</span>
-                                </li>
+                                <?php endforeach; ?>
                             </ul>
                         </div>
                     </div>
@@ -80,7 +81,7 @@ include 'includes/header.php';
 
             <!-- Image/Map Container -->
             <div class="relative  overflow-hidden shadow-2xl aspect-square md:aspect-video lg:aspect-square group">
-                <img src="assets/image/church-building.jpg" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
+                <img src="<?= setting('visit.church_image', 'assets/image/church-building.jpg') ?>" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
                 <div class="absolute inset-0 border border-black/10  pointer-events-none"></div>
             </div>
         </div>
@@ -95,7 +96,7 @@ include 'includes/header.php';
         <div class="text-center max-w-3xl mx-auto mb-16">
             <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">What to Expect</h2>
             <p class="text-lg text-slate-600 font-medium leading-relaxed">
-                Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.
+                <?= setting('visit.expect_text', 'Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.') ?>
             </p>
         </div>
 

@@ -19,7 +19,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop" alt="Community Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
+        <img src="<?= setting('ministries.hero_bg_image', 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1200&auto=format&fit=crop') ?>" alt="Community Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
@@ -30,10 +30,10 @@ include 'includes/header.php';
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
         <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
-            Find Your <br/><span class="text-[#c49a45]">Place.</span>
+            <?= setting('ministries.hero_title', 'Find Your <br/><span class="text-[#c49a45]">Place.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
-            Every ministry at BMI is designed to help you grow in Christ, build authentic relationships, and serve the world with purpose.
+            <?= setting('ministries.hero_subtitle', 'Every ministry at BMI is designed to help you grow in Christ, build authentic relationships, and serve the world with purpose.') ?>
         </p>
     </div>
 </section>

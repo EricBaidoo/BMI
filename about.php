@@ -15,7 +15,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=2000&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover opacity-30 mix-blend-luminosity">
+        <img src="<?= setting('about.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=2000&auto=format&fit=crop') ?>" alt="Worship Background" class="w-full h-full object-cover opacity-30 mix-blend-luminosity">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
@@ -52,13 +52,13 @@ include 'includes/header.php';
                 
                 <div class="text-slate-600 font-medium leading-relaxed space-y-6 text-lg">
                     <p>
-                        Bridge Ministries International began in <?php echo e($founded); ?> as a small group of believers gathering with a single conviction: that the local church should be a bridge — between God and people, between generations, and between the church and the community it serves.
+                        <?= setting('about.history_text1', 'Bridge Ministries International began in ' . $founded . ' as a small group of believers gathering with a single conviction: that the local church should be a bridge — between God and people, between generations, and between the church and the community it serves.') ?>
                     </p>
                     <p>
-                        Under the leadership of Rev. Francis Duane Yalley, that conviction has grown into a thriving movement of cell-based ministries and congregations reaching thousands of believers across Ghana and beyond.
+                        <?= setting('about.history_text2', 'Under the leadership of Rev. Francis Duane Yalley, that conviction has grown into a thriving movement of cell-based ministries and congregations reaching thousands of believers across Ghana and beyond.') ?>
                     </p>
                     <p>
-                        Today we remain anchored in the same simple commitments that defined our first gatherings: faithful preaching of the Word, strategic prayer, intentional discipleship, and a love for the city. 
+                        <?= setting('about.vision_text', 'Today we remain anchored in the same simple commitments that defined our first gatherings: faithful preaching of the Word, strategic prayer, intentional discipleship, and a love for the city.') ?>
                     </p>
                 </div>
             </div>
@@ -68,14 +68,14 @@ include 'includes/header.php';
                 <div class="absolute inset-0 bg-[#c49a45] blur-[6.25rem] opacity-10 group-hover:opacity-20 transition-opacity duration-700"></div>
                 <div class="relative w-full aspect-[4/5] overflow-hidden border-4 border-white shadow-xl bg-slate-100 flex items-center justify-center">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent z-10"></div>
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <img src="<?= setting('about.founder_image', 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop') ?>" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
                     
                     <div class="absolute bottom-10 left-10 z-20">
                         <div class="inline-flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-md border border-slate-200 mb-4 shadow-sm">
                             <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
                             <span class="text-slate-900 text-xs font-bold tracking-widest uppercase">General Overseer</span>
                         </div>
-                        <h3 class="text-4xl font-display font-black text-white leading-tight">Rev. F.D.<br>Yalley</h3>
+                        <h3 class="text-4xl font-display font-black text-white leading-tight"><?= setting('about.founder_name', 'Rev. F.D.<br>Yalley') ?></h3>
                     </div>
                 </div>
             </div>

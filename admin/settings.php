@@ -20,6 +20,8 @@ $schema = [
         'label' => 'General',
         'fields' => [
             ['key' => 'site.name',         'label' => 'Site / Church name',  'type' => 'text'],
+            ['key' => 'site.logo',         'label' => 'Main Logo (Header/Footer)', 'type' => 'image'],
+            ['key' => 'site.favicon',      'label' => 'Favicon (Browser Tab)',     'type' => 'image'],
             ['key' => 'site.tagline',      'label' => 'Tagline',              'type' => 'text'],
             ['key' => 'site.description',  'label' => 'Short description (used in SEO meta + social cards)', 'type' => 'textarea'],
             ['key' => 'site.founded_year', 'label' => 'Founded year',         'type' => 'text'],
@@ -94,18 +96,42 @@ foreach ($schema as $group) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    file_put_contents(__DIR__ . '/files_dump.txt', print_r($_FILES, true) . "\n" . print_r($_POST, true));
     try {
         csrf_check();
+        require_once __DIR__ . '/../includes/uploads.php';
+        
         $posted = $_POST['setting'] ?? [];
         if (!is_array($posted)) {
             throw new RuntimeException('Invalid form payload.');
         }
         $update = [];
-        foreach ($allowedKeys as $key) {
-            // PHP converts dots in $_POST keys to underscores at the top level — but keys
-            // inside an array (setting[...]) are preserved verbatim.
-            if (array_key_exists($key, $posted)) {
-                $update[$key] = trim((string) $posted[$key]);
+        
+        foreach ($schema as $group) {
+            foreach ($group['fields'] as $f) {
+                $key = $f['key'];
+                $postKey = str_replace('.', '_', $key);
+                if ($f['type'] === 'image') {
+                    $actualKey = isset($_FILES['setting_files']['name'][$key]) ? $key : (isset($_FILES['setting_files']['name'][$postKey]) ? $postKey : null);
+                    if ($actualKey && !empty($_FILES['setting_files']['name'][$actualKey])) {
+                        $file = [
+                            'name' => $_FILES['setting_files']['name'][$actualKey],
+                            'type' => $_FILES['setting_files']['type'][$actualKey],
+                            'tmp_name' => $_FILES['setting_files']['tmp_name'][$actualKey],
+                            'error' => $_FILES['setting_files']['error'][$actualKey],
+                            'size' => $_FILES['setting_files']['size'][$actualKey],
+                        ];
+                        if ($file['error'] !== UPLOAD_ERR_NO_FILE) {
+                            $update[$key] = upload_image($file, 'site');
+                        }
+                    }
+                } else {
+                    if (array_key_exists($key, $posted)) {
+                        $update[$key] = trim((string) $posted[$key]);
+                    } elseif (array_key_exists($postKey, $posted)) {
+                        $update[$key] = trim((string) $posted[$postKey]);
+                    }
+                }
             }
         }
         settings_save($update);
@@ -125,26 +151,13 @@ if (flash('settings') === 'saved') {
 $values = settings_all(true);
 $activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['group'] : 'general';
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="robots" content="noindex,nofollow">
-    <title>Site Settings | BMI Admin</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-slate-100 text-slate-800">
-    <div class="max-w-6xl mx-auto py-10 px-4">
-        <div class="flex items-center justify-between gap-3 flex-wrap">
-            <div>
-                <h1 class="text-3xl font-bold">Site Settings</h1>
-                <p class="mt-2 text-slate-600">Update site-wide content. Changes take effect immediately on the public site.</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="index.php" class="rounded bg-slate-200 px-4 py-2 text-sm">Dashboard</a>
-                <a href="logout.php" class="rounded bg-slate-800 text-white px-4 py-2 text-sm">Sign out</a>
-            </div>
+<?php
+$pageTitle = 'Site Settings | BMI Admin';
+require_once __DIR__ . '/includes/header.php';
+?>
+        <div class="mb-6">
+            <h1 class="text-2xl font-bold text-slate-800">Site Settings</h1>
+            <p class="mt-1 text-slate-500">Update site-wide content. Changes take effect immediately on the public site.</p>
         </div>
 
         <?php if ($feedback !== ''): ?>
@@ -155,12 +168,12 @@ $activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['
         <?php endif; ?>
 
         <div class="mt-6 grid md:grid-cols-[220px_1fr] gap-6 items-start">
-            <nav class="bg-white border border-slate-200 rounded p-2 sticky top-4">
-                <ul class="text-sm">
+            <nav class="bg-white border border-slate-200 rounded-xl p-2 sticky top-4 shadow-sm">
+                <ul class="text-sm space-y-1">
                     <?php foreach ($schema as $key => $group): ?>
                         <li>
                             <a href="?group=<?php echo e($key); ?>"
-                               class="block rounded px-3 py-2 <?php echo $key === $activeGroup ? 'bg-slate-900 text-white font-semibold' : 'hover:bg-slate-100'; ?>">
+                               class="block rounded-lg px-3 py-2.5 transition-colors <?php echo $key === $activeGroup ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-100/50 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'; ?>">
                                 <?php echo e($group['label']); ?>
                             </a>
                         </li>
@@ -168,10 +181,10 @@ $activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['
                 </ul>
             </nav>
 
-            <form method="post" class="bg-white border border-slate-200 rounded p-6 space-y-5">
+            <form method="post" enctype="multipart/form-data" class="bg-white border border-slate-200 rounded-xl p-6 md:p-8 space-y-6 shadow-sm">
                 <?php echo csrf_field(); ?>
                 <input type="hidden" name="active_group" value="<?php echo e($activeGroup); ?>">
-                <h2 class="text-xl font-semibold border-b border-slate-200 pb-3"><?php echo e($schema[$activeGroup]['label']); ?></h2>
+                <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4"><?php echo e($schema[$activeGroup]['label']); ?></h2>
 
                 <?php
                 // Render every group as hidden inputs so we don't lose values on tab switch — only the active group is visible.
@@ -181,27 +194,36 @@ $activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['
                         $visible = $groupKey === $activeGroup;
                 ?>
                     <?php if ($visible): ?>
-                        <label class="block text-sm">
-                            <span class="font-medium"><?php echo e($field['label']); ?></span>
+                        <div>
+                            <label class="block text-sm font-semibold text-slate-700 mb-1.5"><?php echo e($field['label']); ?></label>
                             <?php if ($field['type'] === 'textarea'): ?>
-                                <textarea name="setting[<?php echo e($field['key']); ?>]" rows="3" class="mt-1 w-full border border-slate-300 rounded px-3 py-2"><?php echo e($val); ?></textarea>
+                                <textarea name="setting[<?php echo e($field['key']); ?>]" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-3 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo e($val); ?></textarea>
+                            <?php elseif ($field['type'] === 'image'): ?>
+                                <div class="flex items-center gap-4">
+                                    <?php if ($val): ?>
+                                        <div class="h-12 w-auto bg-slate-100 rounded border border-slate-200 overflow-hidden flex items-center justify-center p-1">
+                                            <img src="/BMI/<?php echo e($val); ?>" class="max-h-full max-w-full object-contain" alt="">
+                                        </div>
+                                    <?php endif; ?>
+                                    <input type="file" name="setting_files[<?php echo e(str_replace('.', '_', $field['key'])); ?>]" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
                             <?php else: ?>
                                 <input type="<?php echo e($field['type']); ?>" name="setting[<?php echo e($field['key']); ?>]"
                                        value="<?php echo e($val); ?>"
-                                       class="mt-1 w-full border border-slate-300 rounded px-3 py-2">
+                                       class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
                             <?php endif; ?>
-                            <span class="mt-1 block text-xs text-slate-400"><code><?php echo e($field['key']); ?></code></span>
-                        </label>
+                            <span class="mt-1.5 block text-xs text-slate-400 font-mono tracking-tight"><?php echo e($field['key']); ?></span>
+                        </div>
                     <?php else: ?>
-                        <input type="hidden" name="setting[<?php echo e($field['key']); ?>]" value="<?php echo e($val); ?>">
+                        <?php if ($field['type'] !== 'image'): ?>
+                            <input type="hidden" name="setting[<?php echo e($field['key']); ?>]" value="<?php echo e($val); ?>">
+                        <?php endif; ?>
                     <?php endif; ?>
                 <?php endforeach; endforeach; ?>
 
-                <div class="pt-2">
-                    <button type="submit" class="rounded bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 text-sm font-semibold">Save changes</button>
+                <div class="pt-4 border-t border-slate-100">
+                    <button type="submit" class="rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-6 py-2.5 text-sm font-semibold transition-all shadow-md shadow-blue-500/30">Save changes</button>
                 </div>
             </form>
         </div>
-    </div>
-</body>
-</html>
+<?php require_once __DIR__ . '/includes/footer.php'; ?>

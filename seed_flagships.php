@@ -17,7 +17,7 @@ try {
         '2026-01-01',
         '2026-01-21',
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 2. Singles and Married Conference
@@ -29,7 +29,7 @@ try {
         '2026-02-14',
         null,
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 3. Easter Convocation
@@ -41,7 +41,7 @@ try {
         '2026-04-03',
         '2026-04-05',
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 4. Revive Thy Works
@@ -53,7 +53,7 @@ try {
         '2026-06-15',
         null,
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 5. Fruits and Vegetable Fast
@@ -65,7 +65,7 @@ try {
         '2026-08-01',
         '2026-08-07',
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1498837167922-ddd27525d352?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 6. CAN GOD? Annual Anniversary Celebration
@@ -77,7 +77,7 @@ try {
         '2026-10-10',
         '2026-10-12',
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 7. Feast of Miracles
@@ -89,7 +89,7 @@ try {
         '2026-03-31',
         null,
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1504356611382-747683921786?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1504356611382-747683921786?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 8. Semper Fidelis
@@ -101,7 +101,7 @@ try {
         '2026-11-20',
         null,
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1510511459019-5d25979bb959?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1510511459019-5d25979bb959?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     // 9. A Night of Repairing, Restoring and Building
@@ -113,7 +113,7 @@ try {
         '2026-12-31',
         null,
         'Bridge Ministries International',
-        'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1467810563316-b5476525c0f9?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     echo "Successfully seeded flagship programs!";

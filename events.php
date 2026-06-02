@@ -32,7 +32,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=2000&auto=format&fit=crop" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
+        <img src="<?= setting('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
         <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/90 via-[#06080f]/80 to-[#06080f]"></div>
     </div>
     
@@ -43,10 +43,10 @@ include 'includes/header.php';
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
         <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
-            Upcoming <br/><span class="text-[#c49a45]">Events.</span>
+            <?= setting('events.hero_title', 'Upcoming <br/><span class="text-[#c49a45]">Events.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
-            From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.
+            <?= setting('events.hero_subtitle', 'From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.') ?>
         </p>
     </div>
 </section>
@@ -130,7 +130,7 @@ include 'includes/header.php';
 <section class="py-20 bg-slate-900 relative overflow-hidden">
     <!-- Abstract Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#c49a45]/20 blur-[7.5rem] rounded-full pointer-events-none"></div>
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
     
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <h2 class="text-3xl md:text-5xl font-display font-black text-white tracking-tight mb-6">Experience Transformation</h2>

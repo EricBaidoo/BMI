@@ -5,13 +5,24 @@ $pageDescription = 'Our statement of faith — what Bridge Ministries Internatio
 require_once __DIR__ . '/includes/helpers.php';
 include 'includes/header.php';
 ?>
-<section class="page-hero">
-    <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
-        <span class="tag-chip">Our Beliefs</span>
-        <h1 class="text-4xl md:text-5xl font-bold mt-3">What We Believe</h1>
-        <p class="mt-4 text-lg muted-copy max-w-3xl">
-            We are a Bible-believing, Christ-centred church standing in the historic stream of evangelical Christian faith.
-            What follows is a summary of the core convictions that shape our preaching, our gatherings, and our life together.
+<!-- HERO SECTION -->
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
+    <div class="absolute inset-0 z-0">
+        <img src="<?= setting('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
+    </div>
+    
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
+        <div class="inline-flex items-center gap-4 mb-6">
+            <div class="h-px w-12 bg-[#c49a45]"></div>
+            <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Beliefs</span>
+            <div class="h-px w-12 bg-[#c49a45]"></div>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
+            <?= setting('beliefs.hero_title', 'What We <br/><span class="text-[#c49a45]">Believe.</span>') ?>
+        </h1>
+        <p class="text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
+            <?= setting('beliefs.intro_text', 'We are a Bible-believing, Christ-centred church standing in the historic stream of evangelical Christian faith. What follows is a summary of the core convictions that shape our preaching, our gatherings, and our life together.') ?>
         </p>
     </div>
 </section>
@@ -21,9 +32,7 @@ include 'includes/header.php';
     <div class="section-card">
         <h2 class="text-2xl font-semibold">A Note Before You Read</h2>
         <p class="mt-3 text-sm muted-copy leading-relaxed">
-            We don't see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we
-            believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest
-            questions from anyone exploring faith.
+            <?= setting('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
         </p>
     </div>
 

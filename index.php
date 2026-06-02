@@ -6,6 +6,9 @@ require_once __DIR__ . '/includes/settings.php';
 
 $upcomingEvents = [];
 $latestSermons = [];
+$heroSlides = [];
+$testimonies = [];
+$weeklyServices = [];
 
 try {
     $pdo = db_connect();
@@ -14,6 +17,10 @@ try {
 
     $stmt = $pdo->query("SELECT id, title, sermon_date, topic, sermon_image FROM sermons ORDER BY sermon_date DESC LIMIT 3");
     $latestSermons = $stmt->fetchAll();
+
+    $heroSlides = $pdo->query("SELECT * FROM hero_slides ORDER BY sort_order ASC")->fetchAll();
+    $testimonies = $pdo->query("SELECT * FROM testimonies ORDER BY sort_order ASC")->fetchAll();
+    $weeklyServices = $pdo->query("SELECT * FROM weekly_services ORDER BY sort_order ASC")->fetchAll();
 } catch (Throwable $e) {}
 
 include 'includes/header.php';
@@ -31,90 +38,53 @@ include 'includes/header.php';
 
 <!-- HERO CAROUSEL: Clean Professional Design -->
 <section class="relative w-full h-screen min-h-[43.75rem] max-h-[62.5rem] bg-slate-900 overflow-hidden" id="hero-carousel">
-    
-    <!-- Slide 1: Global Missions -->
-    <div class="carousel-slide absolute inset-0 w-full h-full opacity-100 z-20 flex items-center justify-center" id="slide-0">
-        <div class="absolute inset-0 z-0">
-            <img src="assets/image/chad-kirchoff-ivqGyYLtBI8-unsplash.jpg" alt="Missions" class="bg-zoom w-full h-full object-cover object-center" onerror="this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop';">
-            <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-slate-900/20"></div>
-        </div>
-        <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto mt-16 text-center">
-            <h1 class="font-display font-black text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-8 text-white leading-[1.05]">
-                Impact the <span class="text-[#c49a45]">World.</span>
-            </h1>
-            <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-                Taking the uncompromised message of hope and truth to every nation. Join our global mandate.
-            </p>
-            <div class="flex items-center justify-center gap-6">
-                <a href="ministries" class="inline-flex items-center justify-center bg-[#c49a45] text-white hover:bg-[#d4ac57] text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                    Discover Ministries
-                </a>
+    <?php if (empty($heroSlides)): ?>
+        <div class="carousel-slide absolute inset-0 w-full h-full opacity-100 z-20 flex items-center justify-center">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
             </div>
-            
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
-                <button onclick="goToSlide(0)" class="w-10 h-1.5 bg-[#c49a45] transition-all" aria-label="Current slide"></button>
-                <button onclick="goToSlide(1)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 2"></button>
-                <button onclick="goToSlide(2)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 3"></button>
+            <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
+                <h1 class="font-display font-black text-6xl text-white">Welcome</h1>
             </div>
         </div>
-    </div>
-
-    <!-- Slide 2: Worship -->
-    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 z-10 flex items-center justify-center" id="slide-1">
-        <div class="absolute inset-0 z-0">
-            <img src="assets/image/aaron-burden-535Npq1wFG8-unsplash.jpg" alt="Worship" class="bg-zoom w-full h-full object-cover object-center" onerror="this.src='https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=2000&auto=format&fit=crop';">
-            <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-slate-900/20"></div>
-        </div>
-        <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto mt-16 text-center">
-            <h1 class="font-display font-black text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-8 text-white leading-[1.05]">
-                Encounter <span class="text-white">His Presence.</span>
-            </h1>
-            <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-                Experience powerful worship and authentic community. There is a place for you in our church family.
-            </p>
-            <div class="flex items-center justify-center gap-6">
-                <a href="visit" class="inline-flex items-center justify-center bg-white text-slate-900 hover:bg-slate-100 text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                    Plan Your Visit
-                </a>
+    <?php else: ?>
+        <?php foreach ($heroSlides as $i => $slide): ?>
+            <div class="carousel-slide absolute inset-0 w-full h-full <?php echo $i === 0 ? 'opacity-100 z-20' : 'opacity-0 z-10'; ?> flex items-center justify-center" id="slide-<?php echo $i; ?>">
+                <div class="absolute inset-0 z-0">
+                    <?php if ($slide['bg_image']): ?>
+                        <img src="<?php echo strpos($slide['bg_image'], 'http') === 0 ? htmlspecialchars($slide['bg_image']) : htmlspecialchars($slide['bg_image']); ?>" alt="" class="bg-zoom w-full h-full object-cover object-center">
+                    <?php endif; ?>
+                    <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-slate-900/20"></div>
+                </div>
+                <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto mt-16 text-center">
+                    <?php if ($slide['title']): ?>
+                        <h1 class="font-display font-black text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-8 text-white leading-[1.05]">
+                            <?php echo $slide['title']; // Allow HTML like <span> as requested ?>
+                        </h1>
+                    <?php endif; ?>
+                    <?php if ($slide['subtitle']): ?>
+                        <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
+                            <?php echo htmlspecialchars($slide['subtitle']); ?>
+                        </p>
+                    <?php endif; ?>
+                    <?php if ($slide['button_text'] && $slide['button_url']): ?>
+                        <div class="flex items-center justify-center gap-6">
+                            <a href="<?php echo htmlspecialchars($slide['button_url']); ?>" class="inline-flex items-center justify-center <?php echo $i % 2 === 0 ? 'bg-[#c49a45] text-white hover:bg-[#d4ac57]' : 'bg-white text-slate-900 hover:bg-slate-100'; ?> text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                                <?php echo htmlspecialchars($slide['button_text']); ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
+                        <?php foreach ($heroSlides as $j => $s): ?>
+                            <button onclick="goToSlide(<?php echo $j; ?>)" class="<?php echo $i === $j ? 'w-10' : 'w-4'; ?> h-1.5 <?php echo $i === 0 ? 'bg-[#c49a45]' : 'bg-white'; ?> <?php echo $i !== $j ? 'bg-white/40 hover:bg-white/80' : ''; ?> transition-all" aria-label="Go to slide <?php echo $j+1; ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
             </div>
-            
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
-                <button onclick="goToSlide(0)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 1"></button>
-                <button onclick="goToSlide(1)" class="w-10 h-1.5 bg-white transition-all" aria-label="Current slide"></button>
-                <button onclick="goToSlide(2)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 3"></button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Slide 3: The Word -->
-    <div class="carousel-slide absolute inset-0 w-full h-full opacity-0 z-10 flex items-center justify-center bg-slate-900" id="slide-2">
-        <div class="absolute inset-0 z-0">
-            <img src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?q=80&w=2000&auto=format&fit=crop" alt="The Word" class="bg-zoom w-full h-full object-cover object-center opacity-60">
-            <div class="absolute inset-0 bg-slate-900/60 mix-blend-multiply"></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/40 to-slate-900/20"></div>
-        </div>
-        <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto mt-16 text-center">
-            <h1 class="font-display font-black text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-8 text-white leading-[1.05]">
-                Uncompromised <span class="text-[#c49a45]">Truth.</span>
-            </h1>
-            <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
-                Dive deep into the Word of God with our latest sermon series designed to build resilient faith.
-            </p>
-            <div class="flex items-center justify-center gap-6">
-                <a href="sermons" class="inline-flex items-center justify-center bg-[#c49a45] text-white hover:bg-[#d4ac57] text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                    Watch Latest Sermon
-                </a>
-            </div>
-            
-            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex gap-3">
-                <button onclick="goToSlide(0)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 1"></button>
-                <button onclick="goToSlide(1)" class="w-4 h-1.5 bg-white/40 hover:bg-white/80 transition-all" aria-label="Go to slide 2"></button>
-                <button onclick="goToSlide(2)" class="w-10 h-1.5 bg-[#c49a45] transition-all" aria-label="Current slide"></button>
-            </div>
-        </div>
-    </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </section>
 
 <!-- ANIMATED MARQUEE TICKER -->
@@ -122,40 +92,19 @@ include 'includes/header.php';
     <!-- Subtle glow behind the marquee -->
     <div class="absolute inset-0 bg-gradient-to-r from-transparent via-[#c49a45]/10 to-transparent pointer-events-none"></div>
     <div class="whitespace-nowrap flex items-center animate-marquee font-display font-black tracking-[0.25em] uppercase text-[0.6875rem] md:text-xs">
-        <!-- We duplicate the text to ensure a seamless infinite scroll -->
+        <?php for ($m = 0; $m < 3; $m++): ?>
         <span class="mx-8 flex items-center gap-8">
-            <span class="text-slate-300">WORSHIP WITH US</span> 
+            <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text1', 'WORSHIP WITH US')); ?></span> 
             <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">SUNDAYS AT 8:45 AM</span> 
+            <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text2', 'SUNDAYS AT 8:45 AM')); ?></span> 
             <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]">EXPERIENCE TRANSFORMATION</span> 
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]"><?php echo htmlspecialchars(setting('home.marquee_text3', 'EXPERIENCE TRANSFORMATION')); ?></span> 
             <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">UNCOMPROMISED TRUTH</span> 
+            <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text4', 'UNCOMPROMISED TRUTH')); ?></span> 
             <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span>
-            <span class="text-slate-300">A LEGACY OF ENDURING FAITH</span>
+            <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text5', 'A LEGACY OF ENDURING FAITH')); ?></span>
         </span>
-        <span class="mx-8 flex items-center gap-8">
-            <span class="text-slate-300">WORSHIP WITH US</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">SUNDAYS AT 8:45 AM</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]">EXPERIENCE TRANSFORMATION</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">UNCOMPROMISED TRUTH</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span>
-            <span class="text-slate-300">A LEGACY OF ENDURING FAITH</span>
-        </span>
-        <span class="mx-8 flex items-center gap-8">
-            <span class="text-slate-300">WORSHIP WITH US</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">SUNDAYS AT 8:45 AM</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]">EXPERIENCE TRANSFORMATION</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
-            <span class="text-slate-300">UNCOMPROMISED TRUTH</span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span>
-            <span class="text-slate-300">A LEGACY OF ENDURING FAITH</span>
-        </span>
+        <?php endfor; ?>
     </div>
 </div>
 
@@ -171,7 +120,7 @@ include 'includes/header.php';
                 
                 <!-- Main Image Container -->
                 <div class="relative w-full aspect-[3/4] overflow-hidden border-8 border-white bg-slate-100 flex items-center justify-center z-10 shadow-sm">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
+                    <img src="<?= setting('home.founder_image', 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop') ?>" alt="Rev. Francis Duane Yalley" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
                     
                     <div class="absolute bottom-0 left-0 p-8 z-20 w-full">
@@ -197,14 +146,12 @@ include 'includes/header.php';
                     </div>
                     
                     <h2 class="text-[2.5rem] md:text-5xl lg:text-[3.5rem] font-display font-black text-slate-900 mb-8 leading-[1.1] tracking-tight">
-                        A voice of restoration,<br>
-                        a builder of lives &<br>
-                        <span class="text-[#c49a45]">a repairer of destinies.</span>
+                        <?= setting('home.founder_title', 'A voice of restoration,<br>a builder of lives &<br><span class="text-[#c49a45]">a repairer of destinies.</span>') ?>
                     </h2>
                     
                     <div class="text-slate-600 font-medium leading-relaxed">
                         <p class="mb-8 text-sm md:text-base">
-                            From the vibrant nation of Ghana in West Africa emerges Reverend Francis Duane Yalley, affectionately known as “The Repairer.” For over two decades, he has served as the General Overseer and founder of Bridge Ministries International, building not just a church, but a global movement of Switching On lives.
+                            <?= setting('home.founder_bio1', 'From the vibrant nation of Ghana in West Africa emerges Reverend Francis Duane Yalley, affectionately known as “The Repairer.” For over two decades, he has served as the General Overseer and founder of Bridge Ministries International, building not just a church, but a global movement of Switching On lives.') ?>
                         </p>
                         
                         <div class="p-8 my-8 border-l-[0.1875rem] border-[#c49a45] bg-[#faf9f6] relative flex gap-4">
@@ -212,7 +159,7 @@ include 'includes/header.php';
                                 <svg class="w-10 h-10" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
                             </div>
                             <p class="text-base text-[#111827] font-bold italic leading-relaxed">
-                                "Rev. F.D. Yalley is more than a preacher. He is a restorer of broken lives. A builder of leaders. A voice of prophetic clarity."
+                                "<?= setting('home.founder_bio2', 'Rev. F.D. Yalley is more than a preacher. He is a restorer of broken lives. A builder of leaders. A voice of prophetic clarity.') ?>"
                             </p>
                         </div>
                         
@@ -240,11 +187,11 @@ include 'includes/header.php';
                 </div>
                 
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-black text-white mb-6 leading-tight">
-                    A legacy of <span class="text-[#c49a45]">enduring<br>faith</span> and action.
+                    <?= setting('home.mission_title', 'A legacy of <span class="text-[#c49a45]">enduring<br>faith</span> and action.') ?>
                 </h2>
                 
                 <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-10 font-medium">
-                    Under the leadership of our General Overseer, Bridge Ministries International operates with a profound commitment to establishing a lasting, positive impact on individuals and society.
+                    <?= setting('home.mission_text', 'Under the leadership of our General Overseer, Bridge Ministries International operates with a profound commitment to establishing a lasting, positive impact on individuals and society.') ?>
                 </p>
                 
                 <div class="flex flex-col gap-4">
@@ -253,8 +200,8 @@ include 'includes/header.php';
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path></svg>
                         </div>
                         <div>
-                            <h4 class="text-base font-bold text-white mb-1">Missions & Outreach</h4>
-                            <p class="text-slate-400 text-xs leading-relaxed">Impacting communities across the globe through active missions and support.</p>
+                            <h4 class="text-base font-bold text-white mb-1"><?= setting('home.mission_box1_title', 'Missions & Outreach') ?></h4>
+                            <p class="text-slate-400 text-xs leading-relaxed"><?= setting('home.mission_box1_desc', 'Impacting communities across the globe through active missions and support.') ?></p>
                         </div>
                     </div>
                     
@@ -263,8 +210,8 @@ include 'includes/header.php';
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                         </div>
                         <div>
-                            <h4 class="text-base font-bold text-white mb-1">Sound Doctrine</h4>
-                            <p class="text-slate-400 text-xs leading-relaxed">Rooted firmly in biblical truth, theology, and the transformative power of the Word.</p>
+                            <h4 class="text-base font-bold text-white mb-1"><?= setting('home.mission_box2_title', 'Sound Doctrine') ?></h4>
+                            <p class="text-slate-400 text-xs leading-relaxed"><?= setting('home.mission_box2_desc', 'Rooted firmly in biblical truth, theology, and the transformative power of the Word.') ?></p>
                         </div>
                     </div>
                 </div>
@@ -272,7 +219,7 @@ include 'includes/header.php';
 
             <div class="order-1 lg:order-2" data-aos="fade-left">
                 <div class="relative overflow-hidden aspect-square border border-slate-700/50">
-                    <img src="assets/image/chad-kirchoff-ivqGyYLtBI8-unsplash.jpg" alt="Community Outreach" class="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-1000" onerror="this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1000&auto=format&fit=crop';">
+                    <img src="<?= setting('home.mission_bg', 'assets/image/chad-kirchoff-ivqGyYLtBI8-unsplash.jpg') ?>" alt="Community Outreach" class="w-full h-full object-cover grayscale opacity-90 hover:grayscale-0 hover:opacity-100 transition-all duration-1000" onerror="this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=1000&auto=format&fit=crop';">
                 </div>
             </div>
             
@@ -281,16 +228,16 @@ include 'includes/header.php';
 </section>
 <!-- BY THE NUMBERS (DYNAMIC COUNTERS) -->
 <section class="py-20 bg-white border-y border-slate-200 relative overflow-hidden">
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-luminosity"></div>
+    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-5 mix-blend-luminosity"></div>
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="grid grid-cols-2 max-w-4xl mx-auto gap-8 text-center" id="counter-section">
             <div class="p-6" data-aos="fade-up" data-aos-delay="0">
-                <div class="text-[#c49a45] text-5xl md:text-6xl font-display font-black mb-2"><span class="counter" data-target="20">0</span>+</div>
-                <div class="text-slate-900 font-bold uppercase tracking-widest text-sm">Years of Ministry</div>
+                <div class="text-[#c49a45] text-5xl md:text-6xl font-display font-black mb-2"><span class="counter" data-target="<?php echo (int)setting('home.counter1_number', 20); ?>">0</span>+</div>
+                <div class="text-slate-900 font-bold uppercase tracking-widest text-sm"><?php echo htmlspecialchars(setting('home.counter1_label', 'Years of Ministry')); ?></div>
             </div>
             <div class="p-6" data-aos="fade-up" data-aos-delay="100">
-                <div class="text-[#c49a45] text-5xl md:text-6xl font-display font-black mb-2"><span class="counter" data-target="10">0</span>K+</div>
-                <div class="text-slate-900 font-bold uppercase tracking-widest text-sm">Lives Impacted</div>
+                <div class="text-[#c49a45] text-5xl md:text-6xl font-display font-black mb-2"><span class="counter" data-target="<?php echo (int)setting('home.counter2_number', 10); ?>">0</span>K+</div>
+                <div class="text-slate-900 font-bold uppercase tracking-widest text-sm"><?php echo htmlspecialchars(setting('home.counter2_label', 'Lives Impacted')); ?></div>
             </div>
         </div>
     </div>
@@ -300,7 +247,7 @@ include 'includes/header.php';
 <section class="py-24 md:py-32 relative overflow-hidden" id="testimonies-section">
     <!-- Cinematic Background -->
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=2000&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover grayscale opacity-30">
+        <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?q=80&w=1200&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover grayscale opacity-30">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-slate-900/95 to-slate-950"></div>
     </div>
     
@@ -316,59 +263,35 @@ include 'includes/header.php';
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             
-            <!-- Testimony 1 -->
-            <div class="group relative mt-0" data-aos="fade-up" data-aos-delay="0">
-                <div class="absolute -inset-0.5 bg-gradient-to-b from-[#c49a45]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur"></div>
-                <div class="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 lg:p-12 h-full flex flex-col transition-transform duration-500 group-hover:-translate-y-2">
-                    <svg class="w-12 h-12 text-[#c49a45] opacity-50 mb-8 transform -translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    <p class="text-slate-300 text-lg lg:text-xl font-light leading-relaxed flex-grow mb-10">
-                        "Since joining Bridge Ministries, my entire outlook on purpose and faith has completely shifted. The uncompromised teaching of the Word has anchored my family through our toughest seasons."
-                    </p>
-                    <div class="flex items-center gap-5 pt-6 border-t border-white/10">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" alt="Sarah Mensah" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 group-hover:border-[#c49a45] transition-colors duration-500">
-                        <div>
-                            <h4 class="text-white font-bold font-display uppercase tracking-wider text-base mb-1">Sarah Mensah</h4>
-                            <span class="text-[#c49a45] text-[0.625rem] font-bold uppercase tracking-widest">Church Member</span>
+            <?php foreach ($testimonies as $index => $test): ?>
+                <?php
+                    // Create staggered effect for middle item if 3 columns
+                    $staggerClass = ($index % 3 === 1) ? 'lg:translate-y-16 mt-8 lg:mt-0' : 'mt-0';
+                    $delay = ($index % 3) * 100;
+                ?>
+                <div class="group relative <?php echo $staggerClass; ?>" data-aos="fade-up" data-aos-delay="<?php echo $delay; ?>">
+                    <div class="absolute -inset-0.5 bg-gradient-to-b from-[#c49a45]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur"></div>
+                    <div class="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 lg:p-12 h-full flex flex-col transition-transform duration-500 group-hover:-translate-y-2">
+                        <svg class="w-12 h-12 text-[#c49a45] opacity-50 mb-8 transform -translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                        <p class="text-slate-300 text-lg lg:text-xl font-light leading-relaxed flex-grow mb-10">
+                            "<?php echo htmlspecialchars($test['quote']); ?>"
+                        </p>
+                        <div class="flex items-center gap-5 pt-6 border-t border-white/10">
+                            <?php if ($test['image_url']): ?>
+                                <img src="<?php echo strpos($test['image_url'], 'http') === 0 ? htmlspecialchars($test['image_url']) : htmlspecialchars($test['image_url']); ?>" alt="<?php echo htmlspecialchars($test['author_name']); ?>" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 group-hover:border-[#c49a45] transition-colors duration-500">
+                            <?php else: ?>
+                                <div class="w-16 h-16 rounded-full bg-slate-800 border-2 border-slate-700 flex items-center justify-center text-[#c49a45] font-bold text-xl group-hover:border-[#c49a45] transition-colors duration-500">
+                                    <?php echo strtoupper(substr($test['author_name'], 0, 1)); ?>
+                                </div>
+                            <?php endif; ?>
+                            <div>
+                                <h4 class="text-white font-bold font-display uppercase tracking-wider text-base mb-1"><?php echo htmlspecialchars($test['author_name']); ?></h4>
+                                <span class="text-[#c49a45] text-[0.625rem] font-bold uppercase tracking-widest"><?php echo htmlspecialchars($test['author_role']); ?></span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Testimony 2 (Staggered) -->
-            <div class="group relative lg:translate-y-16" data-aos="fade-up" data-aos-delay="100">
-                <div class="absolute -inset-0.5 bg-gradient-to-b from-[#c49a45]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur"></div>
-                <div class="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 lg:p-12 h-full flex flex-col transition-transform duration-500 group-hover:-translate-y-2">
-                    <svg class="w-12 h-12 text-[#c49a45] opacity-50 mb-8 transform -translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    <p class="text-slate-300 text-lg lg:text-xl font-light leading-relaxed flex-grow mb-10">
-                        "I walked in completely broken. The intense prayer culture and the genuine love from the leadership brought a profound restoration I never thought was possible in my life."
-                    </p>
-                    <div class="flex items-center gap-5 pt-6 border-t border-white/10">
-                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?q=80&w=200&auto=format&fit=crop" alt="David Osei" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 group-hover:border-[#c49a45] transition-colors duration-500">
-                        <div>
-                            <h4 class="text-white font-bold font-display uppercase tracking-wider text-base mb-1">David Osei</h4>
-                            <span class="text-[#c49a45] text-[0.625rem] font-bold uppercase tracking-widest">Men's Ministry</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Testimony 3 -->
-            <div class="group relative" data-aos="fade-up" data-aos-delay="200">
-                <div class="absolute -inset-0.5 bg-gradient-to-b from-[#c49a45]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl blur"></div>
-                <div class="relative bg-white/5 backdrop-blur-xl border border-white/10 p-10 lg:p-12 h-full flex flex-col transition-transform duration-500 group-hover:-translate-y-2">
-                    <svg class="w-12 h-12 text-[#c49a45] opacity-50 mb-8 transform -translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
-                    <p class="text-slate-300 text-lg lg:text-xl font-light leading-relaxed flex-grow mb-10">
-                        "Finding a community that actively lives out the gospel has been the greatest blessing. My spiritual growth here has been truly unprecedented."
-                    </p>
-                    <div class="flex items-center gap-5 pt-6 border-t border-white/10">
-                        <img src="https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?q=80&w=200&auto=format&fit=crop" alt="Grace Appiah" class="w-16 h-16 rounded-full object-cover border-2 border-slate-700 group-hover:border-[#c49a45] transition-colors duration-500">
-                        <div>
-                            <h4 class="text-white font-bold font-display uppercase tracking-wider text-base mb-1">Grace Appiah</h4>
-                            <span class="text-[#c49a45] text-[0.625rem] font-bold uppercase tracking-widest">Women's Leader</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <?php endforeach; ?>
 
         </div>
     </div>
@@ -460,112 +383,92 @@ include 'includes/header.php';
 </section>
 
 <!-- WATCH ONLINE: Deep Navy -->
-<section class="relative w-full h-[37.5rem] flex items-center justify-center overflow-hidden bg-slate-900 group">
+<section class="relative w-full py-28 md:py-36 flex items-center justify-center overflow-hidden bg-[#11131e]">
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop" alt="Watch Live" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-[10s] opacity-30 mix-blend-luminosity">
-        <div class="absolute inset-0 bg-slate-900/80"></div>
-        <div class="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-900/90 to-transparent"></div>
+        <img src="<?= setting('home.watch_bg', 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=1200&auto=format&fit=crop') ?>" alt="Watch Live" class="w-full h-full object-cover opacity-10 mix-blend-luminosity">
+        <div class="absolute inset-0 bg-[#11131e]/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-r from-[#11131e] via-[#11131e]/95 to-transparent"></div>
     </div>
     
-    <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+    <div class="relative z-10 w-[90%] max-w-[75rem] mx-auto flex flex-col md:flex-row items-center justify-between gap-16">
         <div class="max-w-xl">
-            <div class="inline-flex items-center gap-3 mb-6 px-4 py-2 bg-white/10 border border-white/20 text-white font-bold text-xs tracking-[0.2em] uppercase backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_10px_rgba(239,68,68,0.8)]"></span>
+            <div class="inline-flex items-center gap-2.5 mb-8 px-3 py-1.5 bg-white/5 border border-white/10 text-white/80 font-bold text-[0.625rem] tracking-[0.15em] uppercase">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#c93b3b]"></span>
                 Watch Online
             </div>
-            <h2 class="font-display font-extrabold text-5xl md:text-7xl tracking-tighter mb-6 text-white leading-tight">
-                Sundays. <br><span class="text-[#c49a45]">Anywhere</span> in the world.
+            
+            <h2 class="font-display font-black text-[4.5rem] md:text-[5.5rem] tracking-[-0.02em] mb-8 text-white leading-[0.95]">
+                <?= setting('home.watch_title', 'Sundays.<br><span class="text-[#c19f54]">Anywhere</span> in the<br>world.') ?>
             </h2>
-            <p class="font-sans text-xl text-white/80 mb-10 font-light leading-relaxed">
-                Join us live each week or revisit recent messages. Wherever you are, the bridge reaches you.
+            
+            <p class="font-sans text-base text-[#a0a4b0] font-normal leading-relaxed max-w-sm">
+                <?= setting('home.watch_subtitle', 'Join us live each week or revisit recent messages. Wherever you are, the bridge reaches you.') ?>
             </p>
         </div>
         
-        <div class="flex flex-col gap-4 w-full md:w-auto">
-            <a href="live" class="inline-flex items-center justify-center bg-[#c49a45] text-white hover:bg-[#d4ac57] text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 gap-3">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+        <div class="flex flex-col gap-4 w-full md:w-auto md:min-w-[20rem]">
+            <a href="livestream.php" class="inline-flex items-center justify-center bg-[#c19f54] text-white hover:bg-[#a88946] text-[0.6875rem] font-bold uppercase tracking-[0.15em] px-8 py-5 transition-all gap-3">
+                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
                 Watch Live Service
             </a>
-            <a href="sermons" class="inline-flex items-center justify-center bg-transparent text-white border-2 border-white/30 hover:border-white hover:bg-white/5 text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all gap-3">
-                <svg class="w-5 h-5 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            <a href="sermons" class="inline-flex items-center justify-center bg-[#181a26] text-white border border-white/10 hover:bg-white/5 text-[0.6875rem] font-bold uppercase tracking-[0.15em] px-8 py-5 transition-all gap-3">
+                <svg class="w-4 h-4 stroke-current" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
                 Browse Archive
             </a>
         </div>
     </div>
 </section>
 
-<!-- WEEKLY SERVICES: Colorful Alternating Layout -->
-<section class="py-24 md:py-32 bg-slate-50 relative overflow-hidden border-y border-slate-200">
-    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
-        <div class="text-center mb-16 md:mb-24" data-aos="fade-up">
-            <div class="inline-flex items-center justify-center gap-4 mb-4">
-                <div class="h-px w-12 bg-blue-500"></div>
-                <span class="text-blue-600 font-bold text-sm tracking-widest uppercase">Join Us</span>
-                <div class="h-px w-12 bg-blue-500"></div>
-            </div>
-            <h2 class="text-5xl md:text-7xl text-slate-900 font-display font-black tracking-tight">Our Weekly Services</h2>
+<!-- WEEKLY SERVICES: Clean & Professional -->
+<section class="py-24 md:py-32 bg-[#f8f9fa] relative overflow-hidden">
+    <div class="w-[90%] max-w-[70rem] mx-auto relative z-10">
+        <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
+            <h2 class="text-[2.5rem] md:text-[3.5rem] text-[#111827] font-display font-black tracking-[-0.02em] leading-tight">Our Weekly Services</h2>
         </div>
 
-        <div class="space-y-16">
-            <!-- Restorers -->
-            <div data-aos="fade-up" class="flex flex-col lg:flex-row gap-12 items-center bg-cyan-50 border border-cyan-100 overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
-                <div class="w-full lg:w-1/2 aspect-video lg:aspect-[4/3] relative overflow-hidden bg-slate-900">
-                    <img src="assets/image/flyer_restorers.png" alt="Restorers" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" onerror="this.src='https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop'">
-                </div>
-                <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                    <div class="inline-flex items-center px-4 py-2 bg-white border border-cyan-200 text-cyan-700 font-bold tracking-widest text-sm uppercase mb-6 shadow-sm">
-                        Sunday 8:45 AM
+        <div class="space-y-10 md:space-y-16">
+            <?php foreach ($weeklyServices as $index => $svc): ?>
+                <?php 
+                    $isReversed = $index % 2 !== 0; 
+                    $theme = $svc['theme_color'] ?: 'cyan';
+                    
+                    $themeMap = [
+                        'cyan'   => ['bg' => 'bg-[#f4fbfc]', 'badge_text' => 'text-[#5a758f]', 'badge_border' => 'border-[#dce7f0]', 'title' => 'text-[#1e2a3b]', 'sub' => 'text-[#4b6a88]', 'desc' => 'text-[#71859c]'],
+                        'purple' => ['bg' => 'bg-[#faf5ff]', 'badge_text' => 'text-[#7e5a8b]', 'badge_border' => 'border-[#e9d5ff]', 'title' => 'text-[#2e1e3b]', 'sub' => 'text-[#724f8a]', 'desc' => 'text-[#8b719c]'],
+                        'orange' => ['bg' => 'bg-[#fff7ed]', 'badge_text' => 'text-[#8b6a5a]', 'badge_border' => 'border-[#fed7aa]', 'title' => 'text-[#3b271e]', 'sub' => 'text-[#8a5d4f]', 'desc' => 'text-[#9c8271]'],
+                        'teal'   => ['bg' => 'bg-[#f0fdfa]', 'badge_text' => 'text-[#5a8b7c]', 'badge_border' => 'border-[#ccfbf1]', 'title' => 'text-[#1e3b2f]', 'sub' => 'text-[#4f8a75]', 'desc' => 'text-[#719c8d]'],
+                        'blue'   => ['bg' => 'bg-[#f0f9ff]', 'badge_text' => 'text-[#5a728b]', 'badge_border' => 'border-[#e0f2fe]', 'title' => 'text-[#1e293b]', 'sub' => 'text-[#4f6b8a]', 'desc' => 'text-[#71859c]'],
+                        'red'    => ['bg' => 'bg-[#fef2f2]', 'badge_text' => 'text-[#8b5a5a]', 'badge_border' => 'border-[#fecaca]', 'title' => 'text-[#3b1e1e]', 'sub' => 'text-[#8a4f4f]', 'desc' => 'text-[#9c7171]'],
+                        'green'  => ['bg' => 'bg-[#f0fdf4]', 'badge_text' => 'text-[#5f8b5a]', 'badge_border' => 'border-[#bbf7d0]', 'title' => 'text-[#1e3b1e]', 'sub' => 'text-[#4f8a4f]', 'desc' => 'text-[#7a9c71]'],
+                        'yellow' => ['bg' => 'bg-[#fefce8]', 'badge_text' => 'text-[#8b825a]', 'badge_border' => 'border-[#fef08a]', 'title' => 'text-[#3b371e]', 'sub' => 'text-[#8a7f4f]', 'desc' => 'text-[#9c9371]'],
+                        'pink'   => ['bg' => 'bg-[#fdf2f8]', 'badge_text' => 'text-[#8b5a76]', 'badge_border' => 'border-[#fbcfe8]', 'title' => 'text-[#3b1e2a]', 'sub' => 'text-[#8a4f6d]', 'desc' => 'text-[#9c7188]'],
+                    ];
+                    
+                    $classes = $themeMap[$theme] ?? $themeMap['cyan'];
+                ?>
+                <div data-aos="fade-up" class="flex flex-col <?php echo $isReversed ? 'md:flex-row-reverse' : 'md:flex-row'; ?> items-stretch rounded-[1.25rem] overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] bg-white transition-transform hover:-translate-y-1 duration-500">
+                    <div class="w-full md:w-[45%] lg:w-[42%] aspect-square md:aspect-auto relative flex-shrink-0 bg-slate-900">
+                        <?php if ($svc['image_url']): ?>
+                            <img src="<?php echo strpos($svc['image_url'], 'http') === 0 ? htmlspecialchars($svc['image_url']) : htmlspecialchars($svc['image_url']); ?>" alt="<?php echo htmlspecialchars($svc['title']); ?>" class="absolute inset-0 w-full h-full object-cover">
+                        <?php endif; ?>
                     </div>
-                    <h3 class="text-5xl lg:text-6xl font-display font-black text-cyan-900 mb-4 tracking-tighter uppercase">RESTORERS</h3>
-                    <p class="text-cyan-800 text-xl font-medium tracking-wide mb-8">Celebration Service</p>
-                    <p class="text-slate-600 leading-relaxed mb-8">Join us every Sunday morning for an explosive time of worship, profound teaching, and fellowship. Come expectant and leave restored.</p>
-                </div>
-            </div>
-
-            <!-- Repairers -->
-            <div data-aos="fade-up" class="flex flex-col lg:flex-row-reverse gap-12 items-center bg-purple-50 border border-purple-100 overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
-                <div class="w-full lg:w-1/2 aspect-video lg:aspect-[4/3] relative overflow-hidden bg-slate-900">
-                    <img src="assets/image/flyer_repairers.png" alt="Repairers" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" onerror="this.src='https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800&auto=format&fit=crop'">
-                </div>
-                <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                    <div class="inline-flex items-center px-4 py-2 bg-white border border-purple-200 text-purple-700 font-bold tracking-widest text-sm uppercase mb-6 shadow-sm">
-                        Wednesdays
+                    <div class="w-full md:w-[55%] lg:w-[58%] p-8 md:p-12 lg:p-16 flex flex-col justify-center <?php echo $classes['bg']; ?> min-h-[22rem] md:min-h-[28rem]">
+                        <?php if ($svc['time_info']): ?>
+                            <div class="inline-flex items-center px-3 py-1 bg-white border <?php echo $classes['badge_border']; ?> <?php echo $classes['badge_text']; ?> font-bold tracking-[0.08em] text-[0.625rem] uppercase mb-6 rounded shadow-sm w-fit">
+                                <?php echo htmlspecialchars($svc['time_info']); ?>
+                            </div>
+                        <?php endif; ?>
+                        
+                        <h3 class="text-3xl md:text-4xl lg:text-[2.75rem] font-display font-black <?php echo $classes['title']; ?> mb-2 tracking-[-0.03em] uppercase leading-none"><?php echo htmlspecialchars($svc['title']); ?></h3>
+                        
+                        <?php if ($svc['subtitle']): ?>
+                            <p class="<?php echo $classes['sub']; ?> text-sm md:text-base font-semibold tracking-wide mb-6"><?php echo htmlspecialchars($svc['subtitle']); ?></p>
+                        <?php endif; ?>
+                        
+                        <p class="<?php echo $classes['desc']; ?> leading-relaxed text-xs md:text-sm max-w-lg"><?php echo nl2br(htmlspecialchars($svc['description'])); ?></p>
                     </div>
-                    <h3 class="text-5xl lg:text-6xl font-display font-black text-purple-900 mb-4 tracking-tighter uppercase">REPAIRERS</h3>
-                    <p class="text-purple-800 text-xl font-medium tracking-wide mb-8">Cell Meetings</p>
-                    <p class="text-slate-600 leading-relaxed mb-8">Connect intimately with smaller groups within your community. Dive deeper into the Word and build lasting, accountable relationships.</p>
                 </div>
-            </div>
-
-            <!-- Switch On -->
-            <div data-aos="fade-up" class="flex flex-col lg:flex-row gap-12 items-center bg-orange-50 border border-orange-100 overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
-                <div class="w-full lg:w-1/2 aspect-video lg:aspect-[4/3] relative overflow-hidden bg-slate-900">
-                    <img src="assets/image/flyer_switchon.png" alt="Switch On" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" onerror="this.src='https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop'">
-                </div>
-                <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                    <div class="inline-flex items-center px-4 py-2 bg-white border border-orange-200 text-orange-600 font-bold tracking-widest text-sm uppercase mb-6 shadow-sm">
-                        Sunday 8:45 AM
-                    </div>
-                    <h3 class="text-5xl lg:text-6xl font-display font-black text-orange-900 mb-4 tracking-tighter uppercase">SWITCH ON</h3>
-                    <p class="text-orange-800 text-xl font-medium tracking-wide mb-8">Youth Service</p>
-                    <p class="text-slate-600 leading-relaxed mb-8">A dynamic, high-energy service tailored for the next generation. We are raising young leaders grounded in uncompromised truth.</p>
-                </div>
-            </div>
-
-            <!-- Builders -->
-            <div data-aos="fade-up" class="flex flex-col lg:flex-row-reverse gap-12 items-center bg-teal-50 border border-teal-100 overflow-hidden group shadow-sm hover:shadow-2xl transition-all duration-500">
-                <div class="w-full lg:w-1/2 aspect-video lg:aspect-[4/3] relative overflow-hidden bg-slate-900">
-                    <img src="assets/image/flyer_builders.png" alt="Builders" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000 ease-out" onerror="this.src='https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=1200&auto=format&fit=crop'">
-                </div>
-                <div class="w-full lg:w-1/2 p-8 lg:p-16">
-                    <div class="inline-flex items-center px-4 py-2 bg-white border border-teal-200 text-teal-700 font-bold tracking-widest text-sm uppercase mb-6 shadow-sm">
-                        Fridays 7:00 PM
-                    </div>
-                    <h3 class="text-5xl lg:text-6xl font-display font-black text-teal-900 mb-4 tracking-tighter uppercase">BUILDERS</h3>
-                    <p class="text-teal-800 text-xl font-medium tracking-wide mb-8">Leadership Meeting</p>
-                    <p class="text-slate-600 leading-relaxed mb-8">Equipping the saints for the work of ministry. Our Friday leadership meetings focus on deep doctrinal teaching and practical ministry training.</p>
-                </div>
-            </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </section>
@@ -740,7 +643,7 @@ include 'includes/header.php';
 <section class="relative py-32 md:py-48 flex items-center justify-center overflow-hidden border-t border-white/10">
     <!-- Parallax Background Image -->
     <div class="absolute inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=2000&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover transform scale-105" style="filter: brightness(0.6) saturate(1.2);">
+        <img src="https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop" alt="Worship Background" class="w-full h-full object-cover transform scale-105" style="filter: brightness(0.6) saturate(1.2);">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-950/60 to-slate-950/90 mix-blend-multiply"></div>
         <!-- Radial glow effect -->
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#c49a45]/20 via-transparent to-transparent"></div>

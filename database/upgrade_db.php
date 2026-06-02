@@ -32,7 +32,7 @@ try {
         '2026-08-12',
         '2026-08-16',
         'BMI Main Auditorium',
-        'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop'
     ]);
     
     // Seed Special Event 1
@@ -44,7 +44,7 @@ try {
         '2026-06-15',
         null,
         'Youth Chapel',
-        'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop'
     ]);
     
     // Seed Special Event 2
@@ -56,7 +56,7 @@ try {
         '2026-07-20',
         null,
         'Fellowship Hall',
-        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=2000&auto=format&fit=crop'
+        'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=1200&auto=format&fit=crop'
     ]);
 
     echo "Successfully seeded test events data!\n";
