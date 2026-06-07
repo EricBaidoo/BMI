@@ -105,6 +105,28 @@ include 'includes/header.php';
                     </ul>
                 </div>
 
+                <!-- Social Media (Big Icons) -->
+                <div class="mt-12">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-6">Connect with Us</h3>
+                    <div class="flex flex-wrap gap-4">
+                        <?php 
+                            $dynamicSocials = json_decode(setting('social.links', '[]'), true) ?: [];
+                            foreach ($dynamicSocials as $socialLink): 
+                                if(empty($socialLink['url'])) continue;
+                        ?>
+                            <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="w-16 h-16 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-[#c49a45] hover:-translate-y-1 transition-all duration-300 shadow-lg" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>" title="<?php echo htmlspecialchars($socialLink['name']); ?>">
+                                <?php if (!empty($socialLink['icon'])): ?>
+                                    <span class="w-7 h-7 flex items-center justify-center *:w-full *:h-full">
+                                        <?php echo $socialLink['icon']; ?>
+                                    </span>
+                                <?php else: ?>
+                                    <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                                <?php endif; ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
                 <!-- Office Hours -->
                 <div class="p-8 bg-slate-50  border border-slate-100">
                     <h3 class="text-lg font-bold text-slate-900 mb-4">Office Hours</h3>
