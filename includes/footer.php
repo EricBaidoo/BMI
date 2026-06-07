@@ -38,22 +38,27 @@
                         <div class="absolute inset-0 bg-[#c49a45] blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
                         <img class="h-12 w-auto relative z-10" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
                     </div>
-                    <span class="font-display font-black text-2xl tracking-tight text-white">Bridge Ministries</span>
+                    <span class="font-display font-black text-2xl tracking-tight text-white"><?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries')); ?></span>
                 </a>
                 <p class="text-slate-400 text-sm leading-relaxed mb-8 font-light">
                     An international ministry dedicated to empowering communities, teaching uncompromised biblical truth, and fostering a global legacy of faith and action.
                 </p>
-                <div class="flex space-x-4 justify-center md:justify-start">
-                    <?php if(setting('social.facebook')): ?>
-                        <a href="<?php echo setting('social.facebook'); ?>" class="w-12 h-12 bg-white/5 flex items-center justify-center hover:bg-[#c49a45] hover:-translate-y-1 transition-all duration-300 text-slate-400 hover:text-white border border-white/10 hover:border-[#c49a45] shadow-lg hover:shadow-[#c49a45]/30">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.469h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
+                    <?php 
+                        $dynamicSocials = json_decode(setting('social.links', '[]'), true) ?: [];
+                        foreach ($dynamicSocials as $socialLink): 
+                            if(empty($socialLink['url'])) continue;
+                    ?>
+                        <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="w-12 h-12 bg-white/5 flex items-center justify-center hover:bg-[#c49a45] hover:-translate-y-1 transition-all duration-300 text-slate-400 hover:text-white border border-white/10 hover:border-[#c49a45] shadow-lg hover:shadow-[#c49a45]/30" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>" title="<?php echo htmlspecialchars($socialLink['name']); ?>">
+                            <?php if (!empty($socialLink['icon'])): ?>
+                                <span class="w-5 h-5 flex items-center justify-center *:w-full *:h-full">
+                                    <?php echo $socialLink['icon']; ?>
+                                </span>
+                            <?php else: ?>
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+                            <?php endif; ?>
                         </a>
-                    <?php endif; ?>
-                    <?php if(setting('social.youtube')): ?>
-                        <a href="<?php echo setting('social.youtube'); ?>" class="w-12 h-12 bg-white/5 flex items-center justify-center hover:bg-[#c49a45] hover:-translate-y-1 transition-all duration-300 text-slate-400 hover:text-white border border-white/10 hover:border-[#c49a45] shadow-lg hover:shadow-[#c49a45]/30">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        </a>
-                    <?php endif; ?>
+                    <?php endforeach; ?>
                 </div>
             </div>
 
@@ -114,7 +119,7 @@
         <!-- Bottom Copyright -->
         <div class="border-t border-white/10 pt-8 pb-4 flex flex-col md:flex-row justify-between items-center gap-6">
             <p class="text-slate-500 text-sm font-medium tracking-wide">
-                &copy; <?php echo date('Y'); ?> Bridge Ministries International. All rights reserved.
+                &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries International')); ?>. All rights reserved.
             </p>
             <div class="flex items-center gap-8">
                 <a href="#" class="text-slate-500 hover:text-white text-sm font-medium transition-colors hover:underline">Privacy Policy</a>

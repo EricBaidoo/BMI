@@ -61,9 +61,10 @@ function settings_save(array $kv): void
     $pdo = db_connect();
     $pdo->beginTransaction();
     try {
-        $update = $pdo->prepare('UPDATE site_settings SET setting_value = :v WHERE setting_key = :k');
+        $stmt = $pdo->prepare('INSERT INTO site_settings (setting_key, setting_value, setting_group) VALUES (:k, :v1, :g) ON DUPLICATE KEY UPDATE setting_value = :v2');
         foreach ($kv as $key => $value) {
-            $update->execute([':k' => $key, ':v' => (string) $value]);
+            $group = str_contains($key, '.') ? explode('.', $key)[0] : 'general';
+            $stmt->execute([':k' => $key, ':v1' => (string) $value, ':g' => $group, ':v2' => (string) $value]);
         }
         $pdo->commit();
         // Invalidate cache for the rest of this request

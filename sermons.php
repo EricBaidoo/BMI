@@ -9,19 +9,52 @@ $perPage = 12;
 $page = max(1, (int) ($_GET['page'] ?? 1));
 $offset = ($page - 1) * $perPage;
 
+$searchQuery = trim($_GET['q'] ?? '');
+$topicFilter = trim($_GET['topic'] ?? '');
+
 $sermons = [];
 $total = 0;
 $sermonsError = null;
+$allTopics = [];
 
 try {
     $pdo = db_connect();
-    $total = (int) $pdo->query('SELECT COUNT(*) FROM sermons')->fetchColumn();
-    $stmt = $pdo->prepare(
-        'SELECT id, title, speaker, sermon_date, topic, media_type, media_url, content, sermon_image
-         FROM sermons
-         ORDER BY sermon_date DESC, id DESC
-         LIMIT :lim OFFSET :off'
-    );
+    
+    // Fetch unique topics for the filter dropdown
+    $allTopics = $pdo->query('SELECT DISTINCT topic FROM sermons WHERE topic IS NOT NULL AND topic != \'\' ORDER BY topic ASC')->fetchAll(PDO::FETCH_COLUMN);
+
+    $where = [];
+    $params = [];
+    
+    if ($searchQuery !== '') {
+        $where[] = '(title LIKE :q OR speaker LIKE :q OR content LIKE :q)';
+        $params[':q'] = '%' . $searchQuery . '%';
+    }
+    
+    if ($topicFilter !== '') {
+        $where[] = 'topic = :t';
+        $params[':t'] = $topicFilter;
+    }
+    
+    $whereSql = '';
+    if (!empty($where)) {
+        $whereSql = 'WHERE ' . implode(' AND ', $where);
+    }
+
+    $totalStmt = $pdo->prepare('SELECT COUNT(*) FROM sermons ' . $whereSql);
+    $totalStmt->execute($params);
+    $total = (int) $totalStmt->fetchColumn();
+    
+    $sql = 'SELECT id, title, speaker, sermon_date, topic, media_type, media_url, content, sermon_image
+            FROM sermons
+            ' . $whereSql . '
+            ORDER BY sermon_date DESC, id DESC
+            LIMIT :lim OFFSET :off';
+            
+    $stmt = $pdo->prepare($sql);
+    foreach ($params as $k => $v) {
+        $stmt->bindValue($k, $v);
+    }
     $stmt->bindValue(':lim', $perPage, PDO::PARAM_INT);
     $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
     $stmt->execute();
@@ -61,22 +94,22 @@ include 'includes/header.php';
 <section class="py-24 md:py-32 bg-slate-50 relative overflow-hidden border-t border-slate-200">
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <!-- Search / Filter UI Placeholder -->
-        <div class="mb-12 bg-white border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
+        <!-- Search / Filter UI -->
+        <form method="GET" action="sermons.php" class="mb-12 bg-white border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="flex-grow w-full md:w-auto relative">
                 <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                <input type="text" placeholder="Search messages..." class="w-full bg-slate-50 border border-slate-200 text-slate-900 pl-12 pr-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  placeholder-slate-400">
+                <input type="text" name="q" value="<?php echo e($searchQuery); ?>" placeholder="Search messages..." class="w-full bg-slate-50 border border-slate-200 text-slate-900 pl-12 pr-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  placeholder-slate-400">
             </div>
             <div class="w-full md:w-auto flex gap-4">
-                <select class="w-full md:w-48 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  appearance-none">
+                <select name="topic" class="w-full md:w-48 bg-slate-50 border border-slate-200 text-slate-600 px-4 py-3 focus:outline-none focus:border-[#c49a45] transition-colors  appearance-none">
                     <option value="">All Topics</option>
-                    <option value="faith">Faith</option>
-                    <option value="prayer">Prayer</option>
-                    <option value="purpose">Purpose</option>
+                    <?php foreach ($allTopics as $t): ?>
+                        <option value="<?php echo e($t); ?>" <?php echo $topicFilter === $t ? 'selected' : ''; ?>><?php echo e($t); ?></option>
+                    <?php endforeach; ?>
                 </select>
-                <button class="bg-[#c49a45] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#d4ac57] transition-colors ">Filter</button>
+                <button type="submit" class="bg-[#c49a45] text-white px-6 py-3 font-bold uppercase tracking-widest text-sm hover:bg-[#d4ac57] transition-colors ">Filter</button>
             </div>
-        </div>
+        </form>
 
         <?php if ($sermonsError): ?>
             <div class="bg-red-900/20 border border-red-900/50 text-red-400 p-6  text-center">
@@ -95,9 +128,9 @@ include 'includes/header.php';
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 xl:gap-10">
                 <?php foreach ($sermons as $sermon): 
                     $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
-                    $link = !empty($sermon['media_url']) ? htmlspecialchars($sermon['media_url']) : '#';
+                    $link = 'sermon.php?id=' . (int)$sermon['id'];
                 ?>
-                    <a href="<?php echo $link; ?>" <?php echo !empty($sermon['media_url']) ? 'target="_blank" rel="noopener"' : ''; ?> class="group relative bg-white border border-slate-200 hover:border-[#c49a45] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(196,154,69,0.15)]">
+                    <a href="<?php echo $link; ?>" class="group relative bg-white border border-slate-200 hover:border-[#c49a45] transition-all duration-300 hover:-translate-y-1 flex flex-col h-full overflow-hidden shadow-sm hover:shadow-[0_20px_40px_rgba(196,154,69,0.15)]">
                         
                         <!-- Thumbnail Area -->
                         <div class="aspect-[16/10] relative bg-slate-100 overflow-hidden mb-6">
@@ -109,10 +142,16 @@ include 'includes/header.php';
                                 <div class="absolute inset-0 bg-slate-900/50 group-hover:bg-slate-900/30 transition-colors duration-300"></div>
                             <?php endif; ?>
                             
-                            <!-- Red Play Button -->
+                            <!-- Action Icon -->
                             <div class="absolute inset-0 flex items-center justify-center">
                                 <div class="w-16 h-16 rounded-full bg-red-600 text-white flex items-center justify-center transform group-hover:scale-110 group-hover:bg-red-700 transition-all duration-300 shadow-[0_0_20px_rgba(220,38,38,0.4)] group-hover:shadow-[0_0_30px_rgba(220,38,38,0.6)]">
-                                    <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <?php if ($sermon['media_type'] === 'audio'): ?>
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"/></svg>
+                                    <?php elseif ($sermon['media_type'] === 'text'): ?>
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+                                    <?php else: ?>
+                                        <svg class="w-6 h-6 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
@@ -137,7 +176,12 @@ include 'includes/header.php';
                             <?php endif; ?>
 
                             <p class="text-[#c49a45] text-sm mt-auto flex items-center gap-2 group-hover:text-slate-900 font-bold transition-colors uppercase tracking-widest">
-                                Watch Message <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                                <?php 
+                                    if ($sermon['media_type'] === 'audio') echo 'Listen to Message';
+                                    elseif ($sermon['media_type'] === 'text') echo 'Read Message';
+                                    else echo 'Watch Message';
+                                ?> 
+                                <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
                             </p>
                         </div>
                     </a>
@@ -147,11 +191,16 @@ include 'includes/header.php';
             <!-- Pagination -->
             <?php if ($totalPages > 1): ?>
                 <nav class="mt-16 flex items-center justify-center gap-2 text-sm font-bold" aria-label="Pagination">
-                    <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+                    <?php 
+                        $queryParams = $_GET;
+                        for ($i = 1; $i <= $totalPages; $i++): 
+                            $queryParams['page'] = $i;
+                            $pageUrl = 'sermons.php?' . http_build_query($queryParams);
+                    ?>
                         <?php if ($i === $page): ?>
                             <span class="w-10 h-10 flex items-center justify-center  bg-[#c49a45] text-white shadow-md"><?php echo $i; ?></span>
                         <?php else: ?>
-                            <a href="sermons?page=<?php echo $i; ?>" class="w-10 h-10 flex items-center justify-center  border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"><?php echo $i; ?></a>
+                            <a href="<?php echo htmlspecialchars($pageUrl); ?>" class="w-10 h-10 flex items-center justify-center  border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"><?php echo $i; ?></a>
                         <?php endif; ?>
                     <?php endfor; ?>
                 </nav>

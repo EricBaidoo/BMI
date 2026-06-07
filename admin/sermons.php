@@ -202,7 +202,7 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media URL</label>
+                    <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media URL <span class="text-xs font-normal text-slate-500">(e.g., YouTube or Spotify link)</span></label>
                     <input type="url" name="media_url" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
                         placeholder="https://..." value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['media_url']) : ''; ?>">
                 </div>
@@ -265,7 +265,15 @@ require_once __DIR__ . '/includes/header.php';
                                 <?php if (!empty($sermon['topic'])): ?>
                                     <p class="mt-2 text-sm text-slate-700">Topic: <?php echo htmlspecialchars((string) $sermon['topic']); ?></p>
                                 <?php endif; ?>
-                                <p class="mt-1 text-xs text-slate-500">Type: <?php echo htmlspecialchars(strtoupper((string) $sermon['media_type'])); ?></p>
+                                <p class="mt-2 flex items-center gap-2">
+                                    <?php if ($sermon['media_type'] === 'video'): ?>
+                                        <span class="inline-block px-2 py-0.5 rounded text-[0.65rem] font-bold tracking-wider uppercase bg-red-100 text-red-700 border border-red-200">Video</span>
+                                    <?php elseif ($sermon['media_type'] === 'audio'): ?>
+                                        <span class="inline-block px-2 py-0.5 rounded text-[0.65rem] font-bold tracking-wider uppercase bg-emerald-100 text-emerald-700 border border-emerald-200">Audio</span>
+                                    <?php else: ?>
+                                        <span class="inline-block px-2 py-0.5 rounded text-[0.65rem] font-bold tracking-wider uppercase bg-slate-100 text-slate-700 border border-slate-200">Text</span>
+                                    <?php endif; ?>
+                                </p>
                                 <div class="mt-4 flex gap-2">
                                     <a href="sermons.php?edit=<?php echo (int) $sermon['id']; ?>" class="flex-1 rounded border border-blue-300 text-blue-700 text-center px-3 py-2 text-sm hover:bg-blue-50 font-medium">Edit</a>
                                     <form method="post" onsubmit="return confirm('Delete this sermon?');" class="flex-1">
