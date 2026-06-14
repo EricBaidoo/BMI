@@ -14,7 +14,7 @@ Array
 
 Array
 (
-    [csrf_token] => f8fd1888a6de90aa32899b7503db10526949a6cf76e71807be16d8756b26e4d8
+    [csrf_token] => afbb226da3a97794ed8f6d58e1f53fabe3a53937872116d67d9e649e595f89fe
     [active_group] => live
     [end_and_archive] => 0
     [setting] => Array
@@ -44,17 +44,17 @@ Array
             [giving.momo_airteltigo] => 
             [giving.paystack_public_key] => 
             [giving.currency] => GHS
-            [live.embed_url] => 
+            [live.embed_url] => https://www.youtube.com/embed/ZGrEijqUFAM
             [live.youtube_channel_url] => 
             [live.schedule] => Array
                 (
                     [0] => Array
                         (
-                            [name] => Restores Service
-                            [type] => weekly
+                            [name] => Restorers Service
+                            [type] => date
                             [day] => Sunday
-                            [date] => 
-                            [time] => 08:45
+                            [date] => 2026-06-14
+                            [time] => 11:58
                         )
 
                 )
@@ -63,12 +63,40 @@ Array
                 (
                     [0] => Array
                         (
+                            [date] => 2026-06-14
+                            [title] => Comminum Sunday
+                            [url] => https://www.youtube.com/embed/ZGrEijqUFAM
+                        )
+
+                    [1] => Array
+                        (
+                            [date] => 2026-06-14
+                            [title] => Livestream Replay - June 14, 2026
+                            [url] => https://www.youtube.com/embed/ZGrEijqUFAM
+                        )
+
+                    [2] => Array
+                        (
+                            [date] => 2026-06-14
+                            [title] => Livestream Replay - June 14, 2026
+                            [url] => https://youtu.be/ZGrEijqUFAM
+                        )
+
+                    [3] => Array
+                        (
+                            [date] => 2026-06-14
+                            [title] => Restores Service
+                            [url] => https://youtu.be/ZGrEijqUFAM
+                        )
+
+                    [4] => Array
+                        (
                             [date] => 2026-06-02
                             [title] => Cell
                             [url] => https://www.youtube.com/watch?v=f8-K7ShdwQY
                         )
 
-                    [2] => Array
+                    [5] => Array
                         (
                             [date] => 2026-06-02
                             [title] => Livestream Replay - June 2, 2026
@@ -77,7 +105,7 @@ Array
 
                 )
 
-            [live.offline_thumbnail] => 
+            [live.offline_thumbnail] => uploads/thumb_6a2e91e1634fd.png
             [analytics.plausible_domain] => 
         )
 
