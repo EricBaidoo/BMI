@@ -16,7 +16,7 @@ try {
     $stmtSpecial = $pdo->query(
         "SELECT id, title, slug, description, event_date, event_time, venue, event_image 
          FROM events 
-         WHERE event_type = 'special' AND event_date >= CURDATE()
+         WHERE event_type = 'special' AND (event_date >= CURDATE() OR (end_date IS NOT NULL AND end_date >= CURDATE()))
          ORDER BY event_date ASC, event_time ASC
          LIMIT 12"
     );
