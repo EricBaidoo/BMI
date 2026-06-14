@@ -95,6 +95,7 @@ include 'includes/header.php';
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
         <!-- LIVESTREAM BANNER -->
+        <?php if (setting('live.is_streaming_now') == '1'): ?>
         <div class="mb-12 relative overflow-hidden bg-gradient-to-r from-red-600 to-red-800 lg:rounded-2xl shadow-[0_0.625rem_2.5rem_rgba(220,38,38,0.2)] group border border-red-500/50">
             <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
             <div class="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-black/20 to-transparent"></div>
@@ -118,6 +119,7 @@ include 'includes/header.php';
                 </div>
             </div>
         </div>
+        <?php endif; ?>
         
         <!-- Search / Filter UI -->
         <form method="GET" action="sermons.php" class="mb-12 bg-white border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
