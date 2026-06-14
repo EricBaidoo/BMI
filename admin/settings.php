@@ -71,6 +71,7 @@ $schema = [
     'live' => [
         'label' => 'Livestream',
         'fields' => [
+            ['key' => 'live.is_streaming_now',    'label' => 'Is a program currently streaming? (Shows "Watch Live" badges)', 'type' => 'boolean'],
             ['key' => 'live.embed_url',           'label' => 'Live embed URL (YouTube/Facebook embed src)', 'type' => 'url'],
             ['key' => 'live.youtube_channel_url', 'label' => 'YouTube channel URL', 'type' => 'url'],
             ['key' => 'live.schedule',            'label' => 'Upcoming Schedule', 'type' => 'schedule_repeater'],
@@ -591,6 +592,13 @@ require_once __DIR__ . '/includes/header.php';
                                         container.insertAdjacentHTML('afterbegin', html);
                                     }
                                 </script>
+                            <?php elseif ($field['type'] === 'boolean'): ?>
+                                <div class="flex flex-col gap-2">
+                                    <select name="setting[<?php echo e($field['key']); ?>]" id="input_<?php echo e(str_replace('.', '_', $field['key'])); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                        <option value="1" <?php echo $val == '1' ? 'selected' : ''; ?>>Yes, we are currently live streaming</option>
+                                        <option value="0" <?php echo $val != '1' ? 'selected' : ''; ?>>No, stream is offline</option>
+                                    </select>
+                                </div>
                             <?php else: ?>
                                 <div class="flex flex-col gap-2">
                                     <input type="<?php echo e($field['type']); ?>" name="setting[<?php echo e($field['key']); ?>]"

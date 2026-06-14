@@ -40,6 +40,7 @@ include 'includes/header.php';
 <section class="relative w-full h-screen min-h-[43.75rem] max-h-[62.5rem] bg-slate-900 overflow-hidden" id="hero-carousel">
     
     <!-- FLOATING LIVESTREAM BADGE -->
+    <?php if (setting('live.is_streaming_now') == '1'): ?>
     <a href="livestream.php" class="absolute top-24 right-4 md:top-36 md:right-10 z-50 flex items-center justify-center bg-slate-950/80 md:bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-full pr-6 pl-2 py-2 shadow-[0_0.5rem_2rem_rgba(0,0,0,0.5)] hover:bg-slate-900/80 hover:border-red-500/30 hover:scale-105 transition-all duration-500 group overflow-hidden">
         <!-- Subtle gradient background flow -->
         <div class="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-600/10 to-red-600/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_2s_infinite] transition-opacity duration-500"></div>
@@ -56,6 +57,7 @@ include 'includes/header.php';
             <span class="text-red-400 text-[0.6rem] font-bold uppercase tracking-[0.2em] mt-1.5 leading-none">Streaming Now</span>
         </div>
     </a>
+    <?php endif; ?>
 
     <?php if (empty($heroSlides)): ?>
         <div class="carousel-slide absolute inset-0 w-full h-full opacity-100 z-20 flex items-center justify-center">
