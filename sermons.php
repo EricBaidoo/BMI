@@ -94,6 +94,31 @@ include 'includes/header.php';
 <section class="py-24 md:py-32 bg-slate-50 relative overflow-hidden border-t border-slate-200">
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
+        <!-- LIVESTREAM BANNER -->
+        <div class="mb-12 relative overflow-hidden bg-gradient-to-r from-red-600 to-red-800 lg:rounded-2xl shadow-[0_10px_40px_rgba(220,38,38,0.2)] group border border-red-500/50">
+            <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-10"></div>
+            <div class="absolute right-0 top-0 h-full w-1/2 bg-gradient-to-l from-black/20 to-transparent"></div>
+            <div class="relative p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left z-10">
+                <div class="flex-grow">
+                    <div class="inline-flex items-center gap-2 mb-3 bg-red-950/40 text-red-100 text-[0.65rem] font-bold uppercase tracking-widest px-3 py-1 rounded-full border border-red-400/30">
+                        <span class="relative flex h-2 w-2">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        </span>
+                        Join Us Live
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-display font-black text-white mb-3">Experience the Service Online</h2>
+                    <p class="text-red-100/90 text-lg md:text-xl font-medium max-w-2xl">Can't make it in person? Watch the powerful message and worship from anywhere in the world.</p>
+                </div>
+                <div class="flex-shrink-0 w-full md:w-auto">
+                    <a href="livestream.php" class="inline-flex items-center justify-center w-full md:w-auto bg-white text-red-700 hover:bg-slate-50 px-8 py-4 font-bold text-lg shadow-lg hover:shadow-xl transition-all hover:-translate-y-1">
+                        Watch Live Stream
+                        <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
         <!-- Search / Filter UI -->
         <form method="GET" action="sermons.php" class="mb-12 bg-white border border-slate-200 shadow-sm p-6 flex flex-col md:flex-row gap-4 items-center justify-between">
             <div class="flex-grow w-full md:w-auto relative">
