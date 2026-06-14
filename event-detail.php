@@ -60,7 +60,7 @@ include 'includes/header.php';
                     <span class="inline-block bg-white text-slate-900 font-bold text-xs tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">Special Event</span>
                 <?php endif; ?>
 
-                <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 leading-tight max-w-4xl">
+                <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 leading-tight max-w-4xl">
                     <?php echo htmlspecialchars((string)$event['title']); ?>
                 </h1>
                 
