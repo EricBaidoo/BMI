@@ -12,7 +12,7 @@ $weeklyServices = [];
 
 try {
     $pdo = db_connect();
-    $stmt = $pdo->query("SELECT id, title, description, event_date, event_time, venue, event_image FROM events WHERE event_date >= CURDATE() ORDER BY event_date ASC LIMIT 3");
+    $stmt = $pdo->query("SELECT id, title, event_type, description, event_date, end_date, event_time, venue, event_image FROM events WHERE event_date >= CURDATE() OR (end_date IS NOT NULL AND end_date >= CURDATE()) ORDER BY event_date ASC LIMIT 3");
     $upcomingEvents = $stmt->fetchAll();
 
     $stmt = $pdo->query("SELECT id, title, sermon_date, topic, sermon_image FROM sermons ORDER BY sermon_date DESC LIMIT 3");
@@ -531,6 +531,11 @@ include 'includes/header.php';
                             
                             <!-- Text details -->
                             <div class="flex-grow pt-1">
+                                <?php if (!empty($event['event_type'])): ?>
+                                    <span class="inline-block px-2 py-0.5 rounded text-[0.625rem] font-bold uppercase tracking-widest mb-2 border <?php echo $event['event_type'] === 'flagship' ? 'border-amber-200 bg-amber-50 text-amber-700' : 'border-slate-200 bg-slate-50 text-slate-600'; ?>">
+                                        <?php echo htmlspecialchars($event['event_type'] === 'flagship' ? 'Flagship Program' : 'Special Event'); ?>
+                                    </span>
+                                <?php endif; ?>
                                 <h3 class="text-xl font-bold text-slate-900 mb-2 group-hover:<?php echo $c['text']; ?> transition-colors leading-tight line-clamp-2"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
                                 <p class="text-slate-500 text-sm font-medium flex items-center gap-2">
                                     <svg class="w-4 h-4 <?php echo $c['icon']; ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
