@@ -59,7 +59,7 @@ include 'includes/header.php';
                 </div>
                 <div class="relative z-10 w-full w-[90%] max-w-[112.5rem] mx-auto mt-16 text-center">
                     <?php if ($slide['title']): ?>
-                        <h1 class="font-display font-black text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-8 text-white leading-[1.05]">
+                        <h1 class="font-display font-black text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight mb-6 md:mb-8 text-white leading-[1.05]">
                             <?php echo $slide['title']; // Allow HTML like <span> as requested ?>
                         </h1>
                     <?php endif; ?>
@@ -69,8 +69,8 @@ include 'includes/header.php';
                         </p>
                     <?php endif; ?>
                     <?php if ($slide['button_text'] && $slide['button_url']): ?>
-                        <div class="flex items-center justify-center gap-6">
-                            <a href="<?php echo htmlspecialchars($slide['button_url']); ?>" class="inline-flex items-center justify-center <?php echo $i % 2 === 0 ? 'bg-[#c49a45] text-white hover:bg-[#d4ac57]' : 'bg-white text-slate-900 hover:bg-slate-100'; ?> text-sm font-bold uppercase tracking-widest px-10 py-5 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
+                        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 px-4">
+                            <a href="<?php echo htmlspecialchars($slide['button_url']); ?>" class="inline-flex items-center justify-center <?php echo $i % 2 === 0 ? 'bg-[#c49a45] text-white hover:bg-[#d4ac57]' : 'bg-white text-slate-900 hover:bg-slate-100'; ?> text-sm font-bold uppercase tracking-widest px-10 py-4 sm:py-5 w-full sm:w-auto transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
                                 <?php echo htmlspecialchars($slide['button_text']); ?>
                             </a>
                         </div>
@@ -145,7 +145,7 @@ include 'includes/header.php';
                         <span class="text-[#c49a45] font-bold text-xs tracking-widest uppercase">Meet The Founder</span>
                     </div>
                     
-                    <h2 class="text-[2.5rem] md:text-5xl lg:text-[3.5rem] font-display font-black text-slate-900 mb-8 leading-[1.1] tracking-tight">
+                    <h2 class="text-4xl md:text-5xl lg:text-[3.5rem] font-display font-black text-slate-900 mb-6 md:mb-8 leading-[1.1] tracking-tight">
                         <?= setting('home.founder_title', 'A voice of restoration,<br>a builder of lives &<br><span class="text-[#c49a45]">a repairer of destinies.</span>') ?>
                     </h2>
                     
@@ -187,7 +187,7 @@ include 'includes/header.php';
                 </div>
                 
                 <h2 class="text-4xl md:text-5xl lg:text-6xl font-display font-black text-white mb-6 leading-tight">
-                    <?= setting('home.mission_title', 'A legacy of <span class="text-[#c49a45]">enduring<br>faith</span> and action.') ?>
+                        <?= setting('home.mission_title', 'A legacy of <span class="text-[#c49a45]">enduring<br>faith</span> and action.') ?>
                 </h2>
                 
                 <p class="text-slate-300 text-sm md:text-base leading-relaxed mb-10 font-medium">
@@ -306,7 +306,7 @@ include 'includes/header.php';
                     <div class="h-px w-12 bg-rose-500"></div>
                     <span class="text-rose-500 font-bold text-sm tracking-widest uppercase">Teachings</span>
                 </div>
-                <h2 class="text-5xl md:text-7xl text-slate-900 font-display font-black tracking-tight">Latest Sermons</h2>
+                <h2 class="text-4xl md:text-7xl text-slate-900 font-display font-black tracking-tight">Latest Sermons</h2>
             </div>
             <a href="sermons" class="hidden md:flex items-center text-rose-600 hover:text-rose-700 font-bold transition-colors mt-4 md:mt-0 tracking-widest uppercase text-sm group" data-aos="fade-left">
                 All Sermons
@@ -397,7 +397,7 @@ include 'includes/header.php';
                 Watch Online
             </div>
             
-            <h2 class="font-display font-black text-[4.5rem] md:text-[5.5rem] tracking-[-0.02em] mb-8 text-white leading-[0.95]">
+            <h2 class="font-display font-black text-5xl md:text-[5.5rem] tracking-tight mb-8 text-white leading-[0.95]">
                 <?= setting('home.watch_title', 'Sundays.<br><span class="text-[#c19f54]">Anywhere</span> in the<br>world.') ?>
             </h2>
             
@@ -423,7 +423,7 @@ include 'includes/header.php';
 <section class="py-24 md:py-32 bg-[#f8f9fa] relative overflow-hidden">
     <div class="w-[90%] max-w-[70rem] mx-auto relative z-10">
         <div class="text-center mb-12 md:mb-16" data-aos="fade-up">
-            <h2 class="text-[2.5rem] md:text-[3.5rem] text-[#111827] font-display font-black tracking-[-0.02em] leading-tight">Our Weekly Services</h2>
+            <h2 class="text-4xl md:text-[3.5rem] text-[#111827] font-display font-black tracking-tight leading-tight">Our Weekly Services</h2>
         </div>
 
         <div class="space-y-10 md:space-y-16">
@@ -483,7 +483,7 @@ include 'includes/header.php';
                     <div class="h-px w-12 bg-sky-500"></div>
                     <span class="text-sky-600 font-bold text-sm tracking-widest uppercase">Church Life</span>
                 </div>
-                <h2 class="text-5xl md:text-7xl text-slate-900 font-display font-black tracking-tight">Upcoming Events</h2>
+                <h2 class="text-4xl md:text-7xl text-slate-900 font-display font-black tracking-tight">Upcoming Events</h2>
             </div>
             <a href="events" class="hidden md:flex items-center text-sky-600 hover:text-sky-700 font-bold transition-colors mt-4 md:mt-0 tracking-widest uppercase text-sm group">
                 All Events
@@ -571,11 +571,11 @@ include 'includes/header.php';
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="text-center mb-16 md:mb-24" data-aos="fade-up">
             <div class="inline-flex items-center justify-center gap-4 mb-6">
-                <div class="h-[0.125rem] w-12 bg-gradient-to-r from-transparent to-[#c49a45]"></div>
-                <span class="text-[#c49a45] font-bold text-xs tracking-[0.2em] uppercase">Next Steps</span>
-                <div class="h-[0.125rem] w-12 bg-gradient-to-l from-transparent to-[#c49a45]"></div>
+                <div class="h-[0.125rem] w-8 md:w-12 bg-gradient-to-r from-transparent to-[#c49a45]"></div>
+                <span class="text-[#c49a45] font-bold text-[0.625rem] md:text-xs tracking-[0.2em] uppercase">Next Steps</span>
+                <div class="h-[0.125rem] w-8 md:w-12 bg-gradient-to-l from-transparent to-[#c49a45]"></div>
             </div>
-            <h2 class="text-5xl md:text-6xl font-display font-black text-white tracking-tight">Find Us This Sunday</h2>
+            <h2 class="text-4xl md:text-6xl font-display font-black text-white tracking-tight">Find Us This Sunday</h2>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">

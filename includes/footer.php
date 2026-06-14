@@ -173,7 +173,14 @@
 
     if(mobileBtn && menu) {
         mobileBtn.addEventListener('click', () => {
-            menu.classList.toggle('hidden');
+            const isClosed = menu.classList.contains('scale-y-0');
+            if (isClosed) {
+                menu.classList.remove('scale-y-0', 'opacity-0', 'pointer-events-none');
+                menu.classList.add('scale-y-100', 'opacity-100', 'pointer-events-auto');
+            } else {
+                menu.classList.add('scale-y-0', 'opacity-0', 'pointer-events-none');
+                menu.classList.remove('scale-y-100', 'opacity-100', 'pointer-events-auto');
+            }
         });
     }
 </script>

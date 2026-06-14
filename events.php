@@ -42,7 +42,7 @@ include 'includes/header.php';
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Church Life</span>
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
-        <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
             <?= setting('events.hero_title', 'Upcoming <br/><span class="text-[#c49a45]">Events.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
@@ -56,7 +56,7 @@ include 'includes/header.php';
 <section class="py-24 bg-slate-50 border-t border-slate-200">
     <div class="w-[90%] max-w-[112.5rem] mx-auto">
         
-        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
             <div class="max-w-2xl">
                 <h2 class="text-4xl font-display font-black text-slate-900 tracking-tight mb-4">Upcoming Special Events</h2>
                 <p class="text-lg text-slate-600 font-medium">Don't miss out on these powerful one-off gatherings, seminars, and special worship nights.</p>

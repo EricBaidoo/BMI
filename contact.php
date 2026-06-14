@@ -42,7 +42,7 @@ include 'includes/header.php';
     <div class="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#c49a45]/30 to-transparent"></div>
 
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
-        <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
             <?= setting('contact.hero_title', 'Get in Touch') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
