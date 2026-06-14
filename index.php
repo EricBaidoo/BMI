@@ -40,18 +40,18 @@ include 'includes/header.php';
 <section class="relative w-full h-screen min-h-[43.75rem] max-h-[62.5rem] bg-slate-900 overflow-hidden" id="hero-carousel">
     
     <!-- FLOATING LIVESTREAM BADGE -->
-    <a href="livestream.php" class="absolute top-24 md:top-36 right-4 md:right-10 z-50 flex items-center bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-full pr-6 pl-2 py-2 shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:bg-slate-900/80 hover:border-red-500/30 hover:scale-105 transition-all duration-500 group overflow-hidden">
+    <a href="livestream.php" class="absolute top-24 right-4 md:top-36 md:right-10 z-50 flex items-center justify-center bg-slate-950/80 md:bg-slate-950/60 backdrop-blur-xl border border-white/10 rounded-full pr-6 pl-2 py-2 shadow-[0_0.5rem_2rem_rgba(0,0,0,0.5)] hover:bg-slate-900/80 hover:border-red-500/30 hover:scale-105 transition-all duration-500 group overflow-hidden">
         <!-- Subtle gradient background flow -->
         <div class="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-600/10 to-red-600/0 opacity-0 group-hover:opacity-100 group-hover:animate-[shimmer_2s_infinite] transition-opacity duration-500"></div>
         
         <!-- Glowing Play Icon -->
-        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center mr-4 shadow-[0_0_20px_rgba(239,68,68,0.6)] group-hover:shadow-[0_0_30px_rgba(239,68,68,0.8)] relative z-10">
+        <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-700 rounded-full flex items-center justify-center mr-4 shadow-[0_0_1.25rem_rgba(239,68,68,0.6)] group-hover:shadow-[0_0_1.875rem_rgba(239,68,68,0.8)] relative z-10">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-60"></span>
             <svg class="w-5 h-5 text-white ml-0.5 relative z-20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
         </div>
         
         <!-- Text Content -->
-        <div class="flex flex-col relative z-10">
+        <div class="flex flex-col relative z-10 text-left">
             <span class="text-white font-black uppercase tracking-widest text-sm leading-none">Watch Live</span>
             <span class="text-red-400 text-[0.6rem] font-bold uppercase tracking-[0.2em] mt-1.5 leading-none">Streaming Now</span>
         </div>
@@ -83,7 +83,7 @@ include 'includes/header.php';
                         </h1>
                     <?php endif; ?>
                     <?php if ($slide['subtitle']): ?>
-                        <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto">
+                        <p class="font-sans text-xl md:text-2xl text-white/90 mb-12 font-light leading-relaxed max-w-2xl mx-auto px-4">
                             <?php echo htmlspecialchars($slide['subtitle']); ?>
                         </p>
                     <?php endif; ?>
@@ -114,14 +114,14 @@ include 'includes/header.php';
         <?php for ($m = 0; $m < 3; $m++): ?>
         <span class="mx-8 flex items-center gap-8">
             <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text1', 'WORSHIP WITH US IN PERSON')); ?></span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
+            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_0.5rem_rgba(196,154,69,0.8)]"></span> 
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-400 font-bold"><?php echo htmlspecialchars(setting('home.marquee_text2', 'OR JOIN OUR LIVESTREAM')); ?></span> 
             <span class="relative flex h-2 w-2 -ml-4"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span></span>
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)] ml-4"></span> 
+            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_0.5rem_rgba(196,154,69,0.8)] ml-4"></span> 
             <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]"><?php echo htmlspecialchars(setting('home.marquee_text3', 'EXPERIENCE TRANSFORMATION')); ?></span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span> 
+            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_0.5rem_rgba(196,154,69,0.8)]"></span> 
             <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text4', 'UNCOMPROMISED TRUTH')); ?></span> 
-            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_8px_rgba(196,154,69,0.8)]"></span>
+            <span class="w-1.5 h-1.5 bg-gradient-to-br from-[#c49a45] to-[#e8c881] rotate-45 shadow-[0_0_0.5rem_rgba(196,154,69,0.8)]"></span>
             <span class="text-slate-300"><?php echo htmlspecialchars(setting('home.marquee_text5', 'A LEGACY OF ENDURING FAITH')); ?></span>
         </span>
         <?php endfor; ?>
