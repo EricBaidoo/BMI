@@ -27,15 +27,15 @@ include 'includes/header.php';
 ?>
 
 <!-- LIVE PLATFORM LAYOUT -->
-<div class="flex flex-col lg:flex-row h-[calc(100vh-5rem)] md:h-[calc(100vh-6rem)] mt-20 md:mt-24 bg-[#0f0f11] overflow-hidden">
+<div class="flex flex-col lg:flex-row h-[calc(100dvh-5rem)] md:h-[calc(100vh-6rem)] mt-20 md:mt-24 bg-[#0f0f11] overflow-hidden">
     
     <!-- LEFT SIDE: VIDEO PLAYER AREA -->
-    <div class="flex-grow flex flex-col relative overflow-hidden bg-black">
+    <div class="flex-none lg:flex-grow flex flex-col relative overflow-hidden bg-black">
         
-        <!-- Video / Offline State Container (Centers the 16:9 content) -->
-        <div class="flex-grow flex items-center justify-center p-4 lg:p-8">
+        <!-- Video / Offline State Container -->
+        <div class="w-full flex items-center justify-center p-0 lg:p-8">
             <!-- Video Player Container -->
-            <div class="relative w-full bg-slate-900 rounded-xl overflow-hidden shadow-2xl aspect-video ring-1 ring-white/10">
+            <div class="relative w-full bg-slate-900 lg:rounded-xl overflow-hidden shadow-2xl aspect-video lg:ring-1 lg:ring-white/10">
                 <?php if ($liveEmbedUrl !== ''): ?>
                     <iframe id="main-player" src="<?php echo htmlspecialchars($liveEmbedUrl); ?>" class="absolute inset-0 w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 <?php else: ?>
@@ -62,7 +62,7 @@ include 'includes/header.php';
     </div>
 
     <!-- RIGHT SIDE: SIDEBAR -->
-    <div class="w-full lg:w-[25rem] flex-shrink-0 bg-[#f8f9fa] flex flex-col h-[50vh] lg:h-full border-l border-slate-200 z-20">
+    <div class="w-full lg:w-[25rem] flex-grow lg:flex-shrink-0 bg-[#f8f9fa] flex flex-col min-h-0 lg:h-full border-l border-slate-200 z-20">
         
         <!-- Tab Contents Container -->
         <div class="flex-grow overflow-y-auto p-4 md:p-5 relative bg-[#f8f9fa]" id="sidebar-content">
