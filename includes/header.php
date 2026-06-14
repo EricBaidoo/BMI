@@ -92,7 +92,7 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
                         <div class="absolute inset-0 bg-[#c49a45] blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full"></div>
                         <img class="h-10 md:h-12 w-auto relative z-10 transform group-hover:scale-105 transition-transform duration-500" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
                     </div>
-                    <span class="font-display font-bold text-lg md:text-xl tracking-wide text-white group-hover:text-[#c49a45] transition-colors whitespace-nowrap">
+                    <span class="hidden sm:block font-display font-bold text-lg md:text-xl tracking-wide text-white group-hover:text-[#c49a45] transition-colors whitespace-nowrap">
                         <?php echo htmlspecialchars($siteName ?? 'Bridge Ministries'); ?>
                     </span>
                 </a>
@@ -137,10 +137,9 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
                 </a>
             </div>
 
-            <!-- Mobile Menu Button -->
             <div class="xl:hidden flex items-center pl-4">
-                <button id="mobile-menu-btn" class="p-2 text-slate-300 hover:text-white focus:outline-none transition-colors rounded-md hover:bg-white/5" aria-label="Toggle menu">
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <button id="mobile-menu-btn" class="p-3 -mr-3 text-slate-300 hover:text-white focus:outline-none transition-colors rounded-md hover:bg-white/5" aria-label="Toggle menu">
+                    <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
                 </button>
