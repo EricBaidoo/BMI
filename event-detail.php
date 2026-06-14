@@ -2,19 +2,25 @@
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/helpers.php';
 
-$slug = $_GET['slug'] ?? '';
+$id = $_GET['id'] ?? null;
+$slug = $_GET['slug'] ?? null;
 $event = null;
 $error = null;
 
-if (!$slug) {
+if (!$id && !$slug) {
     header('Location: events.php');
     exit;
 }
 
 try {
     $pdo = db_connect();
-    $stmt = $pdo->prepare("SELECT * FROM events WHERE slug = ?");
-    $stmt->execute([$slug]);
+    if ($id) {
+        $stmt = $pdo->prepare("SELECT * FROM events WHERE id = ?");
+        $stmt->execute([$id]);
+    } else {
+        $stmt = $pdo->prepare("SELECT * FROM events WHERE slug = ?");
+        $stmt->execute([$slug]);
+    }
     $event = $stmt->fetch();
 } catch (Throwable $e) {
     $error = "Unable to fetch event details.";

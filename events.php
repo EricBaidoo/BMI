@@ -113,7 +113,7 @@ include 'includes/header.php';
                                 <?php endif; ?>
                             </div>
 
-                            <a href="event-detail.php?slug=<?php echo urlencode((string)$event['slug']); ?>" class="inline-flex items-center font-bold text-slate-900 hover:text-[#c49a45] transition-colors group/link mt-auto">
+                            <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center font-bold text-slate-900 hover:text-[#c49a45] transition-colors group/link mt-auto">
                                 View Details 
                                 <svg class="w-5 h-5 ml-2 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                             </a>

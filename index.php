@@ -507,7 +507,7 @@ include 'includes/header.php';
                         ];
                         $c = $colors[$index % 3];
                     ?>
-                    <a href="events" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>" class="group flex flex-col <?php echo $c['bg']; ?> border <?php echo $c['border']; ?> <?php echo $c['hover']; ?> overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                    <a href="event-detail.php?id=<?php echo (int) $event['id']; ?>" data-aos="fade-up" data-aos-delay="<?php echo $index * 100; ?>" class="group flex flex-col <?php echo $c['bg']; ?> border <?php echo $c['border']; ?> <?php echo $c['hover']; ?> overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                         
                         <!-- FLYER IMAGE -->
                         <div class="w-full aspect-video bg-slate-900 relative overflow-hidden border-b <?php echo $c['border']; ?>">

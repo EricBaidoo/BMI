@@ -108,7 +108,7 @@ include 'includes/header.php';
                         <div class="mb-10"></div>
                         <?php endif; ?>
 
-                        <a href="event-detail.php?slug=<?php echo urlencode((string)$event['slug']); ?>" class="inline-flex items-center justify-center bg-slate-900 text-white hover:bg-[#c49a45] px-8 py-4 -none font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
+                        <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-center bg-slate-900 text-white hover:bg-[#c49a45] px-8 py-4 -none font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
                             Learn More
                             <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                         </a>
