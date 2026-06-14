@@ -22,12 +22,12 @@ AddDefaultCharset utf-8
     # ------------------------------------------------------------------
 
     # Redirect index.php to directory root (dynamic)
-    RewriteCond %{THE_REQUEST} \s/+(.*?/)?index(?:\.php)?[?\s] [NC]
-    RewriteRule ^(.*)index\.php$ /$1 [R=301,L]
+    RewriteCond %{THE_REQUEST} \s/+([^?\s]*/)?index(?:\.php)?[?\s] [NC]
+    RewriteRule ^ /%1 [R=301,L]
 
     # Redirect any visible /something.php -> /something (dynamic)
-    RewriteCond %{THE_REQUEST} \s/+(.*?/)?([^/.]+)\.php([?\s]) [NC]
-    RewriteRule ^(.*)\.php$ /$1 [R=301,L,NE,QSA]
+    RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php([?\s]) [NC]
+    RewriteRule ^ /%1 [R=301,L,NE,QSA]
 
     # Internally rewrite /something -> /something.php when the file exists
     RewriteCond %{REQUEST_FILENAME} !-f

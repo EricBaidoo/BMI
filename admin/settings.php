@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     } else if ($f['type'] === 'image') {
                         if (isset($_POST['active_group']) && $_POST['active_group'] === $groupKey) {
-                            $fileInputName = 'setting_file_' . $postedKey;
+                            $fileInputName = 'setting_file_' . $postKey;
                             if (isset($_FILES[$fileInputName]) && $_FILES[$fileInputName]['error'] === UPLOAD_ERR_OK) {
                                 $tmpName = $_FILES[$fileInputName]['tmp_name'];
                                 $fileName = basename($_FILES[$fileInputName]['name']);
@@ -187,7 +187,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             }
                         }
                     } else if ($postedKey) {
-                        $update[$key] = trim((string) $posted[$postedKey]);
+                        $val = trim((string) $posted[$postedKey]);
+                        
+                        // Automatically convert YouTube standard links to Embed links
+                        if ($key === 'live.embed_url' && $val !== '') {
+                            if (strpos($val, 'youtube.com/watch') !== false) {
+                                parse_str(parse_url($val, PHP_URL_QUERY), $query);
+                                if (isset($query['v'])) {
+                                    $val = 'https://www.youtube.com/embed/' . $query['v'];
+                                }
+                            } else if (strpos($val, 'youtu.be/') !== false) {
+                                $path = parse_url($val, PHP_URL_PATH);
+                                $val = 'https://www.youtube.com/embed/' . ltrim((string)$path, '/');
+                            }
+                        }
+                        
+                        $update[$key] = $val;
                         
                         // Handle auto-archiving
                         if ($key === 'live.embed_url' && isset($_POST['end_and_archive']) && $_POST['end_and_archive'] === '1') {
