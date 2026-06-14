@@ -21,10 +21,6 @@ AddDefaultCharset utf-8
     # Hide .php extensions on public pages (admin/ keeps .php as-is)
     # ------------------------------------------------------------------
 
-    # Skip these rules if accessing the admin folder
-    RewriteCond %{REQUEST_URI} /admin/
-    RewriteRule ^ - [S=3]
-
     # Redirect index.php to directory root (dynamic)
     RewriteCond %{THE_REQUEST} \s/+(.*?/)?index(?:\.php)?[?\s] [NC]
     RewriteRule ^(.*)index\.php$ /$1 [R=301,L]
