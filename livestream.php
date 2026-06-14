@@ -88,8 +88,14 @@ include 'includes/header.php';
                         $todayName = date('l');
                         $endOfToday = strtotime('tomorrow') - 1;
                         
-                        if ($todayName === $day && $endOfToday > $now) {
-                            $eventTime = $todayEventTime;
+                        if ($todayName === $day) {
+                            // Check if today's occurrence has already completely finished (2 hours past start time)
+                            if (($todayEventTime + (2 * 3600)) > $now) {
+                                $eventTime = $todayEventTime;
+                            } else {
+                                // It finished today, so show next week's occurrence
+                                $eventTime = strtotime("next $day $time");
+                            }
                         } else {
                             // Find the next occurrence
                             $eventTime = strtotime("next $day $time");
