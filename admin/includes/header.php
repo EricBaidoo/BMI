@@ -43,7 +43,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
     <meta name="robots" content="noindex,nofollow">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
     <?php if (setting('site.favicon')): ?>
-        <link rel="icon" href="/BMI/<?php echo htmlspecialchars(setting('site.favicon')); ?>">
+        <link rel="icon" href="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars(setting('site.favicon')); ?>">
     <?php endif; ?>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -103,7 +103,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
         <div class="flex items-center justify-between h-16 px-6 bg-brand-900/50 border-b border-slate-800">
             <div class="flex items-center gap-3">
                 <?php if (setting('site.favicon')): ?>
-                    <img src="/BMI/<?php echo htmlspecialchars(setting('site.favicon')); ?>" alt="Logo" class="w-8 h-8 rounded object-contain bg-white">
+                    <img src="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars(setting('site.favicon')); ?>" alt="Logo" class="w-8 h-8 rounded object-contain bg-white">
                 <?php else: ?>
                     <div class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm shadow-inner">
                         B
