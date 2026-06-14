@@ -75,7 +75,7 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
         }
     </script>
 </head>
-<body class="bg-slate-900 text-slate-300 font-sans antialiased flex flex-col min-h-screen">
+<body class="bg-slate-900 text-slate-300 font-sans antialiased flex flex-col min-h-screen overflow-x-hidden">
 
 <!-- HEADER -->
 <header id="site-header" class="fixed w-full top-0 z-50 transition-all duration-500 border-b border-white/10 bg-slate-950/80 backdrop-blur-lg">
@@ -90,9 +90,9 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
                 <a href="./" class="flex items-center gap-4 group">
                     <div class="relative flex items-center justify-center">
                         <div class="absolute inset-0 bg-[#c49a45] blur-lg opacity-20 group-hover:opacity-40 transition-opacity duration-500 rounded-full"></div>
-                        <img class="h-12 w-auto relative z-10 transform group-hover:scale-105 transition-transform duration-500" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
+                        <img class="h-10 md:h-12 w-auto relative z-10 transform group-hover:scale-105 transition-transform duration-500" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
                     </div>
-                    <span class="font-display font-bold text-xl tracking-wide text-white group-hover:text-[#c49a45] transition-colors whitespace-nowrap">
+                    <span class="font-display font-bold text-lg md:text-xl tracking-wide text-white group-hover:text-[#c49a45] transition-colors whitespace-nowrap">
                         <?php echo htmlspecialchars($siteName ?? 'Bridge Ministries'); ?>
                     </span>
                 </a>
@@ -149,8 +149,8 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
     </div>
 
     <!-- Mobile Nav -->
-    <div id="mobile-menu" class="hidden xl:hidden bg-slate-950/95 backdrop-blur-xl border-t border-white/10 absolute top-full left-0 w-full shadow-2xl">
-        <div class="px-6 py-6 flex flex-col gap-4">
+    <div id="mobile-menu" class="fixed inset-x-0 top-20 bg-slate-950/95 backdrop-blur-xl border-t border-white/10 shadow-2xl transition-all duration-300 origin-top transform scale-y-0 opacity-0 pointer-events-none xl:hidden flex flex-col h-[calc(100vh-5rem)] overflow-y-auto">
+        <div class="px-6 py-6 flex flex-col gap-5">
             <?php
             foreach ($navLinks as $url => $label):
                 $isActive = ($currentPage === $url || $currentPage === $url . '.php');
