@@ -21,26 +21,29 @@ AddDefaultCharset utf-8
     # Hide .php extensions on public pages (admin/ keeps .php as-is)
     # ------------------------------------------------------------------
 
-    # Redirect /index or /index.php  ->  /
-    RewriteCond %{THE_REQUEST} \s/+(?:BMI/)?index(?:\.php)?[?\s] [NC]
-    RewriteRule ^ /BMI/ [R=301,L]
+    # Skip these rules if accessing the admin folder
+    RewriteCond %{REQUEST_URI} /admin/
+    RewriteRule ^ - [S=3]
 
-    # Redirect any visible /something.php  ->  /something  (skip admin/)
-    RewriteCond %{REQUEST_URI} !^/BMI/admin/
-    RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php([?\s]) [NC]
-    RewriteRule ^ /%1 [R=301,L,NE,QSA]
+    # Redirect index.php to directory root (dynamic)
+    RewriteCond %{THE_REQUEST} \s/+(.*?/)?index(?:\.php)?[?\s] [NC]
+    RewriteRule ^(.*)index\.php$ /$1 [R=301,L]
 
-    # Internally rewrite /something  ->  /something.php  when the file exists
-    RewriteCond %{REQUEST_URI} !^/BMI/admin/
+    # Redirect any visible /something.php -> /something (dynamic)
+    RewriteCond %{THE_REQUEST} \s/+(.*?/)?([^/.]+)\.php([?\s]) [NC]
+    RewriteRule ^(.*)\.php$ /$1 [R=301,L,NE,QSA]
+
+    # Internally rewrite /something -> /something.php when the file exists
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME}.php -f
-    RewriteRule ^(.+?)/?$ $1.php [L]
+    RewriteRule ^(.*)$ $1.php [L]
 </IfModule>
 
 # ------------------------------------------------------------------------------
 # Custom error pages
 # ------------------------------------------------------------------------------
+# Make sure to change this to /404.php on your live server!
 ErrorDocument 404 /BMI/404.php
 
 # ------------------------------------------------------------------------------
