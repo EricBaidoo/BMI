@@ -330,7 +330,7 @@ require_once __DIR__ . '/includes/header.php';
                                 <div class="flex flex-col gap-3">
                                     <?php if ($val): ?>
                                         <div class="relative w-48 h-28 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
-                                            <img src="/BMI/<?php echo htmlspecialchars($val); ?>" class="w-full h-full object-cover">
+                                            <img src="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars($val); ?>" class="w-full h-full object-cover">
                                         </div>
                                     <?php endif; ?>
                                     <div class="flex flex-col gap-2">
