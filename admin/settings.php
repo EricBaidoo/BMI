@@ -110,24 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             foreach ($group['fields'] as $f) {
                 $key = $f['key'];
                 $postKey = str_replace('.', '_', $key);
-                if ($f['type'] === 'image') {
-                    $actualKey = isset($_FILES['setting_files']['name'][$key]) ? $key : (isset($_FILES['setting_files']['name'][$postKey]) ? $postKey : null);
-                    if ($actualKey && !empty($_FILES['setting_files']['name'][$actualKey])) {
-                        $file = [
-                            'name' => $_FILES['setting_files']['name'][$actualKey],
-                            'type' => $_FILES['setting_files']['type'][$actualKey],
-                            'tmp_name' => $_FILES['setting_files']['tmp_name'][$actualKey],
-                            'error' => $_FILES['setting_files']['error'][$actualKey],
-                            'size' => $_FILES['setting_files']['size'][$actualKey],
-                        ];
-                        if ($file['error'] !== UPLOAD_ERR_NO_FILE) {
-                            $update[$key] = upload_image($file, 'site');
-                        }
-                    }
-                } else {
-                    $postedKey = array_key_exists($key, $posted) ? $key : (array_key_exists($postKey, $posted) ? $postKey : null);
-                    
-                    if ($f['type'] === 'social_repeater') {
+                $postedKey = array_key_exists($key, $posted) ? $key : (array_key_exists($postKey, $posted) ? $postKey : null);
+                
+                if ($f['type'] === 'social_repeater') {
                         // If it's a repeater but no elements were posted (e.g. all removed), it won't be in $posted.
                         // We check if we are currently saving this group to determine if we should clear it.
                         if (isset($_POST['active_group']) && $_POST['active_group'] === $groupKey) {
@@ -260,7 +245,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 }
             }
-        }
         settings_save($update);
         flash('settings', 'saved');
         $group = isset($_POST['active_group']) && isset($schema[$_POST['active_group']]) ? $_POST['active_group'] : 'general';
