@@ -40,7 +40,7 @@ include 'includes/header.php';
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Milestones</span>
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
-        <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
             <?= setting('flagship.hero_title', 'Flagship <br/><span class="text-[#c49a45]">Programs.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">

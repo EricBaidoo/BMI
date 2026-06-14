@@ -656,7 +656,7 @@ include 'includes/header.php';
             <span class="w-12 h-[0.0625rem] bg-[#c49a45]"></span>
         </div>
         
-        <h2 class="text-5xl md:text-7xl lg:text-[5.5rem] mb-8 font-display font-black text-white leading-[1.1] tracking-tight">
+        <h2 class="text-4xl md:text-7xl lg:text-[5.5rem] mb-8 font-display font-black text-white leading-[1.1] tracking-tight">
             Ready to make a<br><span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]">difference?</span>
         </h2>
         

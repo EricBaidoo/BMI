@@ -20,7 +20,7 @@ include 'includes/header.php';
     
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
         <span class="inline-block py-1 px-3 rounded-full bg-[#1a1f2e] border border-white/10 text-[#c49a45] text-sm font-bold tracking-widest uppercase mb-6">You Belong Here</span>
-        <h1 class="text-5xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
             <?= setting('visit.hero_title', 'Plan a Visit') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">

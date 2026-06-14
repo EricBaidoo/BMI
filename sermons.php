@@ -81,7 +81,7 @@ include 'includes/header.php';
             <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Archive</span>
             <div class="h-px w-12 bg-[#c49a45]"></div>
         </div>
-        <h1 class="text-5xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
             <?= setting('sermons.hero_title', 'Watch, Listen, <br/>and <span class="text-[#c49a45]">Grow.</span>') ?>
         </h1>
         <p class="text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
