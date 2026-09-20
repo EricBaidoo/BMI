@@ -351,8 +351,8 @@ require_once __DIR__ . '/includes/header.php';
                                                 </button>
                                             </div>
                                             <div class="w-full space-y-3">
-                                                <input type="text" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][name]" value="<?php echo e($link['name'] ?? ''); ?>" placeholder="Platform Name (e.g. LinkedIn)" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
-                                                <input type="url" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][url]" value="<?php echo e($link['url'] ?? ''); ?>" placeholder="URL" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                <input type="text" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][name]" value="<?php echo e($link['name'] ?? ''); ?>" placeholder="Platform Name (e.g. LinkedIn)" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
+                                                <input type="url" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][url]" value="<?php echo e($link['url'] ?? ''); ?>" placeholder="URL" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                 
                                                 <div class="flex flex-col md:flex-row gap-2 items-start md:items-center mt-2">
                                                     <select onchange="if(this.value) { this.nextElementSibling.value = this.value; this.value=''; }" class="w-full md:w-1/3 border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-semibold text-slate-700">
@@ -385,8 +385,8 @@ require_once __DIR__ . '/includes/header.php';
                                             </button>
                                         </div>
                                         <div class="w-full space-y-3">
-                                            <input type="text" name="setting[<?php echo e($field['key']); ?>][__INDEX__][name]" value="" placeholder="Platform Name (e.g. LinkedIn)" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
-                                            <input type="url" name="setting[<?php echo e($field['key']); ?>][__INDEX__][url]" value="" placeholder="URL" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                            <input type="text" name="setting[<?php echo e($field['key']); ?>][__INDEX__][name]" value="" placeholder="Platform Name (e.g. LinkedIn)" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
+                                            <input type="url" name="setting[<?php echo e($field['key']); ?>][__INDEX__][url]" value="" placeholder="URL" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                             
                                             <div class="flex flex-col md:flex-row gap-2 items-start md:items-center mt-2">
                                                 <select onchange="if(this.value) { this.nextElementSibling.value = this.value; this.value=''; }" class="w-full md:w-1/3 border border-slate-300 rounded-lg px-3 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 outline-none transition-all text-sm font-semibold text-slate-700">
@@ -427,17 +427,17 @@ require_once __DIR__ . '/includes/header.php';
                                                 </button>
                                             </div>
                                             <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-3">
-                                                <input type="text" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][name]" value="<?php echo e($event['name'] ?? ''); ?>" placeholder="Event Name (e.g. Celebration Service)" class="md:col-span-4 w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                <input type="text" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][name]" value="<?php echo e($event['name'] ?? ''); ?>" placeholder="Event Name (e.g. Celebration Service)" class="md:col-span-4 w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                 
                                                 <div class="md:col-span-2">
-                                                    <select name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][type]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" onchange="toggleScheduleType(this)">
+                                                    <select name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][type]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" onchange="toggleScheduleType(this)">
                                                         <option value="weekly" <?php echo ($event['type'] ?? 'weekly') === 'weekly' ? 'selected' : ''; ?>>Weekly Recurring</option>
                                                         <option value="date" <?php echo ($event['type'] ?? 'weekly') === 'date' ? 'selected' : ''; ?>>Specific Date</option>
                                                     </select>
                                                 </div>
 
                                                 <div class="schedule-day-container <?php echo ($event['type'] ?? 'weekly') === 'weekly' ? 'block' : 'hidden'; ?> md:col-span-1">
-                                                    <select name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][day]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                    <select name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][day]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                         <?php
                                                         $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                                                         foreach ($days as $day) {
@@ -449,11 +449,11 @@ require_once __DIR__ . '/includes/header.php';
                                                 </div>
 
                                                 <div class="schedule-date-container <?php echo ($event['type'] ?? 'weekly') === 'date' ? 'block' : 'hidden'; ?> md:col-span-1">
-                                                    <input type="date" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][date]" value="<?php echo e($event['date'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                    <input type="date" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][date]" value="<?php echo e($event['date'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                 </div>
 
                                                 <div class="md:col-span-1">
-                                                    <input type="time" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][time]" value="<?php echo e($event['time'] ?? ''); ?>" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                    <input type="time" name="setting[<?php echo e($field['key']); ?>][<?php echo $index; ?>][time]" value="<?php echo e($event['time'] ?? ''); ?>" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                 </div>
                                             </div>
                                         </div>
@@ -473,17 +473,17 @@ require_once __DIR__ . '/includes/header.php';
                                             </button>
                                         </div>
                                         <div class="w-full grid grid-cols-1 md:grid-cols-4 gap-3">
-                                            <input type="text" name="setting[<?php echo e($field['key']); ?>][__INDEX__][name]" value="" placeholder="Event Name (e.g. Celebration Service)" class="md:col-span-4 w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                            <input type="text" name="setting[<?php echo e($field['key']); ?>][__INDEX__][name]" value="" placeholder="Event Name (e.g. Celebration Service)" class="md:col-span-4 w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                             
                                             <div class="md:col-span-2">
-                                                <select name="setting[<?php echo e($field['key']); ?>][__INDEX__][type]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" onchange="toggleScheduleType(this)">
+                                                <select name="setting[<?php echo e($field['key']); ?>][__INDEX__][type]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" onchange="toggleScheduleType(this)">
                                                     <option value="weekly" selected>Weekly Recurring</option>
                                                     <option value="date">Specific Date</option>
                                                 </select>
                                             </div>
 
                                             <div class="schedule-day-container block md:col-span-1">
-                                                <select name="setting[<?php echo e($field['key']); ?>][__INDEX__][day]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                <select name="setting[<?php echo e($field['key']); ?>][__INDEX__][day]" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                                     <?php
                                                     $days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
                                                     foreach ($days as $day) {
@@ -494,11 +494,11 @@ require_once __DIR__ . '/includes/header.php';
                                             </div>
 
                                             <div class="schedule-date-container hidden md:col-span-1">
-                                                <input type="date" name="setting[<?php echo e($field['key']); ?>][__INDEX__][date]" value="" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                <input type="date" name="setting[<?php echo e($field['key']); ?>][__INDEX__][date]" value="" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                             </div>
 
                                             <div class="md:col-span-1">
-                                                <input type="time" name="setting[<?php echo e($field['key']); ?>][__INDEX__][time]" value="" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                                <input type="time" name="setting[<?php echo e($field['key']); ?>][__INDEX__][time]" value="" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                             </div>
                                         </div>
                                     </div>
@@ -594,7 +594,7 @@ require_once __DIR__ . '/includes/header.php';
                                 </script>
                             <?php elseif ($field['type'] === 'boolean'): ?>
                                 <div class="flex flex-col gap-2">
-                                    <select name="setting[<?php echo e($field['key']); ?>]" id="input_<?php echo e(str_replace('.', '_', $field['key'])); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                    <select name="setting[<?php echo e($field['key']); ?>]" id="input_<?php echo e(str_replace('.', '_', $field['key'])); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                         <option value="1" <?php echo $val == '1' ? 'selected' : ''; ?>>Yes, we are currently live streaming</option>
                                         <option value="0" <?php echo $val != '1' ? 'selected' : ''; ?>>No, stream is offline</option>
                                     </select>
@@ -604,7 +604,7 @@ require_once __DIR__ . '/includes/header.php';
                                     <input type="<?php echo e($field['type']); ?>" name="setting[<?php echo e($field['key']); ?>]"
                                            id="input_<?php echo e(str_replace('.', '_', $field['key'])); ?>"
                                            value="<?php echo e($val); ?>"
-                                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                                            <?php if ($field['type'] === 'url') echo 'placeholder="https://"'; ?>
                                     >
                                     <?php if ($field['key'] === 'live.embed_url' && $val !== ''): ?>
@@ -639,3 +639,4 @@ require_once __DIR__ . '/includes/header.php';
             </form>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

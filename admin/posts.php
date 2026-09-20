@@ -176,13 +176,13 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title *</label>
-                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? e($editing['title']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Category</label>
-                    <select name="category" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                    <select name="category" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                         <?php foreach (['blog' => 'Blog', 'announcement' => 'Announcement', 'devotional' => 'Devotional'] as $val => $label): ?>
                             <option value="<?php echo $val; ?>" <?php echo $editing && $editing['category'] === $val ? 'selected' : ''; ?>><?php echo $label; ?></option>
                         <?php endforeach; ?>
@@ -273,3 +273,4 @@ require_once __DIR__ . '/includes/header.php';
             <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

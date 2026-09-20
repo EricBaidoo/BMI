@@ -28,7 +28,7 @@ try {
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
     
     <!-- Quick Stat Cards -->
-    <a href="messages.php" class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-blue-300 transition-all group relative overflow-hidden">
+    <a href="messages.php" class="bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-md hover:border-blue-300 transition-all group relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <?php echo render_icon('inbox'); ?>
         </div>
@@ -43,7 +43,7 @@ try {
         </div>
     </a>
 
-    <a href="sermons.php" class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:indigo-300 transition-all group relative overflow-hidden">
+    <a href="sermons.php" class="bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-md hover:indigo-300 transition-all group relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <?php echo render_icon('video-camera'); ?>
         </div>
@@ -58,7 +58,7 @@ try {
         </div>
     </a>
 
-    <a href="events.php" class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all group relative overflow-hidden">
+    <a href="events.php" class="bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-md hover:border-emerald-300 transition-all group relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <?php echo render_icon('calendar'); ?>
         </div>
@@ -73,7 +73,7 @@ try {
         </div>
     </a>
 
-    <a href="posts.php" class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm hover:shadow-md hover:border-amber-300 transition-all group relative overflow-hidden">
+    <a href="posts.php" class="bg-white p-6 rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 hover:shadow-md hover:border-amber-300 transition-all group relative overflow-hidden">
         <div class="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
             <?php echo render_icon('newspaper'); ?>
         </div>
@@ -92,7 +92,7 @@ try {
 <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
     
     <!-- Quick Actions -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
             <h2 class="font-semibold text-slate-800">Quick Actions</h2>
         </div>
@@ -125,7 +125,7 @@ try {
     </div>
 
     <!-- System Info -->
-    <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+    <div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden flex flex-col">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between">
             <h2 class="font-semibold text-slate-800">System Information</h2>
         </div>
@@ -153,3 +153,4 @@ try {
 </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

@@ -68,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Left: Decorative Side -->
     <div class="hidden lg:flex w-1/2 bg-brand-950 relative overflow-hidden items-center justify-center flex-col p-12 text-center text-white">
         <!-- Abstract gradient blobs behind -->
-        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-40"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[128px] opacity-40"></div>
+        <div class="absolute top-0 left-0 w-96 h-96 bg-blue-600 rounded-full mix-blend-multiply filter blur-[8rem] opacity-40"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-600 rounded-full mix-blend-multiply filter blur-[8rem] opacity-40"></div>
         
         <div class="relative z-10 max-w-md mx-auto">
             <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl mx-auto flex items-center justify-center text-3xl font-extrabold shadow-2xl shadow-blue-500/30 mb-8 border border-white/10">

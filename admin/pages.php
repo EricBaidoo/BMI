@@ -242,7 +242,7 @@ require_once __DIR__ . '/includes/header.php';
                             <?php else: ?>
                                 <input type="<?php echo e($field['type']); ?>" name="setting[<?php echo e($field['key']); ?>]"
                                        value="<?php echo e($val); ?>"
-                                       class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                       class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                             <?php endif; ?>
                         </div>
                     <?php else: ?>
@@ -256,3 +256,4 @@ require_once __DIR__ . '/includes/header.php';
             </form>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

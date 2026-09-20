@@ -78,20 +78,20 @@ require_once __DIR__ . '/includes/header.php';
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Current password</label>
                     <input type="password" name="current_password" required
-                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                            autocomplete="current-password">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">New password</label>
                     <input type="password" name="new_password" required minlength="10"
-                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                            autocomplete="new-password">
                     <p class="mt-1.5 text-xs text-slate-500">At least 10 characters. Use a passphrase or password manager.</p>
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Confirm new password</label>
                     <input type="password" name="confirm_password" required minlength="10"
-                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                            autocomplete="new-password">
                 </div>
 
@@ -101,3 +101,4 @@ require_once __DIR__ . '/includes/header.php';
             </form>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

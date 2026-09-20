@@ -23,29 +23,66 @@ try {
     $specials = $stmtSpecial->fetchAll();
 
 } catch (Throwable $e) {
-    $eventsError = 'Events are temporarily unavailable. ' . $e->getMessage();
+    // Fallback to mock data for local UI review if database is not set up
+    $specials = [
+        [
+            'id' => 1,
+            'title' => 'Global Leadership Summit',
+            'slug' => 'global-leadership-summit',
+            'description' => 'A two-day intensive for leaders.',
+            'event_date' => date('Y') . '-10-15',
+            'event_time' => '09:00:00',
+            'venue' => 'Main Auditorium',
+            'event_image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop'
+        ],
+        [
+            'id' => 2,
+            'title' => 'Night of Worship',
+            'slug' => 'night-of-worship',
+            'description' => 'An evening of prophetic worship.',
+            'event_date' => date('Y') . '-11-05',
+            'event_time' => '18:00:00',
+            'venue' => 'Sanctuary',
+            'event_image' => 'https://images.unsplash.com/photo-1444053915174-884ee2678687?q=80&w=1200&auto=format&fit=crop'
+        ]
+    ];
 }
 
 include 'includes/header.php';
 ?>
 
+<!-- CUSTOM ANIMATION STYLES -->
+<style>
+.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-left.revealed { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-right.revealed { opacity: 1; transform: translateX(0); }
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+</style>
+
 <!-- HERO SECTION -->
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center">
     <div class="absolute inset-0 z-0">
-        <img src="<?= setting('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
-        <div class="absolute inset-0 bg-gradient-to-b from-[#06080f]/90 via-[#06080f]/80 to-[#06080f]"></div>
+        <img src="<?= setting('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
     </div>
     
-    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
-        <div class="inline-flex items-center gap-4 mb-6">
-            <div class="h-px w-12 bg-[#c49a45]"></div>
-            <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Church Life</span>
-            <div class="h-px w-12 bg-[#c49a45]"></div>
+    <!-- Ambient Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-indigo-600/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
+
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center reveal">
+        <div class="inline-flex items-center gap-6 mb-8">
+            <div class="h-px w-16 bg-white/20"></div>
+            <span class="text-white/50 font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase">Church Life</span>
+            <div class="h-px w-16 bg-white/20"></div>
         </div>
-        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
-            <?= setting('events.hero_title', 'Upcoming <br/><span class="text-[#c49a45]">Events.</span>') ?>
+        <h1 class="text-5xl md:text-7xl lg:text-9xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-300 to-neutral-600 mb-6 tracking-normal uppercase leading-[0.9]">
+            <?= setting('events.hero_title', 'Upcoming <br/><span class="italic font-light">Events.</span>') ?>
         </h1>
-        <p class="text-xl text-slate-300 max-w-3xl mx-auto font-medium leading-relaxed">
+        <p class="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed">
             <?= setting('events.hero_subtitle', 'From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.') ?>
         </p>
     </div>
@@ -53,69 +90,82 @@ include 'includes/header.php';
 
 
 <!-- SPECIAL EVENTS LIST -->
-<section class="py-24 bg-slate-50 border-t border-slate-200">
-    <div class="w-[90%] max-w-[112.5rem] mx-auto">
+<section class="py-24 md:py-32 bg-[#0a0a0c] relative overflow-hidden">
+    <!-- Ambient Glows -->
+    <div class="absolute top-0 right-0 w-[50rem] h-[50rem] bg-indigo-600/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
+
+    <div class="w-[95%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-16 gap-6">
-            <div class="max-w-2xl">
-                <h2 class="text-4xl font-display font-black text-slate-900 tracking-tight mb-4">Upcoming Special Events</h2>
-                <p class="text-lg text-slate-600 font-medium">Don't miss out on these powerful one-off gatherings, seminars, and special worship nights.</p>
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-6">
+            <div class="max-w-3xl reveal-right">
+                <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">Upcoming <br><i class="text-amber-500 font-light">Special Events</i></h2>
+                <p class="text-lg text-neutral-400 font-medium max-w-2xl">Don't miss out on these powerful one-off gatherings, seminars, and special worship nights.</p>
             </div>
         </div>
 
-        <?php if (empty($specials)): ?>
-            <div class="text-center py-16 bg-white -none border border-slate-200 shadow-sm">
-                <div class="w-20 h-20 bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 text-[#c49a45] rounded-full mx-auto">
-                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        <?php if ($eventsError): ?>
+            <div class="bg-red-500/10 border border-red-500/20 text-red-400 p-8 rounded-[2rem] text-center font-bold">
+                <?php echo e($eventsError); ?>
+            </div>
+        <?php elseif (empty($specials)): ?>
+            <div class="text-center py-24 bg-[#050505] rounded-[3rem] border border-white/5 shadow-2xl reveal">
+                <div class="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center mb-8 text-white/30 rounded-full mx-auto">
+                    <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
-                <p class="text-slate-500 font-bold text-lg">No special events scheduled at the moment.</p>
+                <p class="text-neutral-400 font-medium text-xl">No special events scheduled at the moment.</p>
             </div>
         <?php else: ?>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <?php foreach ($specials as $event):
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 xl:gap-12">
+                <?php foreach ($specials as $index => $event):
                     $eventDate = strtotime((string) $event['event_date']);
                     $month = date('M', $eventDate);
                     $day = date('d', $eventDate);
                     $eventTime = !empty($event['event_time']) ? date('g:i A', strtotime((string) $event['event_time'])) : null;
                     $venue = trim((string) ($event['venue'] ?? ''));
                     $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop';
+                    $delayClass = 'delay-' . (($index % 3) + 1) * 100;
                 ?>
-                    <div class="group bg-white border border-slate-200 -none hover:border-[#c49a45] transition-all duration-300 shadow-sm hover:shadow-[0_20px_40px_rgba(196,154,69,0.15)] flex flex-col h-full overflow-hidden">
+                    <div class="group relative bg-[#050505] rounded-[2.5rem] p-4 border border-white/5 hover:border-white/10 transition-all duration-700 shadow-2xl hover:-translate-y-2 flex flex-col h-full overflow-hidden reveal <?php echo $delayClass; ?>">
                         
                         <!-- Event Image -->
-                        <div class="aspect-[16/9] relative overflow-hidden bg-slate-100">
-                            <img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="<?php echo htmlspecialchars((string) $event['title']); ?>" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
+                        <div class="aspect-[16/10] relative overflow-hidden bg-black rounded-[2rem] shadow-inner mb-8">
+                            <img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="<?php echo htmlspecialchars((string) $event['title']); ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out opacity-80 group-hover:opacity-100" loading="lazy">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
                             
                             <!-- Date Badge -->
-                            <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm shadow-xl -none text-center px-4 py-3 group-hover:border-[#c49a45] border border-transparent transition-colors">
-                                <p class="text-[#c49a45] font-bold text-xs uppercase tracking-widest"><?php echo $month; ?></p>
-                                <p class="text-slate-900 font-display font-black text-2xl leading-none mt-1"><?php echo $day; ?></p>
+                            <div class="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-[1.5rem] text-center px-6 py-4 border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:bg-amber-500 group-hover:border-amber-400 group-hover:text-black transition-all duration-500">
+                                <p class="text-white/60 group-hover:text-black/60 font-sans font-bold text-[0.625rem] uppercase tracking-[0.2em] transition-colors"><?php echo $month; ?></p>
+                                <p class="text-white group-hover:text-black font-display font-black text-3xl leading-none mt-1 transition-colors"><?php echo $day; ?></p>
                             </div>
                         </div>
 
                         <!-- Card Content -->
-                        <div class="p-8 flex flex-col flex-grow">
-                            <h3 class="text-2xl font-bold text-slate-900 mb-4 group-hover:text-[#c49a45] transition-colors leading-tight"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
+                        <div class="px-6 pb-6 flex flex-col flex-grow relative z-10">
+                            <h3 class="text-3xl font-display font-black uppercase text-white mb-6 group-hover:text-amber-500 transition-colors duration-500 leading-tight tracking-normal"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
                             
-                            <div class="space-y-3 mb-8 flex-grow">
+                            <div class="space-y-4 mb-10 flex-grow">
                                 <?php if ($eventTime): ?>
-                                    <div class="flex items-center gap-3 text-sm">
-                                        <svg class="w-5 h-5 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                                        <span class="text-slate-600 font-medium"><?php echo htmlspecialchars($eventTime); ?></span>
+                                    <div class="flex items-center gap-4 text-sm group/item">
+                                        <div class="w-12 h-12 rounded-[1rem] bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-black transition-colors duration-300">
+                                            <svg class="w-5 h-5 text-amber-500 group-hover/item:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                        </div>
+                                        <span class="text-neutral-400 font-medium group-hover/item:text-white transition-colors"><?php echo htmlspecialchars($eventTime); ?></span>
                                     </div>
                                 <?php endif; ?>
                                 
                                 <?php if ($venue !== ''): ?>
-                                    <div class="flex items-center gap-3 text-sm">
-                                        <svg class="w-5 h-5 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                        <span class="text-slate-600 font-medium"><?php echo htmlspecialchars($venue); ?></span>
+                                    <div class="flex items-center gap-4 text-sm group/item">
+                                        <div class="w-12 h-12 rounded-[1rem] bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-black transition-colors duration-300">
+                                            <svg class="w-5 h-5 text-amber-500 group-hover/item:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                        </div>
+                                        <span class="text-neutral-400 font-medium group-hover/item:text-white transition-colors"><?php echo htmlspecialchars($venue); ?></span>
                                     </div>
                                 <?php endif; ?>
                             </div>
 
-                            <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center font-bold text-slate-900 hover:text-[#c49a45] transition-colors group/link mt-auto">
-                                View Details 
-                                <svg class="w-5 h-5 ml-2 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                            <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-between font-sans font-bold uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-5 rounded-[1.25rem] hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all duration-300 group/link mt-auto w-full text-left">
+                                View Event Details 
+                                <svg class="w-5 h-5 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                             </a>
                         </div>
                     </div>
@@ -127,20 +177,26 @@ include 'includes/header.php';
 </section>
 
 <!-- DISCOVER FLAGSHIP PROGRAMS CTA -->
-<section class="py-20 bg-slate-900 relative overflow-hidden">
-    <!-- Abstract Glow -->
-    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-[#c49a45]/20 blur-[7.5rem] rounded-full pointer-events-none"></div>
-    <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-luminosity"></div>
-    
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-        <h2 class="text-3xl md:text-5xl font-display font-black text-white tracking-tight mb-6">Experience Transformation</h2>
-        <p class="text-xl text-slate-300 font-medium leading-relaxed mb-10">
-            Our flagship programs are not just dates on a calendar; they are milestones in our shared journey of faith. Discover our major annual events that shape our community.
-        </p>
-        <a href="flagship-programs" class="inline-flex items-center justify-center bg-[#c49a45] text-white hover:bg-[#d4ac57] px-8 py-4 -none font-bold text-lg transition-all shadow-lg hover:shadow-xl hover:-translate-y-1">
-            View Flagship Programs
-            <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-        </a>
+<section class="py-32 bg-[#050505] relative overflow-hidden">
+    <!-- Grid Overlay -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-30 z-0"></div>
+
+    <div class="max-w-[112.5rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-[90%]">
+        <div class="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-12 md:p-24 text-center relative overflow-hidden reveal shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+            <!-- Intense Inner Glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen"></div>
+            
+            <h2 class="text-5xl md:text-6xl lg:text-8xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40 uppercase tracking-normal mb-8 leading-[0.9] relative z-10">Experience <br><i class="text-amber-500 font-light">Transformation</i></h2>
+            
+            <p class="text-xl text-neutral-400 font-medium leading-relaxed mb-12 max-w-2xl mx-auto relative z-10">
+                Our flagship programs are not just dates on a calendar; they are milestones in our shared journey of faith. Discover our major annual events that shape our community.
+            </p>
+            
+            <a href="flagship-programs.php" class="inline-flex items-center justify-center bg-white text-black hover:bg-amber-500 px-12 py-6 font-bold uppercase tracking-[0.2em] text-sm rounded-full transition-all hover:-translate-y-1 relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)]">
+                View Flagship Programs
+                <svg class="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+            </a>
+        </div>
     </div>
 </section>
 

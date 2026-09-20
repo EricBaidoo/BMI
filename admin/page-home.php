@@ -417,3 +417,4 @@ function render_image_setting($key, $label) {
 </div>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

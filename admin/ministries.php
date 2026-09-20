@@ -151,17 +151,17 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Name *</label>
-                    <input type="text" name="name" required maxlength="150" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="name" required maxlength="150" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? htmlspecialchars((string) $editing['name']) : ''; ?>">
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Leader</label>
-                    <input type="text" name="leader_name" maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="leader_name" maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? htmlspecialchars((string) ($editing['leader_name'] ?? '')) : ''; ?>">
                 </div>
                 <div class="md:col-span-2">
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Meeting schedule</label>
-                    <input type="text" name="meeting_schedule" maxlength="150" placeholder="e.g. Saturdays, 4:00 PM" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="meeting_schedule" maxlength="150" placeholder="e.g. Saturdays, 4:00 PM" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? htmlspecialchars((string) ($editing['meeting_schedule'] ?? '')) : ''; ?>">
                 </div>
 
@@ -243,3 +243,4 @@ require_once __DIR__ . '/includes/header.php';
             <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

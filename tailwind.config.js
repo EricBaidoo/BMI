@@ -10,18 +10,25 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          900: '#010115', // Deepest Navy (Backgrounds, Dark Text)
-          800: '#03033A', // Dark Navy
-          700: '#05055A', // Navy
-          500: '#0A0AA0', // Dark Royal Blue (Hover states)
-          400: '#0D0DC0', // Bright Royal Blue (Buttons, Accents)
-          300: '#1010E0', // Vibrant Electric Blue
-          light: '#F4F7F9' // Very light cool gray for section backgrounds
-        }
+          950: '#000000', // True Black Base
+          900: '#0a0a0a', // Deep Charcoal
+          800: '#171717', // Neutral Gray Dark
+          700: '#262626',
+          600: '#404040',
+          500: '#737373',
+          400: '#a3a3a3',
+          300: '#d4d4d4',
+          200: '#e5e5e5',
+          100: '#f5f5f5',
+          50:  '#fafafa',
+        },
+        accent: '#06b6d4', // Retain Cyan for glows
+        give:   '#f59e0b', // Retain Amber for the give CTA
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['Outfit', 'system-ui', 'sans-serif'],
+        display: ['"Playfair Display"', 'Georgia', 'serif'], // Elegant Serif
+        accent: ['Outfit', 'system-ui', 'sans-serif'], // Modern Geometric
       }
     }
   },

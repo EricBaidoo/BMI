@@ -126,9 +126,15 @@ $feedback = $flashMap[$_GET['status'] ?? ''] ?? '';
 $events = [];
 try {
     $pdo = db_connect();
+    $page = max(1, (int)($_GET['p'] ?? 1));
+    $limit = 15;
+    $offset = ($page - 1) * $limit;
+    $total = $pdo->query('SELECT COUNT(*) FROM events')->fetchColumn();
+    $totalPages = max(1, ceil($total / $limit));
+
     $events = $pdo->query(
-        'SELECT id, title, event_type, description, event_date, end_date, event_time, venue, event_image
-         FROM events ORDER BY event_date DESC, event_time DESC, id DESC'
+        "SELECT id, title, event_type, description, event_date, end_date, event_time, venue, event_image
+         FROM events ORDER BY event_date DESC, event_time DESC, id DESC LIMIT $limit OFFSET $offset"
     )->fetchAll();
 } catch (Throwable $e) {
     if ($error === '') {
@@ -163,13 +169,13 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title *</label>
-                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingEvent ? htmlspecialchars((string) $editingEvent['title']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Event Type</label>
-                    <select name="event_type" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                    <select name="event_type" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                         <option value="special" <?php echo ($editingEvent && ($editingEvent['event_type'] ?? '') === 'special') ? 'selected' : ''; ?>>Special Event</option>
                         <option value="flagship" <?php echo ($editingEvent && ($editingEvent['event_type'] ?? '') === 'flagship') ? 'selected' : ''; ?>>Flagship Program</option>
                     </select>
@@ -177,25 +183,25 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Start Date *</label>
-                    <input type="date" name="event_date" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="date" name="event_date" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingEvent ? htmlspecialchars((string) $editingEvent['event_date']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">End Date (Optional)</label>
-                    <input type="date" name="end_date" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="date" name="end_date" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingEvent && $editingEvent['end_date'] ? htmlspecialchars((string) $editingEvent['end_date']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Time</label>
-                    <input type="time" name="event_time" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="time" name="event_time" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingEvent && $editingEvent['event_time'] ? htmlspecialchars((string) $editingEvent['event_time']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Venue</label>
-                    <input type="text" name="venue" maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="venue" maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingEvent ? htmlspecialchars((string) ($editingEvent['venue'] ?? '')) : ''; ?>">
                 </div>
 
@@ -284,5 +290,18 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+
+            <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                <div class="mt-8 flex justify-center gap-2">
+                    <?php if ($page > 1): ?>
+                        <a href="?p=<?php echo $page - 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Previous</a>
+                    <?php endif; ?>
+                    <span class="px-4 py-2 text-sm font-medium text-slate-500">Page <?php echo $page; ?> of <?php echo $totalPages; ?></span>
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?p=<?php echo $page + 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Next</a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

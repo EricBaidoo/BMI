@@ -43,3 +43,23 @@ if (!headers_sent()) {
     header('Referrer-Policy: strict-origin-when-cross-origin');
     header('X-XSS-Protection: 1; mode=block');
 }
+
+// Global Exception Handler
+set_exception_handler(function (Throwable $e) use ($appDebug) {
+    if (!headers_sent()) {
+        http_response_code(500);
+    }
+    
+    // Always log the error securely
+    error_log((string)$e);
+
+    if ($appDebug) {
+        echo "<div style='border:1px solid red; padding:20px; background:#fdd; font-family:monospace; margin:20px;'>";
+        echo "<h3>Uncaught Exception</h3>";
+        echo nl2br(htmlspecialchars((string)$e));
+        echo "</div>";
+    } else {
+        echo "<!DOCTYPE html><html lang='en'><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><title>500 - Internal Server Error</title><script src='https://cdn.tailwindcss.com'></script></head><body class='bg-slate-50 flex items-center justify-center h-screen'><div class='max-w-md text-center p-8 bg-white rounded-2xl shadow-xl'><h1 class='text-4xl font-bold text-slate-800 mb-4'>Oops!</h1><p class='text-slate-600 mb-6'>Something went wrong on our servers. We've logged the error and our team is looking into it.</p><a href='/' class='inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors'>Return Home</a></div></body></html>";
+    }
+    exit;
+});

@@ -24,11 +24,26 @@ $urls = [
 
 try {
     $pdo = db_connect();
+    
+    // Blog Posts
     $rows = $pdo->query("SELECT slug, GREATEST(COALESCE(published_at, '1970-01-01'), created_at) AS lastmod
                          FROM posts WHERE published_at IS NOT NULL ORDER BY published_at DESC LIMIT 500")->fetchAll();
     foreach ($rows as $r) {
         $urls[] = ['/blog?post=' . rawurlencode((string) $r['slug']), '0.6', 'monthly', (string) $r['lastmod']];
     }
+    
+    // Sermons
+    $sermons = $pdo->query("SELECT id, sermon_date AS lastmod FROM sermons ORDER BY sermon_date DESC LIMIT 500")->fetchAll();
+    foreach ($sermons as $s) {
+        $urls[] = ['/sermon.php?id=' . (int) $s['id'], '0.8', 'weekly', (string) $s['lastmod']];
+    }
+    
+    // Events
+    $events = $pdo->query("SELECT id, event_date AS lastmod FROM events ORDER BY event_date DESC LIMIT 500")->fetchAll();
+    foreach ($events as $e) {
+        $urls[] = ['/event-detail.php?id=' . (int) $e['id'], '0.7', 'weekly', (string) $e['lastmod']];
+    }
+    
 } catch (Throwable $e) {
     // ignore — still emit static URLs
 }
@@ -46,3 +61,4 @@ foreach ($urls as $u) {
     echo "  </url>\n";
 }
 echo '</urlset>' . "\n";
+

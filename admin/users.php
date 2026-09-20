@@ -169,19 +169,19 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Full Name *</label>
-                    <input type="text" name="name" required maxlength="100" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="name" required maxlength="100" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? e($editing['name']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Email Address *</label>
-                    <input type="email" name="email" required maxlength="150" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="email" name="email" required maxlength="150" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editing ? e($editing['email']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Role *</label>
-                    <select name="role" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                    <select name="role" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                         <option value="admin" <?php echo $editing && $editing['role'] === 'admin' ? 'selected' : ''; ?>>Admin (Full Access)</option>
                         <option value="editor" <?php echo $editing && $editing['role'] === 'editor' ? 'selected' : ''; ?>>Editor (Content Only)</option>
                     </select>
@@ -191,7 +191,7 @@ require_once __DIR__ . '/includes/header.php';
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">
                         Password <?php echo $editing ? '(Leave blank to keep current)' : '*'; ?>
                     </label>
-                    <input type="password" name="password" <?php echo $editing ? '' : 'required'; ?> minlength="10" autocomplete="new-password" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                    <input type="password" name="password" <?php echo $editing ? '' : 'required'; ?> minlength="10" autocomplete="new-password" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                 </div>
 
                 <div class="md:col-span-2 pt-4 border-t border-slate-100 flex gap-3">
@@ -258,3 +258,4 @@ require_once __DIR__ . '/includes/header.php';
             <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

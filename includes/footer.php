@@ -1,199 +1,145 @@
 </main>
 
-<!-- FOOTER -->
+<!-- CINEMATIC FOOTER (End Credits Style) -->
 <?php if (!isset($hideFooter) || !$hideFooter): ?>
-<footer class="relative bg-slate-950 text-white pt-28 pb-10 overflow-hidden border-t border-white/5 mt-12">
-    <!-- Subtle Background Glow -->
-    <div class="absolute top-0 right-0 w-3/4 h-3/4 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-[#c49a45]/10 via-slate-950/0 to-transparent pointer-events-none z-0"></div>
+<footer class="relative bg-[#000000] text-white pt-24 pb-12 overflow-hidden mt-0 z-10">
+    <!-- Very subtle radial glow from the bottom -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[50rem] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent pointer-events-none z-0"></div>
 
-    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center flex flex-col items-center">
         
-        <!-- Top CTA Section -->
-        <div class="flex flex-col lg:flex-row items-center justify-between gap-12 mb-20 pb-16 border-b border-white/10">
-            <div class="max-w-2xl text-center lg:text-left">
-                <h2 class="font-display font-black text-5xl md:text-6xl tracking-tight mb-6 text-white leading-none">
-                    Stay <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#c49a45] to-[#e8c881]">Connected.</span>
-                </h2>
-                <p class="text-slate-400 text-lg md:text-xl leading-relaxed font-light">
-                    Join our newsletter to receive weekly devotionals, updates on global missions, and upcoming events directly to your inbox.
-                </p>
-            </div>
-            <div class="w-full lg:w-auto">
-                <form class="flex flex-col sm:flex-row items-stretch w-full lg:w-[31.25rem] gap-3 sm:gap-0 group">
-                    <input type="email" placeholder="Enter your email address" class="bg-white/5 border border-white/10 sm:border-r-0 text-white px-6 py-4 w-full focus:outline-none focus:border-[#c49a45]/50 focus:bg-white/10 transition-all placeholder-slate-500 font-medium backdrop-blur-md" required>
-                    <button type="submit" class="bg-gradient-to-r from-[#c49a45] to-[#d4ac57] hover:from-[#d4ac57] hover:to-[#c49a45] text-white px-10 py-4 font-bold text-sm uppercase tracking-widest transition-all whitespace-nowrap shadow-[0_0_20px_rgba(196,154,69,0.3)] hover:shadow-[0_0_30px_rgba(196,154,69,0.5)]">
-                        Subscribe
-                    </button>
-                </form>
-            </div>
+        <!-- The Final Call -->
+        <h2 class="font-display font-normal text-4xl md:text-6xl lg:text-7xl tracking-tight mb-12 text-white leading-[0.9]">
+            Stay <i class="text-white/50">Connected.</i>
+        </h2>
+        
+        <!-- Newsletter Block -->
+        <form class="flex flex-col sm:flex-row items-stretch w-full max-w-xl mx-auto gap-0 group mb-16 border-b border-white/20 pb-4">
+            <input type="email" placeholder="Enter your email address" class="bg-transparent border-none text-white px-2 py-4 w-full focus:outline-none placeholder-white/30 font-sans tracking-[0.2em] text-sm uppercase text-center sm:text-left transition-all" required>
+            <button type="submit" class="bg-transparent text-white/50 hover:text-white px-8 py-4 font-sans font-medium text-xs uppercase tracking-[0.3em] transition-all whitespace-nowrap">
+                Subscribe
+            </button>
+        </form>
+
+        <!-- Minimalist Site Map -->
+        <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-16 max-w-4xl mx-auto">
+            <a href="about" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">About Us</a>
+            <a href="ministries" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Ministries</a>
+            <a href="sermons" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Sermons</a>
+            <a href="events" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Events</a>
+            <a href="visit" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Visit</a>
+            <a href="donate" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Give</a>
+            <a href="contact" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Contact</a>
         </div>
 
-        <!-- Main Links Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-16 lg:gap-8 mb-20">
+        <!-- Social & Contact Lines -->
+        <div class="flex flex-col items-center gap-6 mb-16">
+            <div class="flex items-center gap-8">
+                <?php 
+                    $dynamicSocials = json_decode(setting('social.links', '[]'), true) ?: [];
+                    foreach ($dynamicSocials as $socialLink): 
+                        if(empty($socialLink['url'])) continue;
+                ?>
+                    <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="text-white/30 hover:text-white transition-colors duration-500" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>">
+                        <?php if (!empty($socialLink['icon'])): ?>
+                            <span class="w-5 h-5 flex items-center justify-center *:w-full *:h-full">
+                                <?php echo $socialLink['icon']; ?>
+                            </span>
+                        <?php else: ?>
+                            <span class="font-sans text-[0.625rem] uppercase tracking-[0.2em]"><?php echo htmlspecialchars($socialLink['name']); ?></span>
+                        <?php endif; ?>
+                    </a>
+                <?php endforeach; ?>
+            </div>
             
-            <!-- Brand Column -->
-            <div class="lg:col-span-4 pr-8 text-center md:text-left">
-                <a href="./" class="inline-flex items-center gap-4 mb-8 group">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-[#c49a45] blur-md opacity-20 group-hover:opacity-40 transition-opacity duration-500"></div>
-                        <img class="h-12 w-auto relative z-10" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
-                    </div>
-                    <span class="font-display font-black text-2xl tracking-tight text-white"><?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries')); ?></span>
-                </a>
-                <p class="text-slate-400 text-sm leading-relaxed mb-8 font-light">
-                    An international ministry dedicated to empowering communities, teaching uncompromised biblical truth, and fostering a global legacy of faith and action.
+            <?php $address = setting('contact.address'); if($address): ?>
+                <p class="text-white/30 font-sans text-xs tracking-widest uppercase"><?php echo htmlspecialchars($address); ?></p>
+            <?php endif; ?>
+            
+            <?php $phone = setting('contact.phone_primary'); if($phone): ?>
+                <p class="text-white/30 font-sans text-xs tracking-widest uppercase"><?php echo htmlspecialchars($phone); ?></p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Final Mark -->
+        <div class="flex flex-col items-center">
+            <img class="h-12 w-auto mb-10 opacity-30 grayscale mix-blend-screen" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
+            
+            <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
+                <p class="text-white/20 text-[0.55rem] font-sans tracking-[0.3em] uppercase">
+                    &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries')); ?>. All rights reserved.
                 </p>
-                <div class="flex flex-wrap gap-4 justify-center md:justify-start">
-                    <?php 
-                        $dynamicSocials = json_decode(setting('social.links', '[]'), true) ?: [];
-                        foreach ($dynamicSocials as $socialLink): 
-                            if(empty($socialLink['url'])) continue;
-                    ?>
-                        <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="w-12 h-12 bg-white/5 flex items-center justify-center hover:bg-[#c49a45] hover:-translate-y-1 transition-all duration-300 text-slate-400 hover:text-white border border-white/10 hover:border-[#c49a45] shadow-lg hover:shadow-[#c49a45]/30" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>" title="<?php echo htmlspecialchars($socialLink['name']); ?>">
-                            <?php if (!empty($socialLink['icon'])): ?>
-                                <span class="w-5 h-5 flex items-center justify-center *:w-full *:h-full">
-                                    <?php echo $socialLink['icon']; ?>
-                                </span>
-                            <?php else: ?>
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
-                            <?php endif; ?>
-                        </a>
-                    <?php endforeach; ?>
+                <div class="hidden md:block w-1 h-1 rounded-full bg-white/10"></div>
+                <div class="flex items-center gap-6">
+                    <a href="privacy.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Privacy</a>
+                    <a href="privacy.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Terms</a>
+                    <a href="admin/login.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Staff Login</a>
                 </div>
             </div>
-
-            <!-- Links Columns -->
-            <div class="lg:col-span-2 lg:col-start-6">
-                <h4 class="font-display font-bold text-white tracking-widest uppercase text-xs mb-8 flex items-center gap-3">
-                    <span class="w-1.5 h-1.5 bg-gradient-to-r from-[#c49a45] to-[#e8c881] shadow-[0_0_10px_rgba(196,154,69,0.8)]"></span>
-                    Church Life
-                </h4>
-                <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="about" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> About Us</a></li>
-                    <li><a href="ministries" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Our Ministries</a></li>
-                    <li><a href="sermons" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Watch Sermons</a></li>
-                    <li><a href="events" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Upcoming Events</a></li>
-                </ul>
-            </div>
-
-            <div class="lg:col-span-2">
-                <h4 class="font-display font-bold text-white tracking-widest uppercase text-xs mb-8 flex items-center gap-3">
-                    <span class="w-1.5 h-1.5 bg-gradient-to-r from-[#c49a45] to-[#e8c881] shadow-[0_0_10px_rgba(196,154,69,0.8)]"></span>
-                    Get Involved
-                </h4>
-                <ul class="space-y-4 text-sm font-medium">
-                    <li><a href="visit" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Plan a Visit</a></li>
-                    <li><a href="donate" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Give Online</a></li>
-                    <li><a href="contact" class="text-slate-400 hover:text-white hover:translate-x-2 flex items-center gap-2 transition-all duration-300 group"><span class="w-0 h-0.5 bg-[#c49a45] transition-all duration-300 group-hover:w-3"></span> Contact Us</a></li>
-                </ul>
-            </div>
-
-            <div class="lg:col-span-3">
-                <h4 class="font-display font-bold text-white tracking-widest uppercase text-xs mb-8 flex items-center gap-3">
-                    <span class="w-1.5 h-1.5 bg-gradient-to-r from-[#c49a45] to-[#e8c881] shadow-[0_0_10px_rgba(196,154,69,0.8)]"></span>
-                    Contact
-                </h4>
-                <ul class="space-y-6 text-sm text-slate-400 font-medium">
-                    <?php $address = setting('contact.address'); if($address): ?>
-                        <li class="flex items-start group">
-                            <div class="w-10 h-10 bg-white/5 flex items-center justify-center mr-4 flex-shrink-0 border border-white/10 group-hover:border-[#c49a45] group-hover:bg-[#c49a45]/10 group-hover:text-[#c49a45] transition-all duration-300">
-                                <svg class="w-4 h-4 text-slate-400 group-hover:text-[#c49a45] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                            </div>
-                            <span class="leading-relaxed pt-2 group-hover:text-white transition-colors duration-300"><?php echo htmlspecialchars($address); ?></span>
-                        </li>
-                    <?php endif; ?>
-                    
-                    <?php $phone = setting('contact.phone_primary'); if($phone): ?>
-                        <li class="flex items-start group">
-                            <div class="w-10 h-10 bg-white/5 flex items-center justify-center mr-4 flex-shrink-0 border border-white/10 group-hover:border-[#c49a45] group-hover:bg-[#c49a45]/10 group-hover:text-[#c49a45] transition-all duration-300">
-                                <svg class="w-4 h-4 text-slate-400 group-hover:text-[#c49a45] transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>
-                            </div>
-                            <span class="pt-2 group-hover:text-white transition-colors duration-300"><?php echo htmlspecialchars($phone); ?></span>
-                        </li>
-                    <?php endif; ?>
-                </ul>
-            </div>
-
         </div>
 
-        <!-- Bottom Copyright -->
-        <div class="border-t border-white/10 pt-8 pb-4 flex flex-col md:flex-row justify-between items-center gap-6">
-            <p class="text-slate-500 text-sm font-medium tracking-wide">
-                &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries International')); ?>. All rights reserved.
-            </p>
-            <div class="flex items-center gap-8">
-                <a href="#" class="text-slate-500 hover:text-white text-sm font-medium transition-colors hover:underline">Privacy Policy</a>
-                <a href="#" class="text-slate-500 hover:text-white text-sm font-medium transition-colors hover:underline">Terms of Service</a>
-                <a href="admin/login.php" class="text-slate-500 hover:text-white text-sm font-medium transition-colors hover:underline">Staff Login</a>
-            </div>
-        </div>
     </div>
 </footer>
 <?php endif; ?>
 
+<!-- Cookie Consent Toast -->
+<div id="cookie-banner" class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-sm w-[calc(100%-2rem)] sm:w-auto bg-[#111111]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[100] opacity-0 pointer-events-none transition-all duration-500 translate-y-8 p-5">
+    <p class="text-white/80 text-sm font-sans leading-relaxed mb-4">
+        We use cookies to enhance your browsing experience and analyze traffic. 
+        <a href="privacy.php" class="text-amber-500 hover:text-amber-400 font-bold ml-1">Read More</a>
+    </p>
+    <div class="flex items-center gap-3">
+        <button onclick="acceptCookies()" class="flex-1 bg-amber-500 text-black px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-amber-400 transition-colors">Accept</button>
+        <button onclick="dismissCookies()" class="flex-1 bg-white/10 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-white/20 transition-colors">Decline</button>
+    </div>
+</div>
+
 <script>
-    // Header Scroll Effect
-    const header = document.getElementById('site-header');
-    const headerInner = document.getElementById('header-inner');
-    const isHome = <?php echo $currentPage === 'index.php' ? 'true' : 'false'; ?>;
-    const mobileBtn = document.getElementById('mobile-menu-btn');
-    
-    if (isHome) {
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 20) {
-                header.classList.remove('header-transparent');
-                header.classList.add('header-solid');
-                headerInner.classList.remove('md:h-24');
-                headerInner.classList.add('md:h-20');
-                if(mobileBtn) {
-                    mobileBtn.classList.remove('text-white');
-                    mobileBtn.classList.add('text-gray-600');
-                }
-            } else {
-                header.classList.add('header-transparent');
-                header.classList.remove('header-solid');
-                headerInner.classList.add('md:h-24');
-                headerInner.classList.remove('md:h-20');
-                if(mobileBtn) {
-                    mobileBtn.classList.add('text-white');
-                    mobileBtn.classList.remove('text-gray-600');
-                }
-            }
-        });
-        
-        // Initial check for mobile button color
-        if(window.scrollY <= 20 && mobileBtn) {
-             mobileBtn.classList.add('text-white');
-             mobileBtn.classList.remove('text-gray-600');
+    function acceptCookies() {
+        localStorage.setItem('cookieConsent', 'accepted');
+        hideCookieBanner();
+    }
+    function dismissCookies() {
+        localStorage.setItem('cookieConsent', 'declined');
+        hideCookieBanner();
+    }
+    function hideCookieBanner() {
+        const banner = document.getElementById('cookie-banner');
+        if (banner) {
+            banner.classList.remove('opacity-100', 'translate-y-0');
+            banner.classList.add('opacity-0', 'pointer-events-none', 'translate-y-8');
         }
     }
-
-    // Mobile Menu Toggle
-    const menu = document.getElementById('mobile-menu');
-
-    if(mobileBtn && menu) {
-        mobileBtn.addEventListener('click', () => {
-            const isClosed = menu.classList.contains('scale-y-0');
-            if (isClosed) {
-                menu.classList.remove('scale-y-0', 'opacity-0', 'pointer-events-none');
-                menu.classList.add('scale-y-100', 'opacity-100', 'pointer-events-auto');
-            } else {
-                menu.classList.add('scale-y-0', 'opacity-0', 'pointer-events-none');
-                menu.classList.remove('scale-y-100', 'opacity-100', 'pointer-events-auto');
-            }
-        });
-    }
+    
+    // Check consent on load
+    document.addEventListener('DOMContentLoaded', () => {
+        if (!localStorage.getItem('cookieConsent')) {
+            setTimeout(() => {
+                const banner = document.getElementById('cookie-banner');
+                if (banner) {
+                    banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-8');
+                    banner.classList.add('opacity-100', 'translate-y-0');
+                }
+            }, 1000);
+        }
+    });
 </script>
 
-<!-- AOS Animation JS -->
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<!-- Mobile Menu JS -->
+<script src="assets/js/main.js?v=<?php echo filemtime(__DIR__ . '/../assets/js/main.js') ?: time(); ?>"></script>
 <script>
-    AOS.init({
-        duration: 800,
-        once: true,
-        offset: 50,
-        easing: 'ease-out-cubic'
-    });
+    // Initialize Swup for SPA-like transitions
+    if (typeof Swup !== 'undefined') {
+        const swup = new Swup();
+        swup.hooks.on('page:view', () => {
+            if (typeof initScrollReveal === 'function') initScrollReveal();
+            if (typeof initCounters === 'function') initCounters();
+            if (typeof initParallax === 'function') initParallax();
+            if (typeof initHeroCarousel === 'function') initHeroCarousel();
+            if (typeof initSmartHeader === 'function') initSmartHeader();
+            document.dispatchEvent(new Event('swup:pageView'));
+        });
+    }
 </script>
 
 </body>

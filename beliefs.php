@@ -6,152 +6,190 @@ require_once __DIR__ . '/includes/helpers.php';
 include 'includes/header.php';
 ?>
 <!-- HERO SECTION -->
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-slate-900 overflow-hidden">
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#000000] overflow-hidden">
     <div class="absolute inset-0 z-0">
-        <img src="<?= setting('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity">
+        <img loading="lazy" src="<?= setting('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 ">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center">
         <div class="inline-flex items-center gap-4 mb-6">
-            <div class="h-px w-12 bg-[#c49a45]"></div>
-            <span class="text-[#c49a45] font-bold text-sm tracking-widest uppercase">Our Beliefs</span>
-            <div class="h-px w-12 bg-[#c49a45]"></div>
+            <div class="h-px w-12 bg-[#000000]"></div>
+            <span class="text-white/60 font-bold text-sm tracking-widest uppercase">Our Beliefs</span>
+            <div class="h-px w-12 bg-[#000000]"></div>
         </div>
-        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-tight leading-tight">
-            <?= setting('beliefs.hero_title', 'What We <br/><span class="text-[#c49a45]">Believe.</span>') ?>
+        <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-normal leading-tight">
+            <?= setting('beliefs.hero_title', 'What We <br/><span class="text-white/60">Believe.</span>') ?>
         </h1>
-        <p class="text-xl text-slate-300 max-w-3xl mx-auto font-light leading-relaxed">
+        <p class="text-xl text-white/30 max-w-3xl mx-auto font-light leading-relaxed">
             <?= setting('beliefs.intro_text', 'We are a Bible-believing, Christ-centred church standing in the historic stream of evangelical Christian faith. What follows is a summary of the core convictions that shape our preaching, our gatherings, and our life together.') ?>
         </p>
     </div>
 </section>
 
-<section class="max-w-4xl mx-auto px-4 py-12">
-
-    <div class="section-card">
-        <h2 class="text-2xl font-semibold">A Note Before You Read</h2>
-        <p class="mt-3 text-sm muted-copy leading-relaxed">
-            <?= setting('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
-        </p>
-    </div>
-
-    <ol class="mt-8 space-y-6">
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">01</p>
-            <h3 class="text-xl font-semibold mt-1">The Bible</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe the Bible — the sixty-six books of the Old and New Testaments — is the inspired, inerrant, and authoritative
-                Word of God. It is the supreme and final standard for what we believe and how we live.
+<section class="py-24 md:py-32 bg-[#F5F5F5] relative overflow-hidden text-black">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
+        
+        <div class="max-w-4xl mx-auto text-center mb-20 reveal">
+            <h2 class="text-3xl md:text-5xl font-display font-black uppercase text-black mb-6 tracking-normal">A Note Before You Read</h2>
+            <p class="text-lg md:text-xl text-black/60 font-sans font-medium leading-relaxed">
+                <?= setting('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
             </p>
-            <p class="text-xs muted-copy mt-3">2 Timothy 3:16-17 · 2 Peter 1:20-21 · Psalm 119:105</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">02</p>
-            <h3 class="text-xl font-semibold mt-1">God</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe in one true and living God who exists eternally in three persons — Father, Son, and Holy Spirit.
-                He is the Creator, Sustainer, and Sovereign over all things, perfect in love, holiness, justice, and mercy.
-            </p>
-            <p class="text-xs muted-copy mt-3">Deuteronomy 6:4 · Matthew 28:19 · Genesis 1:1 · 1 John 4:8</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">03</p>
-            <h3 class="text-xl font-semibold mt-1">Jesus Christ</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe Jesus Christ is fully God and fully man — conceived by the Holy Spirit, born of the virgin Mary, lived a
-                sinless life, taught with authority, performed miracles, was crucified for our sins, was buried and bodily raised
-                from the dead, ascended to the right hand of the Father, and will return in glory.
-            </p>
-            <p class="text-xs muted-copy mt-3">John 1:1, 14 · Philippians 2:5-11 · 1 Corinthians 15:3-4 · Acts 1:11</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">04</p>
-            <h3 class="text-xl font-semibold mt-1">The Holy Spirit</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe the Holy Spirit is God — equal with the Father and the Son. He convicts the world of sin, regenerates
-                those who believe, indwells every Christian, empowers us for holy living, and gifts the church for ministry.
-            </p>
-            <p class="text-xs muted-copy mt-3">John 14:16-17 · John 16:7-11 · Acts 1:8 · 1 Corinthians 12:4-11</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">05</p>
-            <h3 class="text-xl font-semibold mt-1">Humanity & Sin</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe every person is created in the image of God, with dignity and worth. Yet because of Adam's fall,
-                all humanity is born into sin and stands in need of God's saving grace. We cannot save ourselves.
-            </p>
-            <p class="text-xs muted-copy mt-3">Genesis 1:27 · Romans 3:23 · Romans 5:12 · Ephesians 2:1-3</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">06</p>
-            <h3 class="text-xl font-semibold mt-1">Salvation</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe salvation is by grace alone, through faith alone, in Jesus Christ alone. It is a free gift from God,
-                not earned by good works. Through repentance and faith in Christ's finished work, we are forgiven, justified,
-                adopted as God's children, and given eternal life.
-            </p>
-            <p class="text-xs muted-copy mt-3">Ephesians 2:8-9 · Romans 10:9-10 · John 3:16 · Titus 3:5</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">07</p>
-            <h3 class="text-xl font-semibold mt-1">The Church</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe the Church is the body of Christ — composed of all true believers, expressed locally in gathered congregations.
-                The local church exists to worship God, build up disciples, and bear witness to the world. Every Christian is called
-                to be an active part of a healthy local church.
-            </p>
-            <p class="text-xs muted-copy mt-3">1 Corinthians 12:12-27 · Acts 2:42-47 · Hebrews 10:24-25</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">08</p>
-            <h3 class="text-xl font-semibold mt-1">Baptism & Communion</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We practise two ordinances given by Jesus to the church: <strong>water baptism</strong>, as a public confession of faith
-                in Christ for those who have believed; and <strong>the Lord's Supper</strong> (Communion), as an ongoing remembrance of
-                Christ's death and a proclamation of His coming return.
-            </p>
-            <p class="text-xs muted-copy mt-3">Matthew 28:19 · Acts 2:38 · 1 Corinthians 11:23-26</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">09</p>
-            <h3 class="text-xl font-semibold mt-1">The Christian Life</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe every Christian is called to a life of growing holiness, daily prayer and Scripture, faithful service in
-                the local church, generous stewardship, and bold witness in the world. The Holy Spirit empowers us — we don't walk
-                this journey alone.
-            </p>
-            <p class="text-xs muted-copy mt-3">Romans 12:1-2 · Galatians 5:22-25 · 2 Corinthians 5:17-20</p>
-        </li>
-
-        <li class="section-card">
-            <p class="text-sm font-semibold text-blue-700">10</p>
-            <h3 class="text-xl font-semibold mt-1">The Return of Christ & Eternity</h3>
-            <p class="mt-3 text-sm muted-copy leading-relaxed">
-                We believe Jesus Christ will return personally, visibly, and gloriously to judge the living and the dead and to
-                establish His everlasting kingdom. Those who trust in Him will live forever in God's presence; those who reject
-                Him will be eternally separated from Him. This hope shapes how we live today.
-            </p>
-            <p class="text-xs muted-copy mt-3">Acts 1:11 · 1 Thessalonians 4:13-18 · Revelation 21:1-5 · Matthew 25:31-46</p>
-        </li>
-
-    </ol>
-
-    <div class="section-card mt-10 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
-        <div>
-            <h2 class="text-xl font-semibold">Have Questions?</h2>
-            <p class="text-sm muted-copy mt-1">Our pastors would love to talk with you — whatever you believe right now.</p>
         </div>
-        <a href="contact" class="primary-action">Talk to a Pastor</a>
+
+        <!-- BENTO GRID FOR BELIEFS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-min">
+            
+            <!-- Bento Item 01 (Large) -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
+                <div class="flex items-start justify-between mb-8">
+                    <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 group-hover:opacity-100 transition-opacity">01</span>
+                    <svg class="w-8 h-8 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                </div>
+                <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Bible</h3>
+                <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe the Bible — the sixty-six books of the Old and New Testaments — is the inspired, inerrant, and authoritative Word of God. It is the supreme and final standard for what we believe and how we live.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                    <span class="text-xs font-bold text-white/50 tracking-widest uppercase">2 Timothy 3:16-17 · 2 Peter 1:20-21 · Psalm 119:105</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 02 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">02</span>
+                <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">God</h3>
+                <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe in one true and living God who exists eternally in three persons — Father, Son, and Holy Spirit. He is the Creator, Sustainer, and Sovereign over all things.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-xl px-4 py-2 border border-white/10 w-full text-center">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase w-full">Deut 6:4 · Matt 28:19</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 03 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">03</span>
+                <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Jesus Christ</h3>
+                <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe Jesus Christ is fully God and fully man. He was crucified for our sins, was buried and bodily raised from the dead, and will return in glory.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-xl px-4 py-2 border border-white/10 w-full text-center">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase w-full">John 1:1 · Phil 2:5-11</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 04 (Large) -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
+                <div class="flex items-start justify-between mb-8">
+                    <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 group-hover:opacity-100 transition-opacity">04</span>
+                </div>
+                <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Holy Spirit</h3>
+                <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe the Holy Spirit is God — equal with the Father and the Son. He convicts the world of sin, regenerates those who believe, indwells every Christian, empowers us for holy living, and gifts the church for ministry.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                    <span class="text-xs font-bold text-white/50 tracking-widest uppercase">John 14:16-17 · Acts 1:8 · 1 Cor 12:4-11</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 05 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">05</span>
+                <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Humanity & Sin</h3>
+                <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    Every person is created in the image of God. Yet because of Adam's fall, all humanity is born into sin and stands in need of God's saving grace.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-xl px-4 py-2 border border-white/10 w-full text-center">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase w-full">Gen 1:27 · Rom 3:23</span>
+                </div>
+            </div>
+            
+            <!-- Bento Item 06 (Large) -->
+            <div class="bg-black border border-amber-500/20 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/50 transition-all duration-500 lg:col-span-3 group relative overflow-hidden">
+                <div class="absolute -top-32 -right-32 w-96 h-96 bg-amber-500/10 blur-[5rem] rounded-full"></div>
+                <div class="relative z-10">
+                    <div class="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
+                        <div class="flex-grow">
+                            <div class="flex items-center gap-6 mb-6">
+                                <span class="text-amber-500 font-display font-black text-6xl leading-none">06</span>
+                                <h3 class="text-4xl font-display font-black uppercase tracking-normal">Salvation</h3>
+                            </div>
+                            <p class="text-xl text-white/80 font-sans font-medium leading-relaxed max-w-4xl mb-6">
+                                We believe salvation is by grace alone, through faith alone, in Jesus Christ alone. It is a free gift from God, not earned by good works. Through repentance and faith in Christ's finished work, we are forgiven, justified, adopted as God's children, and given eternal life.
+                            </p>
+                            <div class="inline-flex bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                                <span class="text-xs font-bold text-amber-500/80 tracking-widest uppercase">Ephesians 2:8-9 · Romans 10:9-10 · John 3:16</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bento Item 07 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">07</span>
+                <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Church</h3>
+                <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe the Church is the body of Christ — composed of all true believers, expressed locally in gathered congregations. Every Christian is called to be an active part of a healthy local church.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase">1 Cor 12:12-27 · Heb 10:24-25</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 08 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">08</span>
+                <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Baptism & Communion</h3>
+                <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We practise two ordinances given by Jesus: water baptism and the Lord's Supper (Communion).
+                </p>
+                <div class="inline-flex bg-white/5 rounded-xl px-4 py-2 border border-white/10 w-full text-center">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase w-full">Matt 28:19 · 1 Cor 11:23</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 09 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">09</span>
+                <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">The Christian Life</h3>
+                <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    Every Christian is called to a life of growing holiness, daily prayer, faithful service, and bold witness in the world.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-xl px-4 py-2 border border-white/10 w-full text-center">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase w-full">Rom 12:1-2 · Gal 5:22-25</span>
+                </div>
+            </div>
+
+            <!-- Bento Item 10 -->
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
+                <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">10</span>
+                <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Return of Christ & Eternity</h3>
+                <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
+                    We believe Jesus Christ will return personally, visibly, and gloriously to judge the living and the dead and to establish His everlasting kingdom. This hope shapes how we live today.
+                </p>
+                <div class="inline-flex bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                    <span class="text-[0.65rem] font-bold text-white/50 tracking-widest uppercase">1 Thess 4:13-18 · Rev 21:1-5</span>
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- CTA -->
+        <div class="mt-20 bg-black border border-white/10 rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row md:items-center justify-between gap-10 reveal shadow-2xl text-white text-center md:text-left">
+            <div>
+                <h2 class="text-4xl font-display font-black uppercase tracking-normal mb-3">Have Questions?</h2>
+                <p class="text-xl text-white/60 font-sans font-medium">Our pastors would love to talk with you — whatever you believe right now.</p>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="contact" class="inline-flex items-center justify-center bg-white text-black hover:bg-neutral-200 px-10 py-5 font-sans font-bold uppercase tracking-widest text-sm rounded-xl transition-all hover:-translate-y-1">
+                    Talk to a Pastor
+                </a>
+            </div>
+        </div>
+        
     </div>
 </section>
 <?php include 'includes/footer.php'; ?>
+

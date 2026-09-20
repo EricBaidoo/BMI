@@ -36,7 +36,13 @@ if (flash('messages') === 'deleted') {
 $messages = [];
 try {
     $pdo = db_connect();
-    $messages = $pdo->query('SELECT * FROM messages ORDER BY created_at DESC')->fetchAll();
+    $page = max(1, (int)($_GET['p'] ?? 1));
+    $limit = 15;
+    $offset = ($page - 1) * $limit;
+    $total = $pdo->query('SELECT COUNT(*) FROM messages')->fetchColumn();
+    $totalPages = max(1, ceil($total / $limit));
+
+    $messages = $pdo->query("SELECT * FROM messages ORDER BY created_at DESC LIMIT $limit OFFSET $offset")->fetchAll();
 } catch (Throwable $e) {
     $error = 'Unable to load messages.';
 }
@@ -96,6 +102,17 @@ require_once __DIR__ . '/includes/header.php';
                         </li>
                     <?php endforeach; ?>
                 </ul>
+            <?php endif; ?>
+            <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                <div class="p-6 border-t border-slate-100 flex justify-center gap-2">
+                    <?php if ($page > 1): ?>
+                        <a href="?p=<?php echo $page - 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Previous</a>
+                    <?php endif; ?>
+                    <span class="px-4 py-2 text-sm font-medium text-slate-500">Page <?php echo $page; ?> of <?php echo $totalPages; ?></span>
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?p=<?php echo $page + 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Next</a>
+                    <?php endif; ?>
+                </div>
             <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

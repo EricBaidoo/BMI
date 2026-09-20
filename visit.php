@@ -10,50 +10,73 @@ require_once __DIR__ . '/includes/settings.php';
 include 'includes/header.php';
 ?>
 
+<!-- CUSTOM ANIMATION STYLES -->
+<style>
+.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.revealed { opacity: 1; transform: translateY(0); }
+.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-left.revealed { opacity: 1; transform: translateX(0); }
+.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal-right.revealed { opacity: 1; transform: translateX(0); }
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+</style>
+
 <!-- HERO SECTION -->
-<div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#06080f] overflow-hidden">
+<div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center">
     <!-- Background Image -->
-    <div class="absolute inset-0">
-        <img src="<?= setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg') ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
-        <div class="absolute inset-0 bg-gradient-to-t from-[#06080f] via-[#06080f]/80 to-transparent"></div>
+    <div class="absolute inset-0 z-0">
+        <img loading="lazy" src="<?= setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg') ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
     </div>
     
-    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center">
-        <span class="inline-block py-1 px-3 rounded-full bg-[#1a1f2e] border border-white/10 text-[#c49a45] text-sm font-bold tracking-widest uppercase mb-6">You Belong Here</span>
-        <h1 class="text-4xl md:text-7xl font-display font-black text-white tracking-tight mb-6">
-            <?= setting('visit.hero_title', 'Plan a Visit') ?>
+    <!-- Abstract Glow -->
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
+
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center reveal">
+        <div class="inline-flex items-center gap-6 mb-8">
+            <div class="h-px w-16 bg-white/20"></div>
+            <span class="text-white/50 font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase">You Belong Here</span>
+            <div class="h-px w-16 bg-white/20"></div>
+        </div>
+        <h1 class="text-5xl md:text-7xl lg:text-9xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-300 to-neutral-600 mb-6 tracking-normal uppercase leading-[0.9]">
+            <?= setting('visit.hero_title', 'Plan a <span class="italic font-light">Visit</span>') ?>
         </h1>
-        <p class="text-xl text-slate-300 max-w-2xl mx-auto font-medium">
+        <p class="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed mb-12">
             <?= setting('visit.hero_subtitle', 'We can\'t wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.') ?>
         </p>
     </div>
 </div>
 
 <!-- WHEN & WHERE SECTION -->
-<div class="py-24 bg-white relative">
-    <div class="w-[90%] max-w-[112.5rem] mx-auto">
+<div class="py-24 md:py-32 bg-[#0a0a0c] text-white relative overflow-hidden">
+    <!-- Ambient Glows -->
+    <div class="absolute top-0 right-0 w-[50rem] h-[50rem] bg-indigo-600/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
+
+    <div class="w-[95%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
             <!-- Text Content -->
-            <div>
-                <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-8">When & Where</h2>
+            <div class="reveal-right">
+                <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-12 leading-[1.0]">When & <i class="text-amber-500 font-light">Where</i></h2>
                 
-                <div class="space-y-8">
+                <div class="space-y-12">
                     <!-- Service Times -->
-                    <div class="flex gap-6">
-                        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 border border-slate-200">
-                            <svg class="w-6 h-6 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <div class="flex gap-6 group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-[#050505] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-300 shadow-xl">
+                            <svg class="w-6 h-6 text-amber-500 group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Service Times</h3>
-                            <ul class="space-y-3 text-slate-600 font-medium">
+                            <h3 class="text-2xl font-display font-black uppercase text-white mb-4 tracking-normal group-hover:text-amber-500 transition-colors">Service Times</h3>
+                            <ul class="space-y-4 text-neutral-400 font-medium">
                                 <?php
                                 $services = db_connect()->query("SELECT title, time_info FROM weekly_services ORDER BY sort_order ASC, id ASC")->fetchAll();
                                 foreach ($services as $svc):
                                 ?>
-                                <li class="flex items-center gap-3">
-                                    <span class="w-2 h-2 rounded-full bg-[#c49a45]"></span>
-                                    <span><?php echo htmlspecialchars($svc['title'] . ' — ' . $svc['time_info']); ?></span>
+                                <li class="flex items-center gap-4 bg-[#050505] border border-white/5 rounded-2xl p-4 hover:border-white/20 transition-colors">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></span>
+                                    <span class="text-white"><?php echo htmlspecialchars($svc['title']); ?></span>
+                                    <span class="ml-auto text-amber-500 font-bold"><?php echo htmlspecialchars($svc['time_info']); ?></span>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -61,28 +84,41 @@ include 'includes/header.php';
                     </div>
 
                     <!-- Location -->
-                    <div class="flex gap-6">
-                        <div class="w-14 h-14 rounded-full bg-slate-100 flex items-center justify-center flex-shrink-0 border border-slate-200">
-                            <svg class="w-6 h-6 text-[#c49a45]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <div class="flex gap-6 group">
+                        <div class="w-16 h-16 rounded-[1.5rem] bg-[#050505] border border-white/10 flex items-center justify-center flex-shrink-0 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-300 shadow-xl">
+                            <svg class="w-6 h-6 text-amber-500 group-hover:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
                         </div>
                         <div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-2">Location</h3>
-                            <p class="text-slate-600 font-medium leading-relaxed mb-4">
-                                <?php echo htmlspecialchars(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>
-                            </p>
-                            <a href="#" class="inline-flex items-center font-bold text-[#c49a45] hover:text-[#d4ac57] transition-colors group">
-                                Get Directions
-                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                            </a>
+                            <h3 class="text-2xl font-display font-black uppercase text-white mb-4 tracking-normal group-hover:text-amber-500 transition-colors">Location</h3>
+                            <div class="bg-[#050505] border border-white/5 rounded-2xl p-6">
+                                <p class="text-neutral-400 font-medium leading-relaxed mb-6">
+                                    <?php echo htmlspecialchars(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>
+                                </p>
+                                <a href="https://maps.google.com/?q=<?php echo urlencode(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center font-bold font-sans uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-300 group/btn">
+                                    Get Directions
+                                    <svg class="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Image/Map Container -->
-            <div class="relative  overflow-hidden shadow-2xl aspect-square md:aspect-video lg:aspect-square group">
-                <img src="<?= setting('visit.church_image', 'assets/image/church-building.jpg') ?>" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
-                <div class="absolute inset-0 border border-black/10  pointer-events-none"></div>
+            <div class="relative overflow-hidden rounded-[3rem] shadow-2xl reveal-left group border border-white/10 h-full min-h-[400px]">
+                <img loading="lazy" src="<?= setting('visit.church_image', 'assets/image/church-building.jpg') ?>" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
+                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80"></div>
+                <div class="absolute bottom-10 left-10 right-10">
+                    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 flex items-center justify-between">
+                        <div>
+                            <p class="text-white font-display font-black text-2xl uppercase tracking-normal">Main Campus</p>
+                            <p class="text-white/60 text-sm font-medium">Join us this Sunday</p>
+                        </div>
+                        <div class="w-12 h-12 rounded-full bg-amber-500 text-black flex items-center justify-center shadow-[0_0_20px_rgba(245,158,11,0.5)]">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -90,46 +126,55 @@ include 'includes/header.php';
 </div>
 
 <!-- WHAT TO EXPECT SECTION -->
-<div class="py-24 bg-slate-50 border-t border-slate-200">
-    <div class="w-[90%] max-w-[112.5rem] mx-auto">
+<div class="py-32 bg-[#050505] relative overflow-hidden">
+    <!-- Grid Overlay -->
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-30 z-0"></div>
+
+    <div class="w-[95%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <div class="text-center max-w-3xl mx-auto mb-16">
-            <h2 class="text-4xl md:text-5xl font-display font-black text-slate-900 tracking-tight mb-6">What to Expect</h2>
-            <p class="text-lg text-slate-600 font-medium leading-relaxed">
+        <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+            <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">What to <i class="text-amber-500 font-light">Expect</i></h2>
+            <p class="text-lg text-neutral-400 font-medium leading-relaxed">
                 <?= setting('visit.expect_text', 'Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.') ?>
             </p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Item 1 -->
-            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                
+                <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Passionate Worship</h3>
-                <p class="text-slate-600 font-medium leading-relaxed">
+                <h3 class="text-3xl font-display font-black uppercase text-white mb-4 tracking-normal leading-none group-hover:text-amber-500 transition-colors">Passionate Worship</h3>
+                <p class="text-neutral-400 font-medium leading-relaxed relative z-10">
                     Our services begin with dynamic, Spirit-led worship. We sing contemporary songs and hymns designed to exalt Jesus.
                 </p>
             </div>
             
             <!-- Item 2 -->
-            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal delay-100 group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                
+                <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">Biblical Teaching</h3>
-                <p class="text-slate-600 font-medium leading-relaxed">
+                <h3 class="text-3xl font-display font-black uppercase text-white mb-4 tracking-normal leading-none group-hover:text-amber-500 transition-colors">Biblical Teaching</h3>
+                <p class="text-neutral-400 font-medium leading-relaxed relative z-10">
                     You will hear an engaging, uncompromising message based entirely on the Word of God that applies directly to your life.
                 </p>
             </div>
 
             <!-- Item 3 -->
-            <div class="bg-white p-8  border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
-                <div class="w-12 h-12  bg-[#c49a45]/10 text-[#c49a45] flex items-center justify-center mb-6">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal delay-200 group relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                
+                <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
+                    <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                 </div>
-                <h3 class="text-xl font-bold text-slate-900 mb-3">BMI Kids</h3>
-                <p class="text-slate-600 font-medium leading-relaxed">
+                <h3 class="text-3xl font-display font-black uppercase text-white mb-4 tracking-normal leading-none group-hover:text-amber-500 transition-colors">BMI Kids</h3>
+                <p class="text-neutral-400 font-medium leading-relaxed relative z-10">
                     We offer a safe, fun, and educational environment for children (infants through 5th grade) during all main services.
                 </p>
             </div>
@@ -139,69 +184,81 @@ include 'includes/header.php';
 </div>
 
 <!-- PLAN A VISIT FORM -->
-<div class="py-24 bg-slate-900 relative overflow-hidden" id="visit-form">
-    
-    <!-- Decorative SVG -->
-    <div class="absolute top-0 right-0 opacity-10 pointer-events-none transform translate-x-1/3 -translate-y-1/3">
-        <svg width="800" height="800" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="white" stroke-width="2"/></svg>
-    </div>
+<div class="py-24 md:py-32 bg-[#0a0a0c] relative overflow-hidden" id="visit-form">
+    <!-- Abstract Glow -->
+    <div class="absolute top-1/2 right-0 translate-x-1/4 -translate-y-1/2 w-[50rem] h-[50rem] bg-amber-500/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
 
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+    <div class="max-w-[112.5rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-[95%]">
         
-        <div class="text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-display font-black text-white tracking-tight mb-6">Let Us Know You're Coming!</h2>
-            <p class="text-lg text-slate-400 font-medium">
-                Fill out the form below and our team will meet you at the door, show you around, and help get your kids checked in!
-            </p>
-        </div>
-
-        <div class="bg-white  shadow-xl p-8 md:p-12">
-            <form action="#" method="POST" class="space-y-6">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
+            <div class="text-left reveal-right">
+                <h2 class="text-5xl md:text-6xl lg:text-8xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40 uppercase tracking-normal mb-8 leading-[0.9]">Let Us Know <br><i class="text-amber-500 font-light">You're Coming!</i></h2>
+                <p class="text-xl text-neutral-400 font-medium max-w-xl leading-relaxed">
+                    Fill out the form below and our team will meet you at the door, show you around, and help get your kids checked in!
+                </p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="first_name" class="block text-sm font-bold text-slate-700 mb-2">First Name</label>
-                        <input type="text" id="first_name" name="first_name" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                <div class="mt-12 flex items-center gap-6">
+                    <div class="flex -space-x-4">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
+                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
                     </div>
-                    <div>
-                        <label for="last_name" class="block text-sm font-bold text-slate-700 mb-2">Last Name</label>
-                        <input type="text" id="last_name" name="last_name" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                    <p class="text-sm text-neutral-400 font-medium">Our welcome team <br>is ready for you.</p>
+                </div>
+            </div>
+
+            <div class="bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-10 md:p-14 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 reveal-left relative">
+                <!-- Inner Glow for Form -->
+                <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none rounded-[3rem]"></div>
+                
+                <form action="#" method="POST" class="space-y-6 relative z-10">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="first_name" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">First Name</label>
+                            <input type="text" id="first_name" name="first_name" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                        </div>
+                        <div>
+                            <label for="last_name" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Last Name</label>
+                            <input type="text" id="last_name" name="last_name" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                        </div>
                     </div>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label for="email" class="block text-sm font-bold text-slate-700 mb-2">Email Address</label>
-                        <input type="email" id="email" name="email" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors" required>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="email" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Email Address</label>
+                            <input type="email" id="email" name="email" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                        </div>
+                        <div>
+                            <label for="phone" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Phone Number</label>
+                            <input type="tel" id="phone" name="phone" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner">
+                        </div>
                     </div>
+
                     <div>
-                        <label for="phone" class="block text-sm font-bold text-slate-700 mb-2">Phone Number</label>
-                        <input type="tel" id="phone" name="phone" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors">
+                        <label for="date" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">When are you planning to visit?</label>
+                        <input type="date" id="date" name="date" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner [color-scheme:dark]" required>
                     </div>
-                </div>
 
-                <div>
-                    <label for="date" class="block text-sm font-bold text-slate-700 mb-2">When are you planning to visit?</label>
-                    <input type="date" id="date" name="date" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700" required>
-                </div>
+                    <div>
+                        <label for="kids" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Will you be bringing any children?</label>
+                        <select id="kids" name="kids" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner appearance-none cursor-pointer">
+                            <option value="no" class="bg-black">No children this time</option>
+                            <option value="yes" class="bg-black">Yes, I will bring my kids</option>
+                        </select>
+                    </div>
 
-                <div>
-                    <label for="kids" class="block text-sm font-bold text-slate-700 mb-2">Will you be bringing any children?</label>
-                    <select id="kids" name="kids" class="w-full bg-slate-50 border border-slate-200  px-4 py-3 focus:outline-none focus:border-[#c49a45] focus:ring-1 focus:ring-[#c49a45] transition-colors text-slate-700">
-                        <option value="no">No children this time</option>
-                        <option value="yes">Yes, I will bring my kids</option>
-                    </select>
-                </div>
-
-                <div class="pt-4">
-                    <button type="submit" class="w-full bg-[#c49a45] hover:bg-[#d4ac57] text-white font-bold text-lg py-4  shadow-lg hover:-translate-y-1 transition-all duration-300">
-                        Plan My Visit
-                    </button>
-                </div>
-            </form>
+                    <div class="pt-6">
+                        <button type="submit" class="w-full bg-white text-black font-bold uppercase tracking-[0.2em] text-sm py-6 rounded-2xl hover:bg-amber-500 hover:-translate-y-1 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]">
+                            Plan My Visit
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
         
     </div>
 </div>
 
 <?php include 'includes/footer.php'; ?>
+

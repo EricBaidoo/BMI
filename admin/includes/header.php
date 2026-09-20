@@ -75,14 +75,14 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
     </script>
     <style>
         .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
+            width: 0.375rem;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
             background: transparent;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
             background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+            border-radius: 1.25rem;
         }
     </style>
     <script>
@@ -97,15 +97,19 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
     <div id="sidebar-backdrop" class="fixed inset-0 z-20 bg-slate-900/50 backdrop-blur-sm hidden lg:hidden" onclick="toggleSidebar()"></div>
 
     <!-- Sidebar -->
-    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-72 bg-brand-950 text-slate-300 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 flex flex-col h-full border-r border-slate-800 shadow-2xl lg:shadow-none">
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-30 w-72 bg-brand-950 text-slate-300 transition-transform duration-300 transform -translate-x-full lg:translate-x-0 flex flex-col h-full border-r border-slate-800 shadow-2xl lg:shadow-none overflow-hidden relative">
+        <!-- Abstract gradient blobs behind -->
+        <div class="absolute top-0 left-0 w-64 h-64 bg-blue-600 rounded-full mix-blend-multiply filter blur-[8rem] opacity-40 pointer-events-none"></div>
+        <div class="absolute bottom-0 right-0 w-64 h-64 bg-purple-600 rounded-full mix-blend-multiply filter blur-[8rem] opacity-40 pointer-events-none"></div>
+
         
         <!-- Logo Area -->
-        <div class="flex items-center justify-between h-16 px-6 bg-brand-900/50 border-b border-slate-800">
+        <div class="flex items-center justify-between h-16 px-6 bg-brand-900/50 border-b border-slate-800 relative z-10">
             <div class="flex items-center gap-3">
                 <?php if (setting('site.favicon')): ?>
                     <img src="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars(setting('site.favicon')); ?>" alt="Logo" class="w-8 h-8 rounded object-contain bg-white">
                 <?php else: ?>
-                    <div class="w-8 h-8 rounded bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center text-white font-bold text-sm shadow-inner">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded mx-auto flex items-center justify-center text-white font-extrabold shadow-lg shadow-blue-500/30 border border-white/10">
                         B
                     </div>
                 <?php endif; ?>
@@ -117,7 +121,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
         </div>
 
         <!-- Navigation Links -->
-        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar">
+        <nav class="flex-1 px-4 py-6 space-y-1 overflow-y-auto custom-scrollbar relative z-10">
             <p class="px-3 text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4">Manage System</p>
             <?php foreach ($navItems as $url => $item): ?>
                 <?php $isActive = ($currentPage === $url); ?>
@@ -131,7 +135,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
         </nav>
 
         <!-- Sidebar Footer -->
-        <div class="p-4 border-t border-slate-800 bg-brand-900/30">
+        <div class="p-4 border-t border-slate-800 bg-brand-900/30 relative z-10">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-slate-300 font-bold border border-slate-700">
                     <?php echo strtoupper(substr($user['name'] ?? $user['email'] ?? 'A', 0, 1)); ?>
@@ -181,3 +185,4 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
 
         <!-- Main Scrollable Area -->
         <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+

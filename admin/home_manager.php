@@ -157,26 +157,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $timeInfo = trim((string) ($_POST['time_info'] ?? ''));
             $themeColor = trim((string) ($_POST['theme_color'] ?? 'cyan'));
             $sortOrder = (int) ($_POST['sort_order'] ?? 0);
+            $leaderName = trim((string) ($_POST['leader_name'] ?? ''));
+            $longDescription = trim((string) ($_POST['long_description'] ?? ''));
+            $showOnHomepage = isset($_POST['show_on_homepage']) ? 1 : 0;
 
             if ($title === '') {
                 throw new RuntimeException('Service title is required.');
             }
 
             $imageUrl = handle_image_upload_or_link($_FILES['image_url'] ?? null, $_POST['image_url_url'] ?? '', $_POST['existing_image_url'] ?? '');
+            $g1 = handle_image_upload_or_link($_FILES['gallery_1'] ?? null, $_POST['gallery_1_url'] ?? '', $_POST['existing_gallery_1'] ?? '');
+            $g2 = handle_image_upload_or_link($_FILES['gallery_2'] ?? null, $_POST['gallery_2_url'] ?? '', $_POST['existing_gallery_2'] ?? '');
+            $g3 = handle_image_upload_or_link($_FILES['gallery_3'] ?? null, $_POST['gallery_3_url'] ?? '', $_POST['existing_gallery_3'] ?? '');
 
             if ($id > 0) {
-                $stmt = $pdo->prepare('UPDATE weekly_services SET title = :title, subtitle = :subtitle, description = :description, time_info = :time_info, image_url = :image_url, theme_color = :theme_color, sort_order = :sort_order WHERE id = :id');
+                $stmt = $pdo->prepare('UPDATE weekly_services SET title = :title, subtitle = :subtitle, description = :description, time_info = :time_info, image_url = :image_url, theme_color = :theme_color, sort_order = :sort_order, leader_name = :leader_name, long_description = :long_description, gallery_image_1 = :g1, gallery_image_2 = :g2, gallery_image_3 = :g3, show_on_homepage = :show_on_homepage WHERE id = :id');
                 $stmt->execute([
                     ':id' => $id, ':title' => $title, ':subtitle' => $subtitle,
                     ':description' => $description, ':time_info' => $timeInfo,
-                    ':image_url' => $imageUrl, ':theme_color' => $themeColor, ':sort_order' => $sortOrder
+                    ':image_url' => $imageUrl, ':theme_color' => $themeColor, ':sort_order' => $sortOrder,
+                    ':leader_name' => $leaderName, ':long_description' => $longDescription,
+                    ':g1' => $g1, ':g2' => $g2, ':g3' => $g3, ':show_on_homepage' => $showOnHomepage
                 ]);
             } else {
-                $stmt = $pdo->prepare('INSERT INTO weekly_services (title, subtitle, description, time_info, image_url, theme_color, sort_order) VALUES (:title, :subtitle, :description, :time_info, :image_url, :theme_color, :sort_order)');
+                $stmt = $pdo->prepare('INSERT INTO weekly_services (title, subtitle, description, time_info, image_url, theme_color, sort_order, leader_name, long_description, gallery_image_1, gallery_image_2, gallery_image_3, show_on_homepage) VALUES (:title, :subtitle, :description, :time_info, :image_url, :theme_color, :sort_order, :leader_name, :long_description, :g1, :g2, :g3, :show_on_homepage)');
                 $stmt->execute([
                     ':title' => $title, ':subtitle' => $subtitle,
                     ':description' => $description, ':time_info' => $timeInfo,
-                    ':image_url' => $imageUrl, ':theme_color' => $themeColor, ':sort_order' => $sortOrder
+                    ':image_url' => $imageUrl, ':theme_color' => $themeColor, ':sort_order' => $sortOrder,
+                    ':leader_name' => $leaderName, ':long_description' => $longDescription,
+                    ':g1' => $g1, ':g2' => $g2, ':g3' => $g3, ':show_on_homepage' => $showOnHomepage
                 ]);
             }
             header('Location: home_manager.php?tab=services&status=saved');
@@ -242,7 +252,7 @@ require_once __DIR__ . '/includes/header.php';
             </li>
             <li>
                 <a href="?tab=services" class="block rounded-lg px-3 py-2.5 transition-colors <?php echo $activeTab === 'services' ? 'bg-blue-50 text-blue-700 font-semibold border border-blue-100/50 shadow-sm' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'; ?>">
-                    Weekly Services
+                    Ministries & Services
                 </a>
             </li>
         </ul>
@@ -274,23 +284,23 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title (HTML allowed)</label>
-                        <input type="text" name="title" value="<?php echo e($editing['title'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" placeholder="E.g. Impact the <span class='text-[#c49a45]'>World.</span>">
+                        <input type="text" name="title" value="<?php echo e($editing['title'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="E.g. Impact the <span class='text-[#c49a45]'>World.</span>">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subtitle</label>
-                        <input type="text" name="subtitle" value="<?php echo e($editing['subtitle'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <input type="text" name="subtitle" value="<?php echo e($editing['subtitle'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Button Text</label>
-                        <input type="text" name="button_text" value="<?php echo e($editing['button_text'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <input type="text" name="button_text" value="<?php echo e($editing['button_text'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Button URL</label>
-                        <input type="text" name="button_url" value="<?php echo e($editing['button_url'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <input type="text" name="button_url" value="<?php echo e($editing['button_url'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Sort Order</label>
-                        <input type="number" name="sort_order" value="<?php echo e($editing['sort_order'] ?? '0'); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <input type="number" name="sort_order" value="<?php echo e($editing['sort_order'] ?? '0'); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Background Image</label>
@@ -301,7 +311,7 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>
-                                <input type="text" name="bg_image_url" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                <input type="text" name="bg_image_url" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                             </div>
                         </div>
                     </div>
@@ -356,15 +366,15 @@ require_once __DIR__ . '/includes/header.php';
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Founder Title (HTML Allowed)</label>
-                        <textarea name="setting[home.founder_title]" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo e(setting('home.founder_title')); ?></textarea>
+                        <textarea name="setting[home.founder_title]" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"><?php echo e(setting('home.founder_title')); ?></textarea>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Founder Biography Paragraph 1</label>
-                        <textarea name="setting[home.founder_bio1]" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo e(setting('home.founder_bio1')); ?></textarea>
+                        <textarea name="setting[home.founder_bio1]" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"><?php echo e(setting('home.founder_bio1')); ?></textarea>
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Founder Biography Quote (Highlight Box)</label>
-                        <textarea name="setting[home.founder_bio2]" rows="2" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo e(setting('home.founder_bio2')); ?></textarea>
+                        <textarea name="setting[home.founder_bio2]" rows="2" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"><?php echo e(setting('home.founder_bio2')); ?></textarea>
                     </div>
                     
                     <div class="col-span-2 pt-4 border-t border-slate-100">
@@ -382,7 +392,7 @@ require_once __DIR__ . '/includes/header.php';
                                 </div>
                                 <div>
                                     <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste Image URL</span>
-                                    <input type="text" name="setting_url[home.founder_image]" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                    <input type="text" name="setting_url[home.founder_image]" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                                 </div>
                             </div>
                         </div>
@@ -542,7 +552,7 @@ require_once __DIR__ . '/includes/header.php';
             }
         ?>
             <h2 class="text-xl font-bold text-slate-800 border-b border-slate-100 pb-4 mb-6">
-                <?php echo $editing ? 'Edit Service' : 'Weekly Services'; ?>
+                <?php echo $editing ? 'Edit Ministry / Service' : 'Ministries & Services'; ?>
             </h2>
 
             <form method="post" enctype="multipart/form-data" class="space-y-6 mb-12 bg-slate-50/50 p-6 rounded-xl border border-slate-100">
@@ -551,28 +561,55 @@ require_once __DIR__ . '/includes/header.php';
                 <?php if ($editing): ?>
                     <input type="hidden" name="id" value="<?php echo $editing['id']; ?>">
                     <input type="hidden" name="existing_image_url" value="<?php echo e($editing['image_url'] ?? ''); ?>">
+                    <input type="hidden" name="existing_gallery_1" value="<?php echo e($editing['gallery_image_1'] ?? ''); ?>">
+                    <input type="hidden" name="existing_gallery_2" value="<?php echo e($editing['gallery_image_2'] ?? ''); ?>">
+                    <input type="hidden" name="existing_gallery_3" value="<?php echo e($editing['gallery_image_3'] ?? ''); ?>">
                 <?php endif; ?>
 
                 <div class="grid md:grid-cols-2 gap-6">
+                    <!-- SECTION: Basic Details -->
+                    <div class="col-span-2 pb-4 mb-2 border-b border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">1. Basic Details</h3>
+                    </div>
+                    
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Service Title *</label>
-                        <input type="text" name="title" required value="<?php echo e($editing['title'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" placeholder="E.g. RESTORERS">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Ministry / Service Title *</label>
+                        <input type="text" name="title" required value="<?php echo e($editing['title'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="E.g. RESTORERS or Destiny World">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Subtitle</label>
-                        <input type="text" name="subtitle" value="<?php echo e($editing['subtitle'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" placeholder="E.g. Celebration Service">
+                        <input type="text" name="subtitle" value="<?php echo e($editing['subtitle'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="E.g. Celebration Service">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Description</label>
-                        <textarea name="description" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"><?php echo e($editing['description'] ?? ''); ?></textarea>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Short Description (Card)</label>
+                        <textarea name="description" rows="2" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"><?php echo e($editing['description'] ?? ''); ?></textarea>
+                    </div>
+
+                    <!-- SECTION: Detailed Content -->
+                    <div class="col-span-2 pb-4 mb-2 mt-6 border-b border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">2. Detailed Content</h3>
+                    </div>
+                    
+                    <div class="col-span-2">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Full Page Content (Long Description)</label>
+                        <textarea name="long_description" id="tinymce-editor" rows="12" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="Detailed information for the dedicated ministry page..."><?php echo e($editing['long_description'] ?? ''); ?></textarea>
+                    </div>
+
+                    <!-- SECTION: Meta Info -->
+                    <div class="col-span-2 pb-4 mb-2 mt-6 border-b border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">3. Meta Info</h3>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Time Info</label>
-                        <input type="text" name="time_info" value="<?php echo e($editing['time_info'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all" placeholder="E.g. Sunday 8:45 AM">
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Leader Name</label>
+                        <input type="text" name="leader_name" value="<?php echo e($editing['leader_name'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="E.g. Rev. John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Time Info / Meeting Schedule</label>
+                        <input type="text" name="time_info" value="<?php echo e($editing['time_info'] ?? ''); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400" placeholder="E.g. Sunday 8:45 AM">
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Theme Color</label>
-                        <select name="theme_color" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <select name="theme_color" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                             <?php
                             $colors = ['cyan' => 'Cyan', 'purple' => 'Purple', 'orange' => 'Orange', 'teal' => 'Teal', 'blue' => 'Blue', 'red' => 'Red', 'green' => 'Green', 'yellow' => 'Yellow', 'pink' => 'Pink'];
                             foreach ($colors as $val => $label):
@@ -583,10 +620,20 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div>
                         <label class="block text-sm font-semibold text-slate-700 mb-1.5">Sort Order</label>
-                        <input type="number" name="sort_order" value="<?php echo e($editing['sort_order'] ?? '0'); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                        <input type="number" name="sort_order" value="<?php echo e($editing['sort_order'] ?? '0'); ?>" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
+                    </div>
+                    <div class="flex items-center mt-6">
+                        <label class="flex items-center gap-3 cursor-pointer">
+                            <input type="checkbox" name="show_on_homepage" value="1" <?php echo (!isset($editing) || !empty($editing['show_on_homepage'])) ? 'checked' : ''; ?> class="w-5 h-5 text-blue-600 rounded border-slate-300 focus:ring-blue-500">
+                            <span class="text-sm font-semibold text-slate-700">Show on Homepage</span>
+                        </label>
+                    </div>
+                    <!-- SECTION: Media & Gallery -->
+                    <div class="col-span-2 pb-4 mb-2 mt-6 border-b border-slate-100">
+                        <h3 class="text-sm font-bold text-slate-800 uppercase tracking-wider">4. Media & Gallery</h3>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Service Flyer / Image</label>
+                        <label class="block text-sm font-semibold text-slate-700 mb-1.5">Flyer / Image</label>
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span>
@@ -594,7 +641,52 @@ require_once __DIR__ . '/includes/header.php';
                             </div>
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>
-                                <input type="text" name="image_url_url" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                                <input type="text" name="image_url_url" placeholder="https://..." class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gallery Fields -->
+                    <div class="col-span-2 pt-4 border-t border-slate-100">
+                        <label class="block text-sm font-semibold text-slate-700 mb-4">Gallery Images (Optional - displayed on the details page)</label>
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <!-- Gallery 1 -->
+                            <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <span class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Image 1</span>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">Upload File</span>
+                                    <input type="file" name="gallery_1" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">OR Paste URL</span>
+                                    <input type="text" name="gallery_1_url" placeholder="https://..." class="w-full border border-slate-200 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-300 text-sm">
+                                </div>
+                            </div>
+                            
+                            <!-- Gallery 2 -->
+                            <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <span class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Image 2</span>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">Upload File</span>
+                                    <input type="file" name="gallery_2" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">OR Paste URL</span>
+                                    <input type="text" name="gallery_2_url" placeholder="https://..." class="w-full border border-slate-200 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-300 text-sm">
+                                </div>
+                            </div>
+                            
+                            <!-- Gallery 3 -->
+                            <div class="space-y-3 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                                <span class="block text-xs font-bold text-slate-700 uppercase tracking-wider">Image 3</span>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">Upload File</span>
+                                    <input type="file" name="gallery_3" accept="image/*" class="w-full text-xs text-slate-500 file:mr-2 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                </div>
+                                <div>
+                                    <span class="block text-[0.65rem] font-medium text-slate-500 mb-1">OR Paste URL</span>
+                                    <input type="text" name="gallery_3_url" placeholder="https://..." class="w-full border border-slate-200 rounded-md px-3 py-1.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-300 text-sm">
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -604,7 +696,7 @@ require_once __DIR__ . '/includes/header.php';
                         <a href="home_manager.php?tab=services" class="px-5 py-2.5 rounded-lg border border-slate-300 text-slate-700 hover:bg-slate-50 font-semibold transition-colors">Cancel</a>
                     <?php endif; ?>
                     <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-semibold transition-colors shadow-sm">
-                        <?php echo $editing ? 'Update Service' : 'Add Service'; ?>
+                        <?php echo $editing ? 'Update Ministry / Service' : 'Add Ministry / Service'; ?>
                     </button>
                 </div>
             </form>
@@ -619,7 +711,14 @@ require_once __DIR__ . '/includes/header.php';
                         <?php endif; ?>
 
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-bold text-slate-800 text-lg"><?php echo e($svc['title']); ?></h3>
+                            <h3 class="font-bold text-slate-800 text-lg">
+                                <?php echo e($svc['title']); ?>
+                                <?php if (empty($svc['show_on_homepage'])): ?>
+                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-100 text-slate-800">Hidden from Home</span>
+                                <?php else: ?>
+                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">Shows on Home</span>
+                                <?php endif; ?>
+                            </h3>
                             <p class="text-sm text-slate-500"><?php echo e($svc['subtitle']); ?> · <?php echo e($svc['time_info']); ?></p>
                             <span class="inline-block mt-1 px-2 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-600"><?php echo e($svc['theme_color']); ?></span>
                         </div>
@@ -644,5 +743,19 @@ require_once __DIR__ . '/includes/header.php';
         <?php endif; ?>
     </div>
 </div>
+
+<!-- TinyMCE Rich Text Editor -->
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+<script>
+  tinymce.init({
+    selector: '#tinymce-editor',
+    plugins: 'advlist autolink lists link image charmap preview anchor pagebreak',
+    toolbar_mode: 'floating',
+    height: 400,
+    branding: false,
+    menubar: false,
+    toolbar: 'undo redo | blocks | bold italic | alignleft aligncenter alignright | bullist numlist | link image'
+  });
+</script>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>

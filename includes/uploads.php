@@ -37,12 +37,14 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
         'image/x-icon' => 'ico',
         'image/vnd.microsoft.icon' => 'ico',
         'image/svg+xml' => 'svg',
+        'video/mp4' => 'mp4',
+        'video/webm' => 'webm',
     ];
 
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime = (string) $finfo->file($file['tmp_name']);
     if (!isset($allowed[$mime])) {
-        throw new RuntimeException('Only JPG, PNG, GIF, WebP, SVG, and ICO images are allowed.');
+        throw new RuntimeException('Only JPG, PNG, GIF, WebP, SVG, ICO images, and MP4/WEBM videos are allowed.');
     }
     $ext = $allowed[$mime];
 
@@ -51,11 +53,11 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
         throw new RuntimeException('Upload directory is not writable.');
     }
 
-    if (in_array($ext, ['webp', 'ico', 'svg'])) {
+    if (in_array($ext, ['webp', 'ico', 'svg', 'mp4', 'webm'])) {
         $name = sprintf('%s_%s_%s.%s', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)), $ext);
         $destination = $uploadDir . $name;
         if (!move_uploaded_file($file['tmp_name'], $destination)) {
-            throw new RuntimeException('Could not save uploaded image.');
+            throw new RuntimeException('Could not save uploaded file.');
         }
     } else {
         $name = sprintf('%s_%s_%s.webp', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)));
@@ -121,15 +123,16 @@ function upload_delete(?string $relativePath): void
 /**
  * Handles logic for either uploading a new file, or using a provided URL.
  * File upload takes precedence over URL.
+ * Falls back to the existing value if neither a new file nor new URL is provided.
  *
  * @param array|null $file The $_FILES['input_name'] array.
  * @param string $url The provided URL string (from $_POST).
- * @param string $prefix Prefix for the uploaded file.
+ * @param string $existing The existing value to fall back to.
  * @return string|null The resulting path/URL or null.
  */
-function handle_image_upload_or_link(?array $file, string $url, string $prefix = 'upload'): ?string
+function handle_image_upload_or_link(?array $file, string $url, string $existing = ''): ?string
 {
-    $uploaded = upload_image($file, $prefix);
+    $uploaded = upload_image($file, 'upload');
     if ($uploaded !== null) {
         return $uploaded;
     }
@@ -137,6 +140,11 @@ function handle_image_upload_or_link(?array $file, string $url, string $prefix =
     $url = trim($url);
     if ($url !== '') {
         return $url;
+    }
+
+    $existing = trim($existing);
+    if ($existing !== '') {
+        return $existing;
     }
 
     return null;

@@ -133,9 +133,15 @@ $feedback = $flashMap[$_GET['status'] ?? ''] ?? '';
 $sermons = [];
 try {
     $pdo = db_connect();
+    $page = max(1, (int)($_GET['p'] ?? 1));
+    $limit = 15;
+    $offset = ($page - 1) * $limit;
+    $total = $pdo->query('SELECT COUNT(*) FROM sermons')->fetchColumn();
+    $totalPages = max(1, ceil($total / $limit));
+
     $sermons = $pdo->query(
-        'SELECT id, title, speaker, sermon_date, topic, media_type, media_url, content, sermon_image
-         FROM sermons ORDER BY sermon_date DESC, id DESC'
+        "SELECT id, title, speaker, sermon_date, topic, media_type, media_url, content, sermon_image
+         FROM sermons ORDER BY sermon_date DESC, id DESC LIMIT $limit OFFSET $offset"
     )->fetchAll();
 } catch (Throwable $e) {
     if ($error === '') {
@@ -170,31 +176,31 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Title</label>
-                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="title" required maxlength="200" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['title']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Speaker</label>
-                    <input type="text" name="speaker" required maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="speaker" required maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['speaker']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Date</label>
-                    <input type="date" name="sermon_date" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="date" name="sermon_date" required class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingSermon ? (string) $editingSermon['sermon_date'] : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Topic</label>
-                    <input type="text" name="topic" maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="text" name="topic" maxlength="120" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['topic']) : ''; ?>">
                 </div>
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media Type</label>
-                    <select name="media_type" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all">
+                    <select name="media_type" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400">
                         <option value="audio" <?php echo $editingSermon && $editingSermon['media_type'] === 'audio' ? 'selected' : ''; ?>>Audio</option>
                         <option value="video" <?php echo $editingSermon && $editingSermon['media_type'] === 'video' ? 'selected' : ''; ?>>Video</option>
                         <option value="text" <?php echo $editingSermon && $editingSermon['media_type'] === 'text' ? 'selected' : ''; ?>>Text</option>
@@ -203,7 +209,7 @@ require_once __DIR__ . '/includes/header.php';
 
                 <div>
                     <label class="block text-sm font-semibold text-slate-700 mb-1.5">Media URL <span class="text-xs font-normal text-slate-500">(e.g., YouTube or Spotify link)</span></label>
-                    <input type="url" name="media_url" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 bg-slate-50 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                    <input type="url" name="media_url" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all placeholder:text-slate-400"
                         placeholder="https://..." value="<?php echo $editingSermon ? htmlspecialchars((string) $editingSermon['media_url']) : ''; ?>">
                 </div>
 
@@ -288,5 +294,18 @@ require_once __DIR__ . '/includes/header.php';
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
+
+            <?php if (!empty($totalPages) && $totalPages > 1): ?>
+                <div class="mt-8 flex justify-center gap-2">
+                    <?php if ($page > 1): ?>
+                        <a href="?p=<?php echo $page - 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Previous</a>
+                    <?php endif; ?>
+                    <span class="px-4 py-2 text-sm font-medium text-slate-500">Page <?php echo $page; ?> of <?php echo $totalPages; ?></span>
+                    <?php if ($page < $totalPages): ?>
+                        <a href="?p=<?php echo $page + 1; ?>" class="px-4 py-2 border rounded hover:bg-slate-50 text-sm font-medium">Next</a>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
+

@@ -40,7 +40,7 @@ AddDefaultCharset utf-8
 # Custom error pages
 # ------------------------------------------------------------------------------
 # Make sure to change this to /404.php on your live server!
-ErrorDocument 404 /BMI/404.php
+ErrorDocument 404 /404.php
 
 # ------------------------------------------------------------------------------
 # Security headers
