@@ -27,11 +27,6 @@ include 'includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(20px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-</style>
-
 <!-- LIVE PLATFORM LAYOUT -->
 <div class="flex flex-col lg:flex-row h-[calc(100dvh-5rem)] md:h-[calc(100vh-6rem)] mt-20 md:mt-24 bg-[#030303] overflow-hidden relative">
     
@@ -47,7 +42,7 @@ include 'includes/header.php';
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[80%] bg-indigo-600/20 blur-[100px] pointer-events-none mix-blend-screen hidden lg:block"></div>
 
             <!-- Video Player Container -->
-            <div class="relative w-full lg:max-w-6xl mx-auto bg-black lg:rounded-[2.5rem] overflow-hidden aspect-video shadow-[0_0_50px_rgba(0,0,0,0.8)] border-y border-white/10 lg:border border-white/10 lg:ring-1 lg:ring-white/5 reveal group">
+            <div class="relative w-full lg:max-w-6xl mx-auto bg-black lg:rounded-[2.5rem] overflow-hidden aspect-video shadow-[0_0_50px_rgba(0,0,0,0.8)] border-y border-white/10 lg:border border-white/10 lg:ring-1 lg:ring-white/5 gs-reveal-up group">
                 <?php if ($liveEmbedUrl !== ''): ?>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-10"></div>
                     <iframe id="main-player" src="<?php echo htmlspecialchars($liveEmbedUrl); ?>" class="absolute inset-0 w-full h-full z-0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
@@ -72,6 +67,11 @@ include 'includes/header.php';
                     </div>
                     <iframe id="main-player" src="" class="hidden absolute inset-0 w-full h-full bg-[#000000]" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 <?php endif; ?>
+
+                <!-- REAL-TIME PROMPT OVERLAY -->
+                <div id="interactive-prompt-container" class="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 hidden prompt-active w-[90%] max-w-lg bg-black/60 backdrop-blur-2xl border border-white/20 p-6 rounded-[2rem] shadow-2xl">
+                    <!-- Content injected via AJAX -->
+                </div>
             </div>
         </div>
         
@@ -107,17 +107,41 @@ include 'includes/header.php';
 }
 </style>
 <div class="px-8 py-6 border-b border-white/10 flex items-center justify-between relative z-10 bg-black/20 backdrop-blur-md">
-            <h2 class="font-display font-black uppercase tracking-widest text-white flex items-center gap-2">
-                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                Schedule
+            <h2 id="sidebar-title" class="font-display font-black uppercase tracking-widest text-white flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                Notes
             </h2>
         </div>
 
         <!-- Tab Contents Container -->
         <div class="flex-grow overflow-y-auto p-6 md:p-8 relative z-10 custom-scrollbar" id="sidebar-content">
             
+            <!-- NOTES TAB CONTENT (Interactive) -->
+            <div id="tab-notes" class="block space-y-6">
+                <div id="live-notes-container">
+                    <div class="text-center py-12 opacity-50">
+                        <svg class="w-12 h-12 mx-auto mb-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <p class="font-sans font-medium">Waiting for live notes...</p>
+                    </div>
+                </div>
+                
+                <div class="pt-6 border-t border-white/10 flex gap-4">
+                    <button id="btn-email-notes" class="flex-1 bg-white/10 hover:bg-white/20 text-white px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        Email Notes
+                    </button>
+                    <button id="btn-print-notes" class="flex-1 bg-white/10 hover:bg-white/20 text-white px-4 py-3 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center gap-2">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+                        Print
+                    </button>
+                </div>
+            </div>
+
             <!-- SCHEDULE TAB CONTENT -->
-            <div id="tab-schedule" class="space-y-10 block">
+            <div id="tab-schedule" class="hidden space-y-10">
                 <?php
                 $scheduleJson = setting('live.schedule', '[]');
                 $events = json_decode($scheduleJson, true) ?: [];
@@ -291,20 +315,17 @@ include 'includes/header.php';
             <div id="tab-pray" class="hidden space-y-4">
                 
                 <!-- Submit Prayer Request -->
-                <a href="contact" class="block bg-[#000000] border border-white/10  p-5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover: transition-shadow group">
+                <a href="contact.php" class="block bg-[#000000] border border-white/10 rounded-[1.5rem] p-5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-amber-500/50 transition-all group">
                     <div class="flex items-start gap-4">
                         <div class="text-white flex-shrink-0 mt-0.5 relative">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-                            <div class="absolute -right-2 -bottom-1 bg-[#000000] rounded-full">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-                            </div>
                         </div>
                         <div class="flex-grow">
                             <div class="flex items-center justify-between">
-                                <h3 class="font-bold text-[0.9375rem] text-white group-hover:text-teal-700 transition-colors">Submit Prayer Request</h3>
-                                <svg class="w-4 h-4 text-white/40 group-hover:text-teal-700 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <h3 class="font-bold text-[0.9375rem] text-white group-hover:text-amber-500 transition-colors">Submit Prayer Request</h3>
+                                <svg class="w-4 h-4 text-white/40 group-hover:text-amber-500 group-hover:translate-x-1 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                             </div>
-                            <p class="text-[0.8125rem] text-white/60 mt-2 leading-relaxed">Let us know how we can pray for you and our team will reach out via email with a prayer and helpful next steps.</p>
+                            <p class="text-[0.8125rem] text-white/60 mt-2 leading-relaxed">Let us know how we can pray for you and our team will reach out.</p>
                         </div>
                     </div>
                 </a>
@@ -335,7 +356,7 @@ include 'includes/header.php';
                             $replayUrl = "https://www.facebook.com/plugins/video.php?href={$encodedUrl}&show_text=0";
                         }
                     ?>
-                        <button onclick="playPastService('<?php echo htmlspecialchars($replayUrl); ?>')" class="w-full text-left block bg-[#000000] border border-white/10 p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover: transition-shadow group">
+                        <button onclick="playPastService('<?php echo htmlspecialchars($replayUrl); ?>')" class="w-full text-left block bg-[#000000] border border-white/10 rounded-2xl p-4 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-red-500/50 transition-all group">
                             <div class="flex items-start gap-4">
                                 <div class="text-white/40 group-hover:text-red-600 transition-colors flex-shrink-0 mt-0.5">
                                     <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
@@ -354,19 +375,26 @@ include 'includes/header.php';
 
         <!-- Bottom Navigation Tabs -->
         <div class="flex items-center justify-between border-t border-white/10 bg-[#000000] px-2 py-3 flex-shrink-0 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
-            <button onclick="switchTab('pray')" id="btn-pray" class="flex flex-col items-center justify-center w-1/3 text-white/40 hover:text-white transition-colors">
+            <!-- Notes Tab (Active by Default) -->
+            <button onclick="switchTab('notes')" id="btn-notes" class="flex flex-col items-center justify-center w-1/4 text-white transition-colors">
+                <div class="flex flex-col items-center border-b-[0.1875rem] border-white pb-1 -mb-1 px-2" id="border-notes">
+                    <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    <span class="text-[0.5625rem] font-bold uppercase tracking-wider">Notes</span>
+                </div>
+            </button>
+            <button onclick="switchTab('pray')" id="btn-pray" class="flex flex-col items-center justify-center w-1/4 text-white/40 hover:text-white transition-colors">
                 <div class="flex flex-col items-center border-b-[0.1875rem] border-transparent pb-1 -mb-1 px-2" id="border-pray">
                     <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
                     <span class="text-[0.5625rem] font-bold uppercase tracking-wider">Pray</span>
                 </div>
             </button>
-            <button onclick="switchTab('schedule')" id="btn-schedule" class="flex flex-col items-center justify-center w-1/3 text-white transition-colors">
-                <div class="flex flex-col items-center border-b-[0.1875rem] border-slate-900 pb-1 -mb-1 px-2" id="border-schedule">
+            <button onclick="switchTab('schedule')" id="btn-schedule" class="flex flex-col items-center justify-center w-1/4 text-white/40 transition-colors">
+                <div class="flex flex-col items-center border-b-[0.1875rem] border-transparent pb-1 -mb-1 px-2" id="border-schedule">
                     <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                     <span class="text-[0.5625rem] font-bold uppercase tracking-wider">Schedule</span>
                 </div>
             </button>
-            <button onclick="switchTab('past')" id="btn-past" class="flex flex-col items-center justify-center w-1/3 text-white/40 hover:text-white transition-colors">
+            <button onclick="switchTab('past')" id="btn-past" class="flex flex-col items-center justify-center w-1/4 text-white/40 hover:text-white transition-colors">
                 <div class="flex flex-col items-center border-b-[0.1875rem] border-transparent pb-1 -mb-1 px-2" id="border-past">
                     <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     <span class="text-[0.5625rem] font-bold uppercase tracking-wider">Past</span>
@@ -377,24 +405,38 @@ include 'includes/header.php';
 </div>
 
 <script>
+// --- TAB LOGIC ---
+const tabTitles = {
+    'notes': '<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg> Notes',
+    'pray': '<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg> Pray',
+    'schedule': '<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg> Schedule',
+    'past': '<svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Past'
+};
+
 function switchTab(tab) {
+    document.getElementById('sidebar-title').innerHTML = tabTitles[tab];
+
     // Hide all tabs
+    document.getElementById('tab-notes').classList.add('hidden');
     document.getElementById('tab-pray').classList.add('hidden');
     document.getElementById('tab-schedule').classList.add('hidden');
     document.getElementById('tab-past').classList.add('hidden');
     
     // Reset buttons
+    document.getElementById('btn-notes').classList.replace('text-white', 'text-white/40');
     document.getElementById('btn-pray').classList.replace('text-white', 'text-white/40');
     document.getElementById('btn-schedule').classList.replace('text-white', 'text-white/40');
     document.getElementById('btn-past').classList.replace('text-white', 'text-white/40');
-    document.getElementById('border-pray').classList.replace('border-slate-900', 'border-transparent');
-    document.getElementById('border-schedule').classList.replace('border-slate-900', 'border-transparent');
-    document.getElementById('border-past').classList.replace('border-slate-900', 'border-transparent');
+    
+    document.getElementById('border-notes').classList.replace('border-white', 'border-transparent');
+    document.getElementById('border-pray').classList.replace('border-white', 'border-transparent');
+    document.getElementById('border-schedule').classList.replace('border-white', 'border-transparent');
+    document.getElementById('border-past').classList.replace('border-white', 'border-transparent');
 
     // Show active tab
     document.getElementById('tab-' + tab).classList.remove('hidden');
     document.getElementById('btn-' + tab).classList.replace('text-white/40', 'text-white');
-    document.getElementById('border-' + tab).classList.replace('border-transparent', 'border-slate-900');
+    document.getElementById('border-' + tab).classList.replace('border-transparent', 'border-white');
 }
 
 function playPastService(url) {
@@ -402,16 +444,178 @@ function playPastService(url) {
     if (iframe) {
         iframe.src = url;
         iframe.classList.remove('hidden');
-        
-        // Hide the offline overlay if it exists
         const offlineOverlay = document.getElementById('offline-overlay');
         if (offlineOverlay) offlineOverlay.classList.add('hidden');
-        
-        // Scroll to top to focus on player
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
+
+// --- INTERACTIVE ENGINE (POLLING LOGIC) ---
+document.addEventListener('DOMContentLoaded', () => {
+    let lastPromptHtml = '';
+    let lastNotesHtml = '';
+    const pollInterval = 5000; // 5 seconds
+    
+    function fetchLiveState() {
+        fetch('api/live_state.php')
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Update Prompt Overlay
+                    const promptContainer = document.getElementById('interactive-prompt-container');
+                    if (data.current_prompt_html && data.current_prompt_html.trim() !== '') {
+                        if (data.current_prompt_html !== lastPromptHtml) {
+                            promptContainer.innerHTML = data.current_prompt_html;
+                            promptContainer.classList.remove('hidden');
+                            // Re-trigger animation
+                            promptContainer.classList.remove('prompt-active');
+                            void promptContainer.offsetWidth; // trigger reflow
+                            promptContainer.classList.add('prompt-active');
+                            lastPromptHtml = data.current_prompt_html;
+                        }
+                    } else {
+                        promptContainer.classList.add('hidden');
+                        lastPromptHtml = '';
+                    }
+
+                    // Update Notes
+                    const notesContainer = document.getElementById('live-notes-container');
+                    if (data.current_notes_html && data.current_notes_html.trim() !== '') {
+                        if (data.current_notes_html !== lastNotesHtml) {
+                            // Save user input values before replacing DOM
+                            const oldInputs = notesContainer.querySelectorAll('.notes-input, .notes-textarea');
+                            const savedValues = [];
+                            oldInputs.forEach(input => savedValues.push(input.value));
+                            
+                            notesContainer.innerHTML = data.current_notes_html;
+                            
+                            // Restore user input values
+                            const newInputs = notesContainer.querySelectorAll('.notes-input, .notes-textarea');
+                            newInputs.forEach((input, index) => {
+                                if (savedValues[index]) {
+                                    input.value = savedValues[index];
+                                }
+                            });
+                            
+                            lastNotesHtml = data.current_notes_html;
+                        }
+                    } else if (lastNotesHtml !== '') {
+                        notesContainer.innerHTML = `
+                        <div class="text-center py-12 opacity-50">
+                            <p class="font-sans font-medium">No active notes right now.</p>
+                        </div>`;
+                        lastNotesHtml = '';
+                    }
+                }
+            })
+            .catch(err => console.error('Live State Sync Error:', err));
+    }
+
+    // Initial fetch & loop
+    fetchLiveState();
+    setInterval(fetchLiveState, pollInterval);
+    // Print Logic
+    const btnPrint = document.getElementById('btn-print-notes');
+    if (btnPrint) {
+        btnPrint.addEventListener('click', () => {
+            const notesContent = document.getElementById('live-notes-container').innerHTML;
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>Sermon Notes - Bridge Ministries</title>
+                    <style>
+                        body { font-family: sans-serif; padding: 20px; color: black; background: white; }
+                        h1, h2, h3 { color: #333; }
+                        .notes-input, .notes-textarea { 
+                            border: none; border-bottom: 1px solid #ccc; width: 100%; 
+                            font-family: inherit; font-size: inherit; margin: 10px 0;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h2>Sermon Notes</h2>
+                    ${notesContent}
+                    <script>
+                        // Copy values from parent window
+                        const originalInputs = window.opener.document.querySelectorAll('#live-notes-container .notes-input, #live-notes-container .notes-textarea');
+                        const newInputs = document.querySelectorAll('.notes-input, .notes-textarea');
+                        newInputs.forEach((input, i) => {
+                            if (originalInputs[i]) {
+                                input.value = originalInputs[i].value;
+                                // Convert input to text for printing
+                                const text = document.createElement('span');
+                                text.style.textDecoration = 'underline';
+                                text.innerText = input.value || '________________';
+                                input.parentNode.replaceChild(text, input);
+                            }
+                        });
+                        window.print();
+                        window.close();
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        });
+    }
+
+    // Email Logic
+    const btnEmail = document.getElementById('btn-email-notes');
+    if (btnEmail) {
+        btnEmail.addEventListener('click', () => {
+            const email = prompt("Enter your email address to receive these notes:");
+            if (!email) return;
+
+            // Collect notes and fill in user inputs
+            let tempContainer = document.createElement('div');
+            tempContainer.innerHTML = document.getElementById('live-notes-container').innerHTML;
+            
+            const originalInputs = document.querySelectorAll('#live-notes-container .notes-input, #live-notes-container .notes-textarea');
+            const cloneInputs = tempContainer.querySelectorAll('.notes-input, .notes-textarea');
+            
+            cloneInputs.forEach((input, i) => {
+                if (originalInputs[i]) {
+                    const text = document.createElement('span');
+                    text.innerText = originalInputs[i].value || '________________';
+                    input.parentNode.replaceChild(text, input);
+                }
+            });
+
+            const btnText = btnEmail.innerHTML;
+            btnEmail.innerHTML = "Sending...";
+            btnEmail.disabled = true;
+
+            const formData = new FormData();
+            formData.append('action', 'email_notes');
+            formData.append('email', email);
+            formData.append('notes_html', tempContainer.innerHTML);
+
+            fetch('api/live_state.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Notes sent successfully!');
+                } else {
+                    alert('Failed to send notes: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                alert('An error occurred while sending.');
+                console.error(err);
+            })
+            .finally(() => {
+                btnEmail.innerHTML = btnText;
+                btnEmail.disabled = false;
+            });
+        });
+    }
+});
 </script>
     </div>
 </div>
 
+<?php include 'includes/footer.php'; ?>

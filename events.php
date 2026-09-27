@@ -51,20 +51,10 @@ try {
 include 'includes/header.php';
 ?>
 
-<!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.revealed { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.revealed { opacity: 1; transform: translateX(0); }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-</style>
+
 
 <!-- HERO SECTION -->
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center">
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center gs-reveal-section">
     <div class="absolute inset-0 z-0">
         <img src="<?= setting('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale">
         <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
@@ -73,14 +63,14 @@ include 'includes/header.php';
     <!-- Ambient Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-indigo-600/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
 
-    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center reveal">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center gs-reveal-up">
         <div class="inline-flex items-center gap-6 mb-8">
             <div class="h-px w-16 bg-white/20"></div>
             <span class="text-white/50 font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase">Church Life</span>
             <div class="h-px w-16 bg-white/20"></div>
         </div>
-        <h1 class="text-5xl md:text-7xl lg:text-9xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-300 to-neutral-600 mb-6 tracking-normal uppercase leading-[0.9]">
-            <?= setting('events.hero_title', 'Upcoming <br/><span class="italic font-light">Events.</span>') ?>
+        <h1 class="text-5xl md:text-6xl lg:text-8xl font-display font-black uppercase text-white/95 mb-6 tracking-tight leading-[1.0] drop-shadow-xl">
+            <?= setting('events.hero_title', 'Church <br/><i class="text-amber-500 font-light">Calendar</i>') ?>
         </h1>
         <p class="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed">
             <?= setting('events.hero_subtitle', 'From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.') ?>
@@ -90,14 +80,12 @@ include 'includes/header.php';
 
 
 <!-- SPECIAL EVENTS LIST -->
-<section class="py-24 md:py-32 bg-[#0a0a0c] relative overflow-hidden">
-    <!-- Ambient Glows -->
-    <div class="absolute top-0 right-0 w-[50rem] h-[50rem] bg-indigo-600/5 blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
+<section class="py-24 md:py-32 bg-[#111113] relative overflow-hidden gs-reveal-section">
 
     <div class="w-[95%] max-w-[112.5rem] mx-auto relative z-10">
         
         <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-6">
-            <div class="max-w-3xl reveal-right">
+            <div class="max-w-3xl gs-reveal-right">
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">Upcoming <br><i class="text-amber-500 font-light">Special Events</i></h2>
                 <p class="text-lg text-neutral-400 font-medium max-w-2xl">Don't miss out on these powerful one-off gatherings, seminars, and special worship nights.</p>
             </div>
@@ -108,7 +96,7 @@ include 'includes/header.php';
                 <?php echo e($eventsError); ?>
             </div>
         <?php elseif (empty($specials)): ?>
-            <div class="text-center py-24 bg-[#050505] rounded-[3rem] border border-white/5 shadow-2xl reveal">
+            <div class="text-center py-24 bg-transparent gs-reveal-up">
                 <div class="w-24 h-24 bg-white/5 border border-white/10 flex items-center justify-center mb-8 text-white/30 rounded-full mx-auto">
                     <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
                 </div>
@@ -125,23 +113,23 @@ include 'includes/header.php';
                     $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=800&auto=format&fit=crop';
                     $delayClass = 'delay-' . (($index % 3) + 1) * 100;
                 ?>
-                    <div class="group relative bg-[#050505] rounded-[2.5rem] p-4 border border-white/5 hover:border-white/10 transition-all duration-700 shadow-2xl hover:-translate-y-2 flex flex-col h-full overflow-hidden reveal <?php echo $delayClass; ?>">
+                    <div class="group relative bg-[#0A0A0B] hover:bg-[#161619] transition-colors duration-700 hover:-translate-y-2 flex flex-col h-full overflow-hidden gs-reveal-up <?php echo $delayClass; ?>">
                         
                         <!-- Event Image -->
-                        <div class="aspect-[16/10] relative overflow-hidden bg-black rounded-[2rem] shadow-inner mb-8">
-                            <img src="<?php echo htmlspecialchars($imageUrl); ?>" alt="<?php echo htmlspecialchars((string) $event['title']); ?>" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 ease-out opacity-80 group-hover:opacity-100" loading="lazy">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80 group-hover:opacity-40 transition-opacity duration-700"></div>
+                        <div class="aspect-[16/10] relative overflow-hidden bg-black mb-8">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            <img loading="lazy" src="<?php echo htmlspecialchars($imageUrl); ?>" alt="<?php echo htmlspecialchars((string) $event['title']); ?>" class="w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105">
                             
                             <!-- Date Badge -->
-                            <div class="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-[1.5rem] text-center px-6 py-4 border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:bg-amber-500 group-hover:border-amber-400 group-hover:text-black transition-all duration-500">
+                            <div class="absolute top-6 right-6 bg-white/10 backdrop-blur-md rounded-[1.5rem] text-center px-6 py-4 border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)] group-hover:bg-amber-500 group-hover:border-amber-400 group-hover:text-black transition-all duration-500 z-20">
                                 <p class="text-white/60 group-hover:text-black/60 font-sans font-bold text-[0.625rem] uppercase tracking-[0.2em] transition-colors"><?php echo $month; ?></p>
                                 <p class="text-white group-hover:text-black font-display font-black text-3xl leading-none mt-1 transition-colors"><?php echo $day; ?></p>
                             </div>
                         </div>
 
                         <!-- Card Content -->
-                        <div class="px-6 pb-6 flex flex-col flex-grow relative z-10">
-                            <h3 class="text-3xl font-display font-black uppercase text-white mb-6 group-hover:text-amber-500 transition-colors duration-500 leading-tight tracking-normal"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
+                        <div class="flex-grow flex flex-col px-6 pb-8 z-20">
+                            <h3 class="text-2xl font-display font-black uppercase text-white/95 mb-4 group-hover:text-amber-500 transition-colors duration-500"><?php echo htmlspecialchars((string) $event['title']); ?></h3>
                             
                             <div class="space-y-4 mb-10 flex-grow">
                                 <?php if ($eventTime): ?>
@@ -177,12 +165,12 @@ include 'includes/header.php';
 </section>
 
 <!-- DISCOVER FLAGSHIP PROGRAMS CTA -->
-<section class="py-32 bg-[#050505] relative overflow-hidden">
+<section class="py-32 bg-[#050505] relative overflow-hidden gs-reveal-section">
     <!-- Grid Overlay -->
     <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')] opacity-30 z-0"></div>
 
     <div class="max-w-[112.5rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-[90%]">
-        <div class="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-12 md:p-24 text-center relative overflow-hidden reveal shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+        <div class="bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-[3.5rem] p-12 md:p-24 text-center relative overflow-hidden gs-reveal-up shadow-[0_0_50px_rgba(0,0,0,0.5)]">
             <!-- Intense Inner Glow -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-indigo-600/20 blur-[120px] rounded-full pointer-events-none mix-blend-screen"></div>
             

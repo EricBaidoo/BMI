@@ -4,9 +4,9 @@ foreach ($files as $f) {
     if (file_exists($f)) {
         $c = file_get_contents($f);
         $o = $c;
-        $c = str_replace('data-aos="fade-up"', 'class="reveal"', $c);
-        $c = str_replace('data-aos="fade-right"', 'class="reveal-left"', $c);
-        $c = str_replace('data-aos="fade-left"', 'class="reveal-right"', $c);
+        $c = str_replace('data-aos="fade-up"', 'class="gs-reveal-up"', $c);
+        $c = str_replace('data-aos="fade-right"', 'class="gs-reveal-left"', $c);
+        $c = str_replace('data-aos="fade-left"', 'class="gs-reveal-right"', $c);
         $c = preg_replace('/ data-aos-delay="\d+"/', '', $c);
         
         // Also remove any rogue spaces inside class if needed, but this is fine.

@@ -36,7 +36,7 @@ try {
 
 include 'includes/header.php';
 ?>
-<section class="page-hero">
+<section class="page-hero gs-reveal-section">
     <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
         <span class="tag-chip"><?php echo $single ? ucfirst((string) $single['category']) : 'Good News'; ?></span>
         <h1 class="text-4xl md:text-5xl font-bold mt-3"><?php echo $single ? e($single['title']) : 'Church News and Devotionals'; ?></h1>
@@ -48,7 +48,7 @@ include 'includes/header.php';
     </div>
 </section>
 
-<section class="max-w-6xl mx-auto px-4 py-12">
+<section class="max-w-6xl mx-auto px-4 py-12 gs-reveal-section">
     <?php if ($single): ?>
         <article class="section-card">
             <div class="prose max-w-none text-slate-800">

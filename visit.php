@@ -11,29 +11,26 @@ include 'includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.revealed { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.revealed { opacity: 1; transform: translateX(0); }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-</style>
-
 <!-- HERO SECTION -->
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center">
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
-        <img loading="lazy" src="<?= setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg') ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
+        <?php 
+            $visitHeroBg = setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg');
+            $is_video = preg_match('/\.(mp4|webm)$/i', $visitHeroBg);
+        ?>
+        <?php if ($is_video): ?>
+            <video src="<?= htmlspecialchars($visitHeroBg) ?>" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" autoplay loop muted playsinline></video>
+        <?php else: ?>
+            <img loading="lazy" src="<?= htmlspecialchars($visitHeroBg) ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
+        <?php endif; ?>
         <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
     </div>
     
     <!-- Abstract Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[50rem] h-[50rem] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
 
-    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center reveal">
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center gs-reveal-up">
         <div class="inline-flex items-center gap-6 mb-8">
             <div class="h-px w-16 bg-white/20"></div>
             <span class="text-white/50 font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase">You Belong Here</span>
@@ -57,7 +54,7 @@ include 'includes/header.php';
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
             <!-- Text Content -->
-            <div class="reveal-right">
+            <div class="gs-reveal-right">
                 <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-12 leading-[1.0]">When & <i class="text-amber-500 font-light">Where</i></h2>
                 
                 <div class="space-y-12">
@@ -105,7 +102,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Image/Map Container -->
-            <div class="relative overflow-hidden rounded-[3rem] shadow-2xl reveal-left group border border-white/10 h-full min-h-[400px]">
+            <div class="relative overflow-hidden rounded-[3rem] shadow-2xl gs-reveal-left group border border-white/10 h-full min-h-[400px]">
                 <img loading="lazy" src="<?= setting('visit.church_image', 'assets/image/church-building.jpg') ?>" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80"></div>
                 <div class="absolute bottom-10 left-10 right-10">
@@ -132,7 +129,7 @@ include 'includes/header.php';
 
     <div class="w-[95%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <div class="text-center max-w-3xl mx-auto mb-20 reveal">
+        <div class="text-center max-w-3xl mx-auto mb-20 gs-reveal-up">
             <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">What to <i class="text-amber-500 font-light">Expect</i></h2>
             <p class="text-lg text-neutral-400 font-medium leading-relaxed">
                 <?= setting('visit.expect_text', 'Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.') ?>
@@ -141,7 +138,7 @@ include 'includes/header.php';
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             <!-- Item 1 -->
-            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal group relative overflow-hidden">
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 gs-reveal-up group relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                 
                 <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
@@ -154,7 +151,7 @@ include 'includes/header.php';
             </div>
             
             <!-- Item 2 -->
-            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal delay-100 group relative overflow-hidden">
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 gs-reveal-up delay-100 group relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                 
                 <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
@@ -167,7 +164,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Item 3 -->
-            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 reveal delay-200 group relative overflow-hidden">
+            <div class="bg-white/[0.02] backdrop-blur-3xl p-10 lg:p-12 rounded-[2.5rem] border border-white/5 shadow-2xl hover:border-amber-500/30 transition-all duration-700 hover:-translate-y-2 gs-reveal-up delay-200 group relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-t from-amber-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                 
                 <div class="w-20 h-20 rounded-[1.5rem] bg-black border border-white/10 text-white/50 flex items-center justify-center mb-8 group-hover:bg-amber-500 group-hover:text-black group-hover:border-amber-400 transition-all duration-500">
@@ -191,7 +188,7 @@ include 'includes/header.php';
     <div class="max-w-[112.5rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-[95%]">
         
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-center">
-            <div class="text-left reveal-right">
+            <div class="text-left gs-reveal-right">
                 <h2 class="text-5xl md:text-6xl lg:text-8xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white to-white/40 uppercase tracking-normal mb-8 leading-[0.9]">Let Us Know <br><i class="text-amber-500 font-light">You're Coming!</i></h2>
                 <p class="text-xl text-neutral-400 font-medium max-w-xl leading-relaxed">
                     Fill out the form below and our team will meet you at the door, show you around, and help get your kids checked in!
@@ -207,7 +204,7 @@ include 'includes/header.php';
                 </div>
             </div>
 
-            <div class="bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-10 md:p-14 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 reveal-left relative">
+            <div class="bg-white/[0.02] backdrop-blur-3xl rounded-[3rem] p-10 md:p-14 shadow-[0_0_50px_rgba(0,0,0,0.5)] border border-white/10 gs-reveal-left relative">
                 <!-- Inner Glow for Form -->
                 <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none rounded-[3rem]"></div>
                 

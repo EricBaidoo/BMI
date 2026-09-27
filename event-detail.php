@@ -53,7 +53,7 @@ include 'includes/header.php';
     ?>
 
     <!-- EVENT HERO -->
-    <section class="relative <?php echo $isFlagship ? 'h-[70vh] min-h-[37.5rem]' : 'h-[50vh] min-h-[25rem]'; ?> overflow-hidden">
+    <section class="relative <?php echo $isFlagship ? 'h-[70vh] min-h-[37.5rem]' : 'h-[50vh] min-h-[25rem]'; ?> overflow-hidden gs-reveal-section">
         <img loading="lazy" src="<?php echo htmlspecialchars($imageUrl); ?>" alt="<?php echo htmlspecialchars((string)$event['title']); ?>" class="absolute inset-0 w-full h-full object-cover">
         <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-slate-900/30"></div>
         
@@ -93,7 +93,7 @@ include 'includes/header.php';
     </section>
 
     <!-- CONTENT -->
-    <section class="py-16 md:py-24">
+    <section class="py-16 md:py-24 gs-reveal-section">
         <div class="w-[90%] max-w-[112.5rem] mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
                 

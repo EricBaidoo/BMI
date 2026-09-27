@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Media URL is not valid.');
             }
 
-            $sermonImage = handle_image_upload_or_link($_FILES['sermon_image'] ?? null, $_POST['sermon_image_url'] ?? '', 'sermon');
+            $sermonImage = handle_image_upload_or_link($_FILES['sermon_image'] ?? null, $_POST['sermon_image_url'] ?? '', $_POST['existing_sermon_image'] ?? '', 'sermons');
 
             if ($action === 'add') {
                 $stmt = $pdo->prepare(

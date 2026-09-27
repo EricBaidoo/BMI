@@ -50,26 +50,14 @@ include 'includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.active { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.active { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.active { opacity: 1; transform: translateX(0); }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-.delay-300 { transition-delay: 300ms; }
-</style>
-
 <!-- HERO SECTION -->
-<section class="relative min-h-[65vh] flex items-center justify-center overflow-hidden bg-[#030303] pt-32 pb-20">
+<section class="relative min-h-[65vh] flex items-center justify-center overflow-hidden bg-[#030303] pt-32 pb-20 gs-reveal-section">
     <!-- Ambient Glowing Orbs -->
     <div class="absolute top-10 left-1/4 w-[30rem] h-[30rem] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
     <div class="absolute bottom-0 right-1/4 w-[40rem] h-[40rem] bg-indigo-600/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none"></div>
     <div class="absolute inset-0 bg-[url('<?= setting('flagship.hero_bg_image', 'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop') ?>')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
     
-    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto reveal">
+    <div class="relative z-10 text-center px-6 max-w-5xl mx-auto gs-reveal-up">
         <span class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-amber-500 text-xs font-bold tracking-[0.25em] uppercase mb-8 backdrop-blur-md shadow-2xl">
             Our Milestones
         </span>
@@ -83,11 +71,11 @@ include 'includes/header.php';
 </section>
 
 <!-- VISION SECTION -->
-<section class="py-24 md:py-40 bg-[#050505] relative overflow-hidden border-t border-white/5">
+<section class="py-24 md:py-40 bg-[#050505] relative overflow-hidden border-t border-white/5 gs-reveal-section">
     <div class="w-[90%] max-w-[112.5rem] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 items-center">
         
         <!-- Left Text Content -->
-        <div class="reveal-left">
+        <div class="gs-reveal-left">
             <h2 class="text-5xl md:text-7xl font-display font-black text-white uppercase tracking-normal leading-[0.95] mb-10">
                 Experience<br/>
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-600 italic">Transformation</span>
@@ -103,7 +91,7 @@ include 'includes/header.php';
         </div>
         
         <!-- Right Frosted Glass Card -->
-        <div class="relative reveal-right delay-200">
+        <div class="relative gs-reveal-right delay-200">
             <!-- Glow behind card -->
             <div class="absolute -inset-1 bg-gradient-to-br from-amber-500/20 to-purple-600/20 blur-3xl rounded-[3rem] opacity-70"></div>
             
@@ -122,15 +110,15 @@ include 'includes/header.php';
 </section>
 
 <!-- CATALOG SECTION -->
-<section class="py-32 bg-[#0a0a0c] relative">
+<section class="py-32 bg-[#0a0a0c] relative gs-reveal-section">
     <div class="w-[90%] max-w-[112.5rem] mx-auto">
         
         <?php if ($eventsError): ?>
-            <div class="bg-red-500/10 text-red-400 p-6 rounded-2xl font-bold text-center border border-red-500/20 reveal">
+            <div class="bg-red-500/10 text-red-400 p-6 rounded-2xl font-bold text-center border border-red-500/20 gs-reveal-up">
                 <?php echo e($eventsError); ?>
             </div>
         <?php elseif (empty($flagships)): ?>
-            <div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 reveal">
+            <div class="text-center py-20 bg-white/5 rounded-[3rem] border border-white/10 gs-reveal-up">
                 <p class="text-white/50 font-medium text-xl">No flagship programs are currently published.</p>
             </div>
         <?php else: ?>
@@ -141,7 +129,7 @@ include 'includes/header.php';
                     $isReversed = $index % 2 !== 0;
                     $imageUrl = !empty($event['event_image']) ? $event['event_image'] : 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop';
                 ?>
-                <div class="group flex flex-col <?php echo $isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'; ?> gap-0 rounded-[2.5rem] overflow-hidden bg-black border border-white/10 hover:border-white/20 transition-all duration-700 reveal shadow-2xl hover:shadow-[0_20px_50px_rgba(245,158,11,0.05)]">
+                <div class="group flex flex-col <?php echo $isReversed ? 'lg:flex-row-reverse' : 'lg:flex-row'; ?> gap-0 rounded-[2.5rem] overflow-hidden bg-black border border-white/10 hover:border-white/20 transition-all duration-700 gs-reveal-up shadow-2xl hover:shadow-[0_20px_50px_rgba(245,158,11,0.05)]">
                     
                     <!-- Image -->
                     <div class="w-full lg:w-1/2 aspect-video lg:aspect-auto relative overflow-hidden bg-neutral-900">
@@ -204,7 +192,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => {
+    document.querySelectorAll('.gs-reveal-up, .gs-reveal-left, .gs-reveal-right').forEach((el) => {
         observer.observe(el);
     });
 });

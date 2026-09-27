@@ -78,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $buttonUrl = trim((string) ($_POST['button_url'] ?? ''));
             $sortOrder = (int) ($_POST['sort_order'] ?? 0);
             
-            $bgImage = handle_image_upload_or_link($_FILES['bg_image'] ?? null, $_POST['bg_image_url'] ?? '', $_POST['existing_bg_image'] ?? '');
+            $bgImage = handle_image_upload_or_link($_FILES['bg_image'] ?? null, $_POST['bg_image_url'] ?? '', $_POST['existing_bg_image'] ?? '', 'hero');
             
             if ($id > 0) {
                 $stmt = $pdo->prepare('UPDATE hero_slides SET title = :title, subtitle = :subtitle, button_text = :button_text, button_url = :button_url, sort_order = :sort_order, bg_image = :bg_image WHERE id = :id');
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Author Name and Quote are required.');
             }
             
-            $imageUrl = handle_image_upload_or_link($_FILES['image_url'] ?? null, $_POST['image_url_url'] ?? '', $_POST['existing_image_url'] ?? '');
+            $imageUrl = handle_image_upload_or_link($_FILES['image_url'] ?? null, $_POST['image_url_url'] ?? '', $_POST['existing_image_url'] ?? '', 'staff');
             
             if ($id > 0) {
                 $stmt = $pdo->prepare('UPDATE testimonies SET author_name = :aname, author_role = :arole, quote = :quote, sort_order = :sort_order, image_url = :image_url WHERE id = :id');

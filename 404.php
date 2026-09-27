@@ -4,7 +4,7 @@ $pageTitle = 'Page Not Found | Bridge Ministries International';
 $pageDescription = 'The page you were looking for could not be found.';
 include __DIR__ . '/includes/header.php';
 ?>
-<section class="page-hero">
+<section class="page-hero gs-reveal-section">
     <div class="max-w-6xl mx-auto px-4 py-20 text-center">
         <p class="text-7xl font-extrabold text-slate-300">404</p>
         <h1 class="text-3xl md:text-4xl font-bold mt-4">We could not find that page</h1>

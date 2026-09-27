@@ -60,3 +60,8 @@ if (!function_exists('excerpt')) {
         return implode(' ', array_slice($parts, 0, $words)) . '…';
     }
 }
+
+// Autoload all UI components
+foreach (glob(__DIR__ . '/components/*.php') as $filename) {
+    require_once $filename;
+}

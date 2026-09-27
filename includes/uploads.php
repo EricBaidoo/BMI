@@ -10,7 +10,7 @@
  * Returns the public-relative path (e.g., "assets/image/foo.jpg") or null when no file uploaded.
  * Throws RuntimeException on validation/IO failure.
  */
-function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 20 * 1024 * 1024): ?string
+function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 20 * 1024 * 1024, string $category = 'uncategorized'): ?string
 {
     if (!is_array($file) || ($file['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
         return null;
@@ -48,7 +48,7 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
     }
     $ext = $allowed[$mime];
 
-    $uploadDir = dirname(__DIR__) . '/assets/image/';
+    $uploadDir = dirname(__DIR__) . '/assets/image/' . ltrim($category . '/', '/');
     if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
         throw new RuntimeException('Upload directory is not writable.');
     }
@@ -96,7 +96,7 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
     }
 
     @chmod($destination, 0644);
-    return 'assets/image/' . $name;
+    return 'assets/image/' . ($category ? $category . '/' : '') . $name;
 }
 
 /**
@@ -130,9 +130,9 @@ function upload_delete(?string $relativePath): void
  * @param string $existing The existing value to fall back to.
  * @return string|null The resulting path/URL or null.
  */
-function handle_image_upload_or_link(?array $file, string $url, string $existing = ''): ?string
+function handle_image_upload_or_link(?array $file, string $url, string $existing = '', string $category = 'uncategorized'): ?string
 {
-    $uploaded = upload_image($file, 'upload');
+    $uploaded = upload_image($file, 'upload', 20 * 1024 * 1024, $category);
     if ($uploaded !== null) {
         return $uploaded;
     }

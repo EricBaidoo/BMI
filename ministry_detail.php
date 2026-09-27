@@ -48,23 +48,14 @@ $textColor = explode(' ', $themeClass)[0];
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.revealed { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.revealed { opacity: 1; transform: translateX(0); }
-</style>
-
 <!-- HERO SECTION -->
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[60vh] flex items-center justify-center">
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[60vh] flex items-center justify-center gs-reveal-section">
     <div class="absolute inset-0 z-0">
         <img loading="lazy" src="<?= $heroImage ?>" alt="<?= htmlspecialchars($ministry['title']) ?> Background" class="w-full h-full object-cover opacity-30 mix-blend-luminosity grayscale">
         <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/60 to-[#0a0a0c]"></div>
     </div>
     
-    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center reveal">
+    <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center gs-reveal-up">
         <div class="inline-flex items-center gap-6 mb-6">
             <div class="h-px w-16 bg-white/20"></div>
             <a href="ministries.php" class="text-white/50 hover:text-white font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase transition-colors">
@@ -90,12 +81,12 @@ $textColor = explode(' ', $themeClass)[0];
 </section>
 
 <!-- CONTENT SECTION -->
-<section class="py-24 md:py-32 bg-[#0a0a0c] relative overflow-hidden">
+<section class="py-24 md:py-32 bg-[#0a0a0c] relative overflow-hidden gs-reveal-section">
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
             
             <!-- Left Column: Long Description -->
-            <div class="lg:col-span-8 reveal-left">
+            <div class="lg:col-span-8 gs-reveal-left">
                 <?php if (!empty($ministry['long_description'])): ?>
                     <div class="prose prose-invert prose-lg prose-headings:font-display prose-headings:font-bold prose-headings:uppercase prose-p:font-sans prose-p:text-neutral-400 prose-p:leading-relaxed max-w-none">
                         <?= $ministry['long_description'] ?>
@@ -119,7 +110,7 @@ $textColor = explode(' ', $themeClass)[0];
                 
                 if (count($gallery) > 0):
                 ?>
-                <div class="mt-16 pt-12 border-t border-white/10 reveal">
+                <div class="mt-16 pt-12 border-t border-white/10 gs-reveal-up">
                     <h3 class="font-display font-bold text-2xl text-white uppercase mb-8 pb-4 border-b border-white/10 inline-block">Gallery</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <?php foreach ($gallery as $index => $img): 
@@ -139,7 +130,7 @@ $textColor = explode(' ', $themeClass)[0];
             </div>
 
             <!-- Right Column: Details & CTA -->
-            <div class="lg:col-span-4 reveal-right">
+            <div class="lg:col-span-4 gs-reveal-right">
                 <div class="bg-[#111] border border-white/10 rounded-[2rem] p-8 md:p-10 sticky top-32">
                     
                     <h3 class="font-display font-bold text-2xl text-white uppercase mb-8 pb-4 border-b border-white/10">Ministry Details</h3>
@@ -195,7 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
         rootMargin: "0px 0px -50px 0px"
     });
 
-    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach((el) => {
+    document.querySelectorAll('.gs-reveal-up, .gs-reveal-left, .gs-reveal-right').forEach((el) => {
         observer.observe(el);
     });
 });

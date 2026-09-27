@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new RuntimeException('Title and date are required.');
             }
 
-            $eventImage = handle_image_upload_or_link($_FILES['event_image'] ?? null, $_POST['event_image_url'] ?? '', 'event');
+            $eventImage = handle_image_upload_or_link($_FILES['event_image'] ?? null, $_POST['event_image_url'] ?? '', $_POST['existing_event_image'] ?? '', 'events');
 
             if ($action === 'add') {
                 $stmt = $pdo->prepare(

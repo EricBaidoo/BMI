@@ -1,158 +1,148 @@
 /**
- * BMI — Main JavaScript
- * Lightweight cinematic interactions (no AOS dependency).
+ * BMI — Main JavaScript (GSAP Powered)
  */
 
 /* ============================================================
-   SCROLL REVEAL — IntersectionObserver-based
+   CUSTOM CURSOR
    ============================================================ */
-function initScrollReveal() {
-    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-    if (!revealElements.length) return;
+function initCustomCursor() {
+    const cursor = document.createElement('div');
+    cursor.classList.add('custom-cursor');
+    document.body.appendChild(cursor);
 
-    if ('IntersectionObserver' in window) {
-        const observer = new IntersectionObserver(function (entries) {
-            entries.forEach(function (entry) {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
 
-        revealElements.forEach(function (el) {
-            observer.observe(el);
-        });
-    } else {
-        // Fallback: show everything
-        revealElements.forEach(function (el) {
-            el.classList.add('revealed');
-        });
-    }
-}
-
-/* ============================================================
-   ANIMATED COUNTERS
-   ============================================================ */
-function initCounters() {
-    const counters = document.querySelectorAll('.counter');
-    if (!counters.length) return;
-
-    const observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                const el = entry.target;
-                if (el.dataset.counted) return;
-                el.dataset.counted = 'true';
-
-                const target = parseInt(el.dataset.target, 10) || 0;
-                const duration = 2000;
-                const start = performance.now();
-
-                function step(now) {
-                    const elapsed = now - start;
-                    const progress = Math.min(elapsed / duration, 1);
-                    // Ease out cubic
-                    const eased = 1 - Math.pow(1 - progress, 3);
-                    el.textContent = Math.floor(eased * target);
-                    if (progress < 1) {
-                        requestAnimationFrame(step);
-                    } else {
-                        el.textContent = target;
-                    }
-                }
-                requestAnimationFrame(step);
-                observer.unobserve(el);
-            }
-        });
-    }, { threshold: 0.5 });
-
-    counters.forEach(function (el) {
-        observer.observe(el);
+    const hoverElements = document.querySelectorAll('a, button, input, .horizontal-panel, [role="button"]');
+    hoverElements.forEach(el => {
+        el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+        el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
     });
 }
 
 /* ============================================================
-   PARALLAX BACKGROUNDS
+   GSAP ANIMATIONS
    ============================================================ */
-function initParallax() {
-    const parallaxElements = document.querySelectorAll('.parallax-bg');
-    if (!parallaxElements.length) return;
+function initGSAP() {
+    if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+        console.warn("GSAP not loaded. Running fallback.");
+        document.querySelectorAll('.opacity-0').forEach(el => {
+            el.classList.remove('opacity-0');
+            el.style.opacity = 1;
+        });
+        return;
+    }
+    
+    gsap.registerPlugin(ScrollTrigger);
 
-    function onScroll() {
-        const scrollY = window.pageYOffset;
-        parallaxElements.forEach(function (el) {
-            const rect = el.getBoundingClientRect();
-            const speed = parseFloat(el.dataset.speed) || 0.3;
-            if (rect.bottom > 0 && rect.top < window.innerHeight) {
-                const offset = scrollY * speed;
-                el.style.transform = 'translateY(' + offset + 'px) scale(1.1)';
+    // 1. Hero Animations
+    const heroTitle = document.querySelector('.gs-hero-title');
+    const heroText = document.querySelector('.gs-hero-text');
+    const heroBtn = document.querySelector('.gs-hero-btn');
+    const heroScroll = document.querySelector('.gs-hero-scroll');
+    const heroBg = document.querySelector('.gs-hero-bg img, .gs-hero-bg video');
+    
+    if (heroTitle) {
+        const tl = gsap.timeline();
+        
+        if (heroBg) {
+            gsap.fromTo(heroBg, 
+                { scale: 1.1, filter: 'blur(10px)' }, 
+                { scale: 1, filter: 'blur(0px)', duration: 2, ease: 'power3.out' }
+            );
+        }
+
+        if (heroText) {
+            tl.fromTo(heroText, 
+                { y: 30, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1, ease: 'power3.out' }
+            );
+        }
+        
+        tl.fromTo(heroTitle,
+            { y: 50, opacity: 0, rotationX: -20 },
+            { y: 0, opacity: 1, rotationX: 0, duration: 1.2, ease: 'power4.out' },
+            heroText ? "-=0.6" : 0
+        );
+
+        if (heroBtn) {
+            tl.fromTo(heroBtn,
+                { y: 30, opacity: 0 },
+                { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' },
+                "-=0.8"
+            );
+        }
+
+        if (heroScroll) {
+            tl.fromTo(heroScroll,
+                { opacity: 0 },
+                { opacity: 1, duration: 1 },
+                "-=0.4"
+            );
+        }
+    }
+
+    // 2. Global Reveal Animations (ScrollTrigger)
+    // Disabled temporarily because elements were getting stuck at opacity 0
+    const revealSections = document.querySelectorAll('.gs-reveal-section');
+    revealSections.forEach(section => {
+        const revealUps = section.querySelectorAll('.gs-reveal-up, .gs-reveal-left, .gs-reveal-right, .gs-reveal-opacity');
+        if (revealUps.length) {
+            gsap.fromTo(revealUps, 
+                { y: 60, autoAlpha: 0 },
+                { 
+                    y: 0, 
+                    autoAlpha: 1, 
+                    duration: 1, 
+                    stagger: 0.1, 
+                    ease: 'power3.out',
+                    scrollTrigger: {
+                        trigger: section,
+                        start: "top 80%",
+                    }
+                }
+            );
+        }
+    });
+
+    // 3. Horizontal Scroll Section (Ministries)
+    const horizontalSection = document.getElementById('ministries-horizontal');
+    const horizontalContainer = document.querySelector('.horizontal-scroll-container');
+    
+    if (horizontalSection && horizontalContainer) {
+        // Calculate the amount to scroll horizontally
+        const scrollAmount = horizontalContainer.scrollWidth - window.innerWidth + 100;
+        
+        if (scrollAmount > 0 && window.innerWidth > 768) {
+            gsap.to(horizontalContainer, {
+                x: -scrollAmount,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: horizontalSection,
+                    pin: true,
+                    scrub: 1,
+                    start: "center center",
+                    end: () => "+=" + scrollAmount
+                }
+            });
+        }
+    }
+
+    // 4. Parallax Backgrounds
+    const parallaxBgs = document.querySelectorAll('.gs-parallax-bg');
+    parallaxBgs.forEach(bg => {
+        gsap.to(bg, {
+            yPercent: 30,
+            ease: "none",
+            scrollTrigger: {
+                trigger: bg.parentElement,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true
             }
         });
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-}
-
-/* ============================================================
-   HERO CAROUSEL (index.php)
-   ============================================================ */
-function initHeroCarousel() {
-    var slides = document.querySelectorAll('.carousel-slide');
-    if (!slides.length || slides.length < 2) return;
-
-    var currentIndex = 0;
-    var timer = null;
-    var autoDelayMs = 6000;
-
-    function showSlide(index) {
-        slides.forEach(function (slide, i) {
-            if (i === index) {
-                slide.classList.remove('opacity-0', 'z-10');
-                slide.classList.add('opacity-100', 'z-20');
-            } else {
-                slide.classList.add('opacity-0', 'z-10');
-                slide.classList.remove('opacity-100', 'z-20');
-            }
-        });
-    }
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % slides.length;
-        showSlide(currentIndex);
-    }
-
-    function startAuto() {
-        timer = setInterval(nextSlide, autoDelayMs);
-    }
-
-    function stopAuto() {
-        clearInterval(timer);
-        timer = null;
-    }
-
-    // Expose global goToSlide for inline onclick
-    window.goToSlide = function (index) {
-        currentIndex = index;
-        showSlide(currentIndex);
-        stopAuto();
-        startAuto();
-    };
-
-    showSlide(0);
-    startAuto();
-
-    // Pause on hover
-    var heroSection = document.getElementById('hero-carousel');
-    if (heroSection) {
-        heroSection.addEventListener('mouseenter', stopAuto);
-        heroSection.addEventListener('mouseleave', startAuto);
-    }
-
-    // Pause when tab is hidden
-    document.addEventListener('visibilitychange', function () {
-        if (document.hidden) { stopAuto(); } else { startAuto(); }
     });
 }
 
@@ -163,54 +153,57 @@ function initSmartHeader() {
     const header = document.getElementById('site-header');
     if (!header) return;
 
-    let lastScroll = 0;
-    
-    // Remove Alpine-based classes if any are clinging
-    header.classList.remove('header-solid', 'header-transparent', 'py-4', 'py-8');
-    
-    function onScroll() {
-        const currentScroll = window.pageYOffset;
-        
-        // At the very top
-        if (currentScroll <= 50) {
-            header.classList.remove('header-hidden', 'header-solid', 'py-4');
-            header.classList.add('header-visible', 'header-transparent', 'py-8');
-        } 
-        // Scrolling Down
-        else if (currentScroll > lastScroll && currentScroll > 200) {
-            header.classList.remove('header-visible');
-            header.classList.add('header-hidden');
-        } 
-        // Scrolling Up
-        else if (currentScroll < lastScroll) {
-            header.classList.remove('header-hidden', 'header-transparent', 'py-8');
-            header.classList.add('header-visible', 'header-solid', 'py-4');
+    // Remove any GSAP scroll triggers that might conflict
+    const toggleHeaderBackground = () => {
+        if (window.scrollY > 50) {
+            header.classList.remove('header-transparent');
+            header.classList.add('header-solid');
+            // Also adjust padding for a tighter look when scrolled
+            header.classList.remove('py-8');
+            header.classList.add('py-4');
+        } else {
+            header.classList.remove('header-solid');
+            header.classList.add('header-transparent');
+            // Revert padding
+            header.classList.remove('py-4');
+            header.classList.add('py-8');
         }
-        
-        lastScroll = currentScroll;
-    }
+    };
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    // Run once on load
-    onScroll();
+    window.addEventListener('scroll', toggleHeaderBackground, { passive: true });
+    // Run once on load to set initial state
+    toggleHeaderBackground();
 }
 
 /* ============================================================
    INITIALIZATION
    ============================================================ */
+/* ============================================================
+   INITIALIZATION
+   ============================================================ */
 document.addEventListener('DOMContentLoaded', function () {
-    initScrollReveal();
-    initCounters();
-    initParallax();
-    initHeroCarousel();
-    initSmartHeader();
+    try {
+        initGSAP();
+    } catch (e) {
+        console.error("GSAP Initialization failed:", e);
+        // Fallback: force show text if GSAP fails
+        document.querySelectorAll('.opacity-0').forEach(el => el.style.opacity = 1);
+    }
+    initCustomCursor();
 });
 
 // Re-initialize on Swup page transitions
 document.addEventListener('swup:pageView', function () {
-    initScrollReveal();
-    initCounters();
-    initParallax();
-    initHeroCarousel();
-    initSmartHeader();
+    ScrollTrigger.getAll().forEach(t => t.kill()); // Kill old triggers
+    initGSAP();
+    
+    // Reattach cursor listeners
+    const cursor = document.querySelector('.custom-cursor');
+    if (cursor) {
+        const hoverElements = document.querySelectorAll('a, button, input, .horizontal-panel, [role="button"]');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+    }
 });

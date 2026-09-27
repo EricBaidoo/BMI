@@ -45,23 +45,12 @@ include 'includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.revealed { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.revealed { opacity: 1; transform: translateX(0); }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-</style>
-
 <div class="pt-20 md:pt-24 bg-[#0a0a0c] min-h-screen relative overflow-hidden">
     <!-- Ambient Background Glows -->
     <div class="absolute top-0 right-1/4 w-[50rem] h-[50rem] bg-amber-600/5 blur-[150px] rounded-full pointer-events-none mix-blend-screen z-0"></div>
     
     <?php if ($error || !$sermon): ?>
-        <div class="max-w-3xl mx-auto px-4 py-32 text-center relative z-10 reveal">
+        <div class="max-w-3xl mx-auto px-4 py-32 text-center relative z-10 gs-reveal-up">
             <h1 class="text-5xl md:text-7xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600 mb-6 uppercase tracking-normal">Sermon Not Found</h1>
             <p class="text-xl text-neutral-400 mb-10 font-medium"><?php echo $error ?? "We couldn't find the message you were looking for."; ?></p>
             <a href="sermons.php" class="inline-block bg-white text-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-amber-500 hover:text-white transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] hover:-translate-y-1">Return to Archive</a>
@@ -74,11 +63,11 @@ include 'includes/header.php';
     ?>
 
     <!-- SERMON HERO (Cinematic Player Area) -->
-    <section class="relative bg-[#030303] border-b border-white/5 pt-10 pb-16 relative z-10">
+    <section class="relative bg-[#030303] border-b border-white/5 pt-10 pb-16 relative z-10 gs-reveal-section">
         <!-- Intense Backlight for Player -->
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-indigo-500/10 blur-[100px] pointer-events-none mix-blend-screen"></div>
 
-        <div class="w-[95%] max-w-7xl mx-auto reveal">
+        <div class="w-[95%] max-w-7xl mx-auto gs-reveal-up">
             <div class="inline-flex items-center gap-4 mb-8">
                 <a href="sermons.php" class="text-white/40 hover:text-white transition-colors flex items-center gap-2 font-sans font-bold text-xs uppercase tracking-widest">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
@@ -101,12 +90,12 @@ include 'includes/header.php';
     </section>
 
     <!-- CONTENT SECTION -->
-    <section class="py-16 md:py-24 relative z-20">
+    <section class="py-16 md:py-24 relative z-20 gs-reveal-section">
         <div class="w-[90%] max-w-7xl mx-auto">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
                 
                 <!-- Main Details -->
-                <div class="lg:col-span-8 reveal-right">
+                <div class="lg:col-span-8 gs-reveal-right">
                     <div class="flex items-center gap-3 mb-6 flex-wrap">
                         <span class="px-4 py-1.5 bg-white/5 text-white/70 text-xs font-bold uppercase tracking-widest border border-white/10 rounded-full shadow-inner"><?php echo $sermonDate; ?></span>
                         <?php if (!empty($sermon['topic'])): ?>
@@ -177,7 +166,7 @@ include 'includes/header.php';
                 </div>
 
                 <!-- Sidebar (Glassmorphic) -->
-                <div class="lg:col-span-4 reveal-left delay-100">
+                <div class="lg:col-span-4 gs-reveal-left delay-100">
                     <div class="bg-white/[0.02] backdrop-blur-3xl p-10 border border-white/5 rounded-[2.5rem] sticky top-32 shadow-2xl relative overflow-hidden">
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-amber-500/10 blur-[50px] rounded-full pointer-events-none"></div>
 

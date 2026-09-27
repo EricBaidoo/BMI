@@ -49,11 +49,18 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
     <!-- Compiled Tailwind CSS -->
     <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/styles.css') ?: time(); ?>">
 
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+
     <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     
     <!-- Swup.js -->
     <script src="https://unpkg.com/swup@4"></script>
+
+    <!-- GSAP Core -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <?php if (!empty($analyticsDomain)): ?>
         <script defer data-domain="<?php echo htmlspecialchars($analyticsDomain); ?>" src="https://plausible.io/js/script.js"></script>
@@ -65,157 +72,131 @@ $canonicalUrl = $siteUrl . '/' . ltrim($_SERVER['REQUEST_URI'] ?? '/', '/');
 <div class="film-grain"></div>
 
 <!-- HEADER -->
-<header 
-    id="site-header" 
-    class="fixed w-full top-0 z-50 transition-all duration-500 ease-out bg-transparent py-8">
-    
-    <!-- Permanent subtle gradient to protect text when header is transparent -->
-    <div id="header-gradient" class="absolute inset-0 bg-gradient-to-b from-black/80 to-transparent pointer-events-none z-[-1] transition-opacity duration-500"></div>
+<header id="site-header" class="fixed w-full top-0 z-50 transition-all duration-700 ease-out py-8 header-transparent group">
+    <div class="max-w-[112.5rem] w-[90%] mx-auto relative z-50 flex justify-between items-center">
+        <!-- Logo -->
+        <a href="index.php" class="flex-shrink-0 flex items-center z-[100] gap-3">
+            <?php 
+                $logo = setting('site.logo');
+                if (!$logo) {
+                    $logo = 'assets/image/ui/bmi logo new.png';
+                }
+            ?>
+            <img src="<?= htmlspecialchars($logo) ?>" alt="<?= htmlspecialchars(setting('site.title')) ?>" class="h-10 w-auto object-contain">
+        </a>
 
-    <div class="max-w-[112.5rem] w-[90%] mx-auto relative z-50">
-        <div class="flex justify-between items-center transition-all duration-500" id="header-inner">
-            
-            <!-- Logo Area -->
-            <div class="flex-shrink-0 flex items-center">
-                <a href="./" class="flex items-center gap-4 group">
-                    <img class="h-8 md:h-10 w-auto transform group-hover:scale-105 transition-transform duration-700 ease-out" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
-                    <span class="hidden md:block font-sans font-semibold tracking-[0.1em] text-xs md:text-sm text-white uppercase group-hover:text-brand-300 transition-colors">
-                        Bridge Ministries
-                    </span>
-                </a>
-            </div>
-
-            <!-- Main Navigation -->
-            <nav class="hidden xl:flex items-center justify-center gap-10">
-                <?php
-                $navLinks = [
-                    'about' => 'About Us',
-                    'ministries' => 'Ministries & Services',
-                    'sermons' => 'Sermons',
-                    'events' => 'Events',
-                    'flagship-programs' => 'Flagship',
-                    'contact' => 'Contact'
-                ];
-                foreach ($navLinks as $url => $label):
-                    $isActive = ($currentPage === $url || $currentPage === $url . '.php');
-                ?>
-                <a href="<?php echo $url; ?>" class="nav-link relative text-[0.6875rem] font-medium uppercase tracking-[0.15em] transition-colors py-2 group">
-                    <?php echo $label; ?>
-                    <?php if ($isActive): ?>
-                        <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"></span>
-                    <?php else: ?>
-                        <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-1 bg-white rounded-full transition-all duration-300 group-hover:w-1 opacity-0 group-hover:opacity-100"></span>
-                    <?php endif; ?>
-                </a>
-                <?php endforeach; ?>
-            </nav>
-                
-            <!-- Action Buttons -->
-            <div class="hidden xl:flex flex-shrink-0 items-center gap-8">
-                <a href="livestream" class="text-[0.6875rem] font-medium text-white hover:text-accent transition-colors flex items-center gap-2 uppercase tracking-[0.15em]">
-                    <span class="relative flex h-1.5 w-1.5">
-                        <span class="animate-ping absolute inline-flex h-full w-full bg-accent opacity-75 rounded-full"></span>
-                        <span class="relative inline-flex h-1.5 w-1.5 bg-accent rounded-full"></span>
-                    </span>
-                    Live
-                </a>
-                
-                <a href="donate" class="btn-give px-8 py-3 rounded-none text-[0.6875rem] font-bold uppercase tracking-[0.15em] transition-transform hover:-translate-y-0.5">
-                    Give
-                </a>
-            </div>
-
-            <div class="xl:hidden flex items-center">
-                <button id="mobile-menu-btn" class="text-white hover:text-brand-300 focus:outline-none transition-colors" aria-label="Toggle menu">
-                    <svg id="icon-menu" style="display: block;" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-                    </svg>
-                    <svg id="icon-close" style="display: none;" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mobile Nav -->
-    <div 
-        id="mobile-nav-container"
-        class="fixed inset-0 z-40 bg-brand-950/98 backdrop-blur-2xl xl:hidden flex-col justify-center items-center h-screen pt-20 transition-all duration-300 transform -translate-y-full opacity-0 pointer-events-none flex">
-        
-        <div class="flex flex-col gap-6 text-center w-full px-6">
-            <?php foreach ($navLinks as $url => $label): ?>
-            <a href="<?php echo $url; ?>" class="mobile-nav-link text-xl font-display font-medium text-white/70 hover:text-white transition-colors">
+        <!-- Desktop Nav -->
+        <nav class="hidden xl:flex items-center gap-12">
+            <?php
+            $navLinks = [
+                'about' => 'About Us',
+                'ministries' => 'Ministries',
+                'sermons' => 'Sermons',
+                'events' => 'Events',
+                'donate' => 'Give'
+            ];
+            foreach ($navLinks as $url => $label):
+                $isActive = ($currentPage === $url || $currentPage === $url . '.php');
+            ?>
+            <a href="<?php echo $url; ?>" class="relative text-[0.65rem] font-sans font-bold uppercase tracking-widest-xl text-white/70 hover:text-white transition-colors py-2 nav-link-hover">
                 <?php echo $label; ?>
+                <span class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-px bg-accent transition-all duration-300 <?php echo $isActive ? 'w-full' : ''; ?>"></span>
             </a>
             <?php endforeach; ?>
-            
-            <div class="h-px w-12 bg-white/10 mx-auto my-4"></div>
-            
-            <a href="livestream" class="mobile-nav-link text-lg font-sans font-medium text-white hover:text-accent transition-colors flex items-center justify-center gap-3 uppercase tracking-widest">
-                <span class="w-2 h-2 bg-accent rounded-full animate-pulse"></span>
-                Watch Live
+        </nav>
+
+        <!-- Right Actions -->
+        <div class="flex items-center gap-8">
+            <a href="livestream" class="hidden md:flex items-center gap-3 text-[0.65rem] font-bold text-white uppercase tracking-widest hover:text-accent transition-colors group/live">
+                <div class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-accent group-hover/live:bg-white transition-colors"></span>
+                </div>
+                Live
             </a>
-            <a href="donate" class="mobile-nav-link mt-4 btn-give px-10 py-4 text-sm tracking-[0.2em]">Give Online</a>
+            
+            <button id="mega-menu-trigger" class="flex items-center gap-4 text-white focus:outline-none group/menu xl:hidden">
+                <span class="hidden md:block text-[0.65rem] font-bold uppercase tracking-widest-xl group-hover/menu:text-accent transition-colors">Menu</span>
+                <div class="w-10 h-10 rounded-full border border-white/20 flex flex-col justify-center items-center gap-1.5 group-hover/menu:border-accent group-hover/menu:bg-accent/10 transition-all">
+                    <span class="w-4 h-px bg-white group-hover/menu:w-5 transition-all"></span>
+                    <span class="w-4 h-px bg-white group-hover/menu:w-3 transition-all"></span>
+                </div>
+            </button>
         </div>
     </div>
 </header>
 
-<main id="swup" class="flex-grow transition-fade">
+<!-- FULL SCREEN MEGA MENU -->
+<div id="mega-menu" class="fixed inset-0 z-[60] bg-obsidian-950/98 backdrop-blur-3xl hidden opacity-0 flex-col justify-center">
+    <!-- Close Button -->
+    <button id="mega-menu-close" class="absolute top-8 right-[5%] w-12 h-12 rounded-full border border-white/10 flex flex-col justify-center items-center gap-0 hover:bg-white hover:text-black transition-all z-50">
+        <span class="w-5 h-px bg-current rotate-45 translate-y-[1px]"></span>
+        <span class="w-5 h-px bg-current -rotate-45 -translate-y-[1px]"></span>
+    </button>
+
+    <div class="max-w-[112.5rem] w-[90%] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+        <!-- Links -->
+        <div class="flex flex-col gap-6 lg:gap-8">
+            <span class="text-accent text-[0.65rem] font-bold uppercase tracking-widest-xl mb-4">Navigation</span>
+            <?php foreach ($navLinks as $url => $label): ?>
+                <a href="<?php echo $url; ?>" class="mega-link font-display font-black text-5xl md:text-7xl text-white/50 hover:text-white uppercase tracking-tight transition-colors flex items-center gap-6 group w-fit">
+                    <?php echo $label; ?>
+                    <svg class="w-10 h-10 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            <?php endforeach; ?>
+        </div>
+        
+        <!-- Featured Card (Media/Sermon) -->
+        <div class="hidden lg:block relative rounded-[3rem] overflow-hidden aspect-video bg-obsidian-900 border border-white/5 group hover:border-white/20 transition-all">
+            <img src="https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-80 transition-opacity duration-700 group-hover:scale-105" alt="Latest Sermon">
+            <div class="absolute inset-0 bg-gradient-to-t from-obsidian-950 to-transparent"></div>
+            <div class="absolute bottom-10 left-10 right-10">
+                <span class="text-accent text-xs font-bold uppercase tracking-widest mb-2 block">Latest Sermon</span>
+                <h3 class="text-3xl font-display font-black text-white uppercase leading-none mb-6">Faith In The Fire</h3>
+                <a href="sermons" class="inline-flex items-center gap-3 bg-white text-black px-6 py-3 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-accent hover:text-white transition-colors">
+                    <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    Watch Now
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="swup" class="flex-grow transition-fade pt-0">
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    const header = document.getElementById('site-header');
-    const headerGradient = document.getElementById('header-gradient');
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const iconMenu = document.getElementById('icon-menu');
-    const iconClose = document.getElementById('icon-close');
-    const mobileNavContainer = document.getElementById('mobile-nav-container');
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+    // Mega Menu Logic
+    const trigger = document.getElementById('mega-menu-trigger');
+    const close = document.getElementById('mega-menu-close');
+    const menu = document.getElementById('mega-menu');
+    const links = document.querySelectorAll('.mega-link');
     
     let isMenuOpen = false;
-
-    // Scroll Handler
-    function handleScroll() {
-        if (window.scrollY > 20) {
-            header.classList.remove('bg-transparent', 'py-8');
-            header.classList.add('bg-[#050505]/80', 'backdrop-blur-xl', 'py-4', 'shadow-2xl', 'border-b', 'border-white/5');
-            headerGradient.classList.add('opacity-0');
-        } else {
-            header.classList.add('bg-transparent', 'py-8');
-            header.classList.remove('bg-[#050505]/80', 'backdrop-blur-xl', 'py-4', 'shadow-2xl', 'border-b', 'border-white/5');
-            headerGradient.classList.remove('opacity-0');
-        }
-    }
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initialize on load
-
-    // Mobile Menu Toggle
-    function toggleMenu() {
-        isMenuOpen = !isMenuOpen;
-        if (isMenuOpen) {
-            iconMenu.style.display = 'none';
-            iconClose.style.display = 'block';
-            
-            mobileNavContainer.classList.remove('-translate-y-full', 'opacity-0', 'pointer-events-none');
-            mobileNavContainer.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            document.body.style.overflow = 'hidden';
-        } else {
-            iconMenu.style.display = 'block';
-            iconClose.style.display = 'none';
-            
-            mobileNavContainer.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
-            mobileNavContainer.classList.add('-translate-y-full', 'opacity-0', 'pointer-events-none');
-            document.body.style.overflow = '';
-        }
-    }
-
-    mobileMenuBtn.addEventListener('click', toggleMenu);
     
-    mobileNavLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            if (isMenuOpen) toggleMenu();
-        });
-    });
+    const openMenu = () => {
+        isMenuOpen = true;
+        menu.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+        
+        gsap.to(menu, { opacity: 1, duration: 0.5, ease: "power2.out" });
+        gsap.fromTo(links, 
+            { y: 50, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.7, stagger: 0.1, ease: "power3.out", delay: 0.2 }
+        );
+    };
+    
+    const closeMenu = () => {
+        isMenuOpen = false;
+        document.body.style.overflow = '';
+        
+        gsap.to(menu, { opacity: 0, duration: 0.5, ease: "power2.in", onComplete: () => {
+            menu.classList.add('hidden');
+        }});
+    };
+    
+    trigger.addEventListener('click', openMenu);
+    close.addEventListener('click', closeMenu);
+    links.forEach(l => l.addEventListener('click', closeMenu));
 });
 </script>

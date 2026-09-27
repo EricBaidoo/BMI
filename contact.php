@@ -52,17 +52,6 @@ include 'includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
-<style>
-.reveal { opacity: 0; transform: translateY(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal.revealed { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-left.revealed { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: all 1s cubic-bezier(0.16, 1, 0.3, 1); }
-.reveal-right.revealed { opacity: 1; transform: translateX(0); }
-.delay-100 { transition-delay: 100ms; }
-.delay-200 { transition-delay: 200ms; }
-</style>
-
 <!-- HERO SECTION -->
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden">
     <!-- Background Image -->
@@ -74,7 +63,7 @@ include 'includes/header.php';
     <!-- Abstract Glow -->
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[40rem] h-[40rem] bg-indigo-600/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
 
-    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center reveal">
+    <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center gs-reveal-up">
         <div class="inline-flex items-center gap-6 mb-8">
             <div class="h-px w-16 bg-white/20"></div>
             <span class="text-white/50 font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase">Contact Us</span>
@@ -99,7 +88,7 @@ include 'includes/header.php';
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
             
             <!-- Bento Column 1: Contact Info -->
-            <div class="lg:col-span-5 flex flex-col gap-8 reveal-right">
+            <div class="lg:col-span-5 flex flex-col gap-8 gs-reveal-right">
                 
                 <!-- Main Info Card -->
                 <div class="relative bg-[#050505] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl group overflow-hidden">
@@ -149,7 +138,7 @@ include 'includes/header.php';
                 <!-- Office Hours & Socials (Split Bento) -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 h-full">
                     
-                    <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl reveal group">
+                    <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl gs-reveal-up group">
                         <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Office Hours</h3>
                         <ul class="space-y-4 text-white/60 font-medium text-sm">
                             <li class="flex flex-col"><span class="text-white">Mon - Thu</span> <span>9:00 AM - 5:00 PM</span></li>
@@ -158,7 +147,7 @@ include 'includes/header.php';
                         </ul>
                     </div>
 
-                    <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl reveal flex flex-col justify-between group">
+                    <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl gs-reveal-up flex flex-col justify-between group">
                         <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Social</h3>
                         <div class="grid grid-cols-2 gap-4">
                             <?php 
@@ -184,7 +173,7 @@ include 'includes/header.php';
 
             <!-- Bento Column 2: Contact Form -->
             <div class="lg:col-span-7">
-                <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal h-full group hover:border-amber-500/20 transition-all duration-500">
+                <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl gs-reveal-up h-full group hover:border-amber-500/20 transition-all duration-500">
                     
                     <h2 class="text-3xl md:text-5xl font-display font-black tracking-normal mb-3 uppercase">Send a Message</h2>
                     <p class="text-white/50 font-sans font-medium text-lg mb-10">We would love to hear from you. Please fill out the form below.</p>

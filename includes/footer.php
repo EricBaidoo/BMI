@@ -2,78 +2,65 @@
 
 <!-- CINEMATIC FOOTER (End Credits Style) -->
 <?php if (!isset($hideFooter) || !$hideFooter): ?>
-<footer class="relative bg-[#000000] text-white pt-24 pb-12 overflow-hidden mt-0 z-10">
-    <!-- Very subtle radial glow from the bottom -->
-    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[50rem] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-white/5 via-transparent to-transparent pointer-events-none z-0"></div>
+<footer class="relative bg-obsidian-950 text-white pt-32 pb-12 overflow-hidden mt-0 z-10 border-t border-white/5">
+    <!-- Subtle radial glow from the bottom -->
+    <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] h-[50rem] bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-accent/5 via-transparent to-transparent pointer-events-none z-0"></div>
 
     <div class="relative z-10 w-[90%] max-w-[112.5rem] mx-auto text-center flex flex-col items-center">
         
-        <!-- The Final Call -->
-        <h2 class="font-display font-normal text-4xl md:text-6xl lg:text-7xl tracking-tight mb-12 text-white leading-[0.9]">
-            Stay <i class="text-white/50">Connected.</i>
+        <h2 class="font-display font-black text-5xl md:text-7xl lg:text-[7rem] tracking-tight mb-12 text-white leading-[0.85] uppercase">
+            Stay <i class="text-accent italic font-light">Connected.</i>
         </h2>
         
         <!-- Newsletter Block -->
-        <form class="flex flex-col sm:flex-row items-stretch w-full max-w-xl mx-auto gap-0 group mb-16 border-b border-white/20 pb-4">
-            <input type="email" placeholder="Enter your email address" class="bg-transparent border-none text-white px-2 py-4 w-full focus:outline-none placeholder-white/30 font-sans tracking-[0.2em] text-sm uppercase text-center sm:text-left transition-all" required>
-            <button type="submit" class="bg-transparent text-white/50 hover:text-white px-8 py-4 font-sans font-medium text-xs uppercase tracking-[0.3em] transition-all whitespace-nowrap">
+        <form class="flex flex-col sm:flex-row items-stretch w-full max-w-xl mx-auto gap-0 group mb-24 border-b border-white/20 pb-4 focus-within:border-accent transition-colors">
+            <input type="email" placeholder="Enter your email address" class="bg-transparent border-none text-white px-2 py-4 w-full focus:outline-none placeholder-white/30 font-sans tracking-widest-xl text-xs uppercase text-center sm:text-left transition-all" required>
+            <button type="submit" class="bg-transparent text-white/50 hover:text-accent px-8 py-4 font-sans font-bold text-[0.65rem] uppercase tracking-[0.3em] transition-colors whitespace-nowrap">
                 Subscribe
             </button>
         </form>
 
         <!-- Minimalist Site Map -->
-        <div class="flex flex-wrap justify-center gap-x-12 gap-y-6 mb-16 max-w-4xl mx-auto">
-            <a href="about" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">About Us</a>
-            <a href="ministries" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Ministries</a>
-            <a href="sermons" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Sermons</a>
-            <a href="events" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Events</a>
-            <a href="visit" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Visit</a>
-            <a href="donate" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Give</a>
-            <a href="contact" class="text-white/40 hover:text-white font-sans text-[0.625rem] uppercase tracking-[0.3em] transition-colors">Contact</a>
+        <div class="flex flex-wrap justify-center gap-x-16 gap-y-8 mb-24 max-w-4xl mx-auto">
+            <a href="about" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">About Us</a>
+            <a href="ministries" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Ministries</a>
+            <a href="sermons" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Sermons</a>
+            <a href="events" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Events</a>
+            <a href="donate" class="text-accent hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Give</a>
+            <a href="contact" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Contact</a>
         </div>
 
         <!-- Social & Contact Lines -->
-        <div class="flex flex-col items-center gap-6 mb-16">
-            <div class="flex items-center gap-8">
+        <div class="flex flex-col items-center gap-8 mb-24">
+            <div class="flex items-center gap-12">
                 <?php 
                     $dynamicSocials = json_decode(setting('social.links', '[]'), true) ?: [];
                     foreach ($dynamicSocials as $socialLink): 
                         if(empty($socialLink['url'])) continue;
                 ?>
-                    <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="text-white/30 hover:text-white transition-colors duration-500" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>">
+                    <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="text-white/30 hover:text-accent transition-colors duration-500 hover:scale-110" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>">
                         <?php if (!empty($socialLink['icon'])): ?>
-                            <span class="w-5 h-5 flex items-center justify-center *:w-full *:h-full">
+                            <span class="w-6 h-6 flex items-center justify-center *:w-full *:h-full">
                                 <?php echo $socialLink['icon']; ?>
                             </span>
                         <?php else: ?>
-                            <span class="font-sans text-[0.625rem] uppercase tracking-[0.2em]"><?php echo htmlspecialchars($socialLink['name']); ?></span>
+                            <span class="font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl"><?php echo htmlspecialchars($socialLink['name']); ?></span>
                         <?php endif; ?>
                     </a>
                 <?php endforeach; ?>
             </div>
-            
-            <?php $address = setting('contact.address'); if($address): ?>
-                <p class="text-white/30 font-sans text-xs tracking-widest uppercase"><?php echo htmlspecialchars($address); ?></p>
-            <?php endif; ?>
-            
-            <?php $phone = setting('contact.phone_primary'); if($phone): ?>
-                <p class="text-white/30 font-sans text-xs tracking-widest uppercase"><?php echo htmlspecialchars($phone); ?></p>
-            <?php endif; ?>
         </div>
 
         <!-- Final Mark -->
-        <div class="flex flex-col items-center">
-            <img class="h-12 w-auto mb-10 opacity-30 grayscale mix-blend-screen" src="<?php echo setting('site.logo') ? htmlspecialchars(setting('site.logo')) : 'assets/image/bmi%20logo%20new.png'; ?>" alt="BMI Logo" onerror="this.style.display='none';">
-            
-            <div class="flex flex-col md:flex-row items-center gap-4 md:gap-8">
-                <p class="text-white/20 text-[0.55rem] font-sans tracking-[0.3em] uppercase">
+        <div class="flex flex-col items-center w-full pt-12 border-t border-white/5">
+            <div class="flex flex-col md:flex-row items-center justify-between w-full gap-8">
+                <p class="text-white/20 text-[0.55rem] font-bold font-sans tracking-widest-xl uppercase">
                     &copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars(setting('site.name', 'Bridge Ministries')); ?>. All rights reserved.
                 </p>
-                <div class="hidden md:block w-1 h-1 rounded-full bg-white/10"></div>
-                <div class="flex items-center gap-6">
-                    <a href="privacy.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Privacy</a>
-                    <a href="privacy.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Terms</a>
-                    <a href="admin/login.php" class="text-white/20 hover:text-white text-[0.55rem] font-sans tracking-[0.3em] uppercase transition-colors">Staff Login</a>
+                <div class="flex items-center gap-8">
+                    <a href="privacy.php" class="text-white/20 hover:text-white text-[0.55rem] font-bold font-sans tracking-widest-xl uppercase transition-colors">Privacy</a>
+                    <a href="terms.php" class="text-white/20 hover:text-white text-[0.55rem] font-bold font-sans tracking-widest-xl uppercase transition-colors">Terms</a>
+                    <a href="admin/login.php" class="text-white/20 hover:text-white text-[0.55rem] font-bold font-sans tracking-widest-xl uppercase transition-colors">Staff Login</a>
                 </div>
             </div>
         </div>
@@ -96,11 +83,19 @@
 
 <script>
     function acceptCookies() {
-        localStorage.setItem('cookieConsent', 'accepted');
+        try {
+            localStorage.setItem('cookieConsent', 'accepted');
+        } catch (e) {
+            console.warn('Local storage is disabled or blocked.');
+        }
         hideCookieBanner();
     }
     function dismissCookies() {
-        localStorage.setItem('cookieConsent', 'declined');
+        try {
+            localStorage.setItem('cookieConsent', 'declined');
+        } catch (e) {
+            console.warn('Local storage is disabled or blocked.');
+        }
         hideCookieBanner();
     }
     function hideCookieBanner() {
@@ -125,8 +120,11 @@
     });
 </script>
 
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <!-- Mobile Menu JS -->
-<script src="assets/js/main.js?v=<?php echo filemtime(__DIR__ . '/../assets/js/main.js') ?: time(); ?>"></script>
+<script defer src="assets/js/main.js?v=<?php echo filemtime(__DIR__ . '/../assets/js/main.js') ?: time(); ?>"></script>
 <script>
     // Initialize Swup for SPA-like transitions
     if (typeof Swup !== 'undefined') {

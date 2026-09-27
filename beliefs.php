@@ -6,7 +6,7 @@ require_once __DIR__ . '/includes/helpers.php';
 include 'includes/header.php';
 ?>
 <!-- HERO SECTION -->
-<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#000000] overflow-hidden">
+<section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#000000] overflow-hidden gs-reveal-section">
     <div class="absolute inset-0 z-0">
         <img loading="lazy" src="<?= setting('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 ">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
@@ -27,10 +27,10 @@ include 'includes/header.php';
     </div>
 </section>
 
-<section class="py-24 md:py-32 bg-[#F5F5F5] relative overflow-hidden text-black">
+<section class="py-24 md:py-32 bg-[#F5F5F5] relative overflow-hidden text-black gs-reveal-section">
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
-        <div class="max-w-4xl mx-auto text-center mb-20 reveal">
+        <div class="max-w-4xl mx-auto text-center mb-20 gs-reveal-up">
             <h2 class="text-3xl md:text-5xl font-display font-black uppercase text-black mb-6 tracking-normal">A Note Before You Read</h2>
             <p class="text-lg md:text-xl text-black/60 font-sans font-medium leading-relaxed">
                 <?= setting('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
@@ -41,7 +41,7 @@ include 'includes/header.php';
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 auto-rows-min">
             
             <!-- Bento Item 01 (Large) -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
                 <div class="flex items-start justify-between mb-8">
                     <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 group-hover:opacity-100 transition-opacity">01</span>
                     <svg class="w-8 h-8 text-white/20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
@@ -56,7 +56,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 02 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">02</span>
                 <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">God</h3>
                 <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -68,7 +68,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 03 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">03</span>
                 <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Jesus Christ</h3>
                 <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -80,7 +80,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 04 (Large) -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 lg:col-span-2 group">
                 <div class="flex items-start justify-between mb-8">
                     <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 group-hover:opacity-100 transition-opacity">04</span>
                 </div>
@@ -94,7 +94,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 05 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">05</span>
                 <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Humanity & Sin</h3>
                 <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -106,7 +106,7 @@ include 'includes/header.php';
             </div>
             
             <!-- Bento Item 06 (Large) -->
-            <div class="bg-black border border-amber-500/20 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl reveal hover:border-amber-500/50 transition-all duration-500 lg:col-span-3 group relative overflow-hidden">
+            <div class="bg-black border border-amber-500/20 rounded-[2.5rem] p-10 md:p-14 text-white shadow-2xl gs-reveal-up hover:border-amber-500/50 transition-all duration-500 lg:col-span-3 group relative overflow-hidden">
                 <div class="absolute -top-32 -right-32 w-96 h-96 bg-amber-500/10 blur-[5rem] rounded-full"></div>
                 <div class="relative z-10">
                     <div class="flex flex-col md:flex-row gap-8 items-start md:items-center justify-between">
@@ -127,7 +127,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 07 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">07</span>
                 <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Church</h3>
                 <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -139,7 +139,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 08 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">08</span>
                 <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">Baptism & Communion</h3>
                 <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -151,7 +151,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 09 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">09</span>
                 <h3 class="text-2xl font-display font-black uppercase tracking-normal mb-4">The Christian Life</h3>
                 <p class="text-base text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -163,7 +163,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Bento Item 10 -->
-            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl reveal hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
+            <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-10 text-white shadow-2xl gs-reveal-up hover:border-amber-500/30 transition-all duration-500 group lg:col-span-2">
                 <span class="text-amber-500 font-display font-black text-6xl leading-none opacity-50 block mb-8 group-hover:opacity-100 transition-opacity">10</span>
                 <h3 class="text-3xl font-display font-black uppercase tracking-normal mb-4">The Return of Christ & Eternity</h3>
                 <p class="text-lg text-white/60 font-sans font-medium leading-relaxed mb-6">
@@ -177,7 +177,7 @@ include 'includes/header.php';
         </div>
 
         <!-- CTA -->
-        <div class="mt-20 bg-black border border-white/10 rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row md:items-center justify-between gap-10 reveal shadow-2xl text-white text-center md:text-left">
+        <div class="mt-20 bg-black border border-white/10 rounded-[3rem] p-12 md:p-20 flex flex-col md:flex-row md:items-center justify-between gap-10 gs-reveal-up shadow-2xl text-white text-center md:text-left">
             <div>
                 <h2 class="text-4xl font-display font-black uppercase tracking-normal mb-3">Have Questions?</h2>
                 <p class="text-xl text-white/60 font-sans font-medium">Our pastors would love to talk with you — whatever you believe right now.</p>
