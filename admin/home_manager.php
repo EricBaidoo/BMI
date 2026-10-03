@@ -307,7 +307,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span>
-                                <input type="file" name="bg_image" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                <input type="file" name="bg_image" accept="image/*,video/mp4,video/webm" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             </div>
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>
@@ -388,7 +388,7 @@ require_once __DIR__ . '/includes/header.php';
                             <div class="grid md:grid-cols-2 gap-4">
                                 <div>
                                     <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload New Image</span>
-                                    <input type="file" name="setting_file[home_founder_image]" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                    <input type="file" name="setting_file[home_founder_image]" accept="image/*,video/mp4,video/webm" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                                 </div>
                                 <div>
                                     <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste Image URL</span>
@@ -497,7 +497,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span>
-                                <input type="file" name="image_url" accept="image/*" class="w-full text-sm text-slate-500">
+                                <input type="file" name="image_url" accept="image/*,video/mp4,video/webm" class="w-full text-sm text-slate-500">
                             </div>
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>
@@ -637,7 +637,7 @@ require_once __DIR__ . '/includes/header.php';
                         <div class="grid md:grid-cols-2 gap-4">
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span>
-                                <input type="file" name="image_url" accept="image/*" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                <input type="file" name="image_url" accept="image/*,video/mp4,video/webm" class="w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                             </div>
                             <div>
                                 <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>

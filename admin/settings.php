@@ -334,7 +334,7 @@ require_once __DIR__ . '/includes/header.php';
                                         </div>
                                     <?php endif; ?>
                                     <div class="flex flex-col gap-2">
-                                        <input type="file" name="setting_file_<?php echo e(str_replace('.', '_', $field['key'])); ?>" accept="image/*" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors">
+                                        <input type="file" name="setting_file_<?php echo e(str_replace('.', '_', $field['key'])); ?>" accept="image/*,video/mp4,video/webm" class="text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-colors">
                                         <input type="hidden" name="setting[<?php echo e($field['key']); ?>]" value="<?php echo e($val); ?>">
                                         <p class="text-xs text-slate-500">Upload a new image to replace the current one.</p>
                                     </div>

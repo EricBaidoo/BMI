@@ -226,7 +226,7 @@ require_once __DIR__ . '/includes/header.php';
                                 <div class="grid md:grid-cols-2 gap-4">
                                     <div>
                                         <span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span>
-                                        <input type="file" name="setting_file[<?php echo e(str_replace('.', '_', $field['key'])); ?>]" accept="image/*" class="w-full text-sm">
+                                        <input type="file" name="setting_file[<?php echo e(str_replace('.', '_', $field['key'])); ?>]" accept="image/*,video/mp4,video/webm" class="w-full text-sm">
                                     </div>
                                     <div>
                                         <span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span>

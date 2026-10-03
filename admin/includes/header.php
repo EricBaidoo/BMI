@@ -7,11 +7,11 @@ $user = auth_user();
 $currentPage = basename($_SERVER['PHP_SELF']);
 $navItems = [
     'index.php' => ['icon' => 'home', 'label' => 'Dashboard'],
-    'home_manager.php' => ['icon' => 'home', 'label' => 'Homepage Manager'],
+    'home_manager.php' => ['icon' => 'home', 'label' => 'Ministries & Homepage'],
     'pages.php' => ['icon' => 'document-text', 'label' => 'Page Content'],
     'sermons.php' => ['icon' => 'video-camera', 'label' => 'Sermons'],
     'events.php' => ['icon' => 'calendar', 'label' => 'Events'],
-    'ministries.php' => ['icon' => 'user-group', 'label' => 'Ministries'],
+    // 'ministries.php' => ['icon' => 'user-group', 'label' => 'Ministries'], // Unused, frontend uses weekly_services
     'posts.php' => ['icon' => 'newspaper', 'label' => 'Blog Posts'],
     'messages.php' => ['icon' => 'inbox', 'label' => 'Inbox'],
     'users.php' => ['icon' => 'shield-check', 'label' => 'User Management'],

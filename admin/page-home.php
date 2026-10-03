@@ -121,7 +121,7 @@ function render_image_setting($key, $label) {
     $html = '<div class="mb-4 p-4 border border-slate-200 rounded-lg bg-slate-50/50">';
     $html .= '<label class="block text-sm font-semibold text-slate-700 mb-3">' . htmlspecialchars($label) . '</label>';
     $html .= '<div class="grid md:grid-cols-2 gap-4">';
-    $html .= '<div><span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span><input type="file" name="setting_file['.$key.']" accept="image/*" class="w-full text-sm"></div>';
+    $html .= '<div><span class="block text-xs font-medium text-slate-500 mb-1.5">Upload File</span><input type="file" name="setting_file['.$key.']" accept="image/*,video/mp4,video/webm" class="w-full text-sm"></div>';
     $html .= '<div><span class="block text-xs font-medium text-slate-500 mb-1.5">OR Paste URL</span><input type="url" name="setting_url['.$key.']" placeholder="https://" class="w-full border border-slate-300 rounded-lg px-4 py-2 bg-white text-sm"></div>';
     $html .= '</div>';
     if ($val) {

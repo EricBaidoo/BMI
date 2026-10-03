@@ -27,7 +27,7 @@ if (!$sermon) {
     $pageDescription = substr(strip_tags((string)$sermon['content']), 0, 160);
 }
 
-// Helper to convert youtube watch URLs to embed URLs
+// Helper to convert youtube/facebook watch URLs to embed URLs
 function getEmbedUrl($url) {
     if (strpos($url, 'youtube.com/watch') !== false) {
         parse_str(parse_url($url, PHP_URL_QUERY), $vars);
@@ -37,8 +37,10 @@ function getEmbedUrl($url) {
     } elseif (strpos($url, 'youtu.be/') !== false) {
         $path = parse_url($url, PHP_URL_PATH);
         return 'https://www.youtube.com/embed' . $path;
+    } elseif (strpos($url, 'facebook.com') !== false && (strpos($url, '/videos/') !== false || strpos($url, '/watch') !== false)) {
+        return 'https://www.facebook.com/plugins/video.php?href=' . urlencode($url) . '&show_text=false&width=auto';
     }
-    return $url; // Return original if not youtube, or write other embed handlers if needed
+    return $url; // Return original if not youtube/facebook, or write other embed handlers if needed
 }
 
 include 'includes/header.php';
@@ -75,10 +77,10 @@ include 'includes/header.php';
                 </a>
             </div>
 
-            <?php if ($sermon['media_type'] === 'video' && $hasMedia && strpos($embedUrl, 'youtube.com/embed') !== false): ?>
+            <?php if ($sermon['media_type'] === 'video' && $hasMedia && (strpos($embedUrl, 'youtube.com/embed') !== false || strpos($embedUrl, 'facebook.com/plugins') !== false)): ?>
                 <div class="w-full aspect-video rounded-[2rem] bg-black relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden ring-1 ring-white/5 group">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-10"></div>
-                    <iframe src="<?php echo htmlspecialchars($embedUrl); ?>?autoplay=0&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full absolute inset-0 z-0"></iframe>
+                    <iframe src="<?php echo htmlspecialchars($embedUrl); ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full absolute inset-0 z-0 bg-black"></iframe>
                 </div>
             <?php else: ?>
                 <div class="w-full aspect-[21/9] rounded-[2rem] bg-black relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden ring-1 ring-white/5">
