@@ -457,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const pollInterval = 5000; // 5 seconds
     
     function fetchLiveState() {
-        fetch('api/live_state.php')
+        fetch('api/live_state')
             .then(res => res.json())
             .then(data => {
                 if (data.status === 'success') {
@@ -591,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
             formData.append('email', email);
             formData.append('notes_html', tempContainer.innerHTML);
 
-            fetch('api/live_state.php', {
+            fetch('api/live_state', {
                 method: 'POST',
                 body: formData
             })

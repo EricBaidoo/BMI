@@ -105,7 +105,7 @@ render_hero_cinematic([
         <?php endif; ?>
         
         <!-- Search / Filter UI -->
-        <form method="GET" action="sermons.php" class="mb-16 bg-[#0A0A0B] rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center justify-between gs-reveal-up">
+        <form method="GET" action="sermons" class="mb-16 bg-[#0A0A0B] rounded-[2rem] p-6 md:p-8 flex flex-col md:flex-row gap-6 items-center justify-between gs-reveal-up">
             <div class="flex-grow w-full md:w-auto relative group">
                 <svg class="w-5 h-5 text-white/40 absolute left-6 top-1/2 transform -translate-y-1/2 group-focus-within:text-amber-500 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                 <input type="text" name="q" value="<?php echo htmlspecialchars($searchQuery); ?>" placeholder="Search messages, speakers, topics..." class="w-full bg-[#161619] border-none rounded-2xl text-white pl-14 pr-6 py-4 font-sans font-bold text-lg focus:outline-none focus:ring-1 focus:ring-amber-500/50 transition-colors placeholder-white/20">

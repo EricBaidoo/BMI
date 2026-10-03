@@ -5,6 +5,7 @@ auth_require();
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/uploads.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $feedback = '';
 $error = '';
@@ -32,12 +33,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $eventImage = handle_image_upload_or_link($_FILES['event_image'] ?? null, $_POST['event_image_url'] ?? '', $_POST['existing_event_image'] ?? '', 'events');
 
             if ($action === 'add') {
+                // Ensure slug uniqueness
+                $slug = slugify($title);
+                $check = $pdo->prepare('SELECT COUNT(*) FROM events WHERE slug = :s');
+                $base = $slug; $i = 2;
+                while (true) {
+                    $check->execute([':s' => $slug]);
+                    if ((int) $check->fetchColumn() === 0) {
+                        break;
+                    }
+                    $slug = $base . '-' . $i++;
+                }
+
                 $stmt = $pdo->prepare(
-                    'INSERT INTO events (title, event_type, description, event_date, end_date, event_time, venue, event_image)
-                     VALUES (:title, :event_type, :description, :event_date, :end_date, :event_time, :venue, :event_image)'
+                    'INSERT INTO events (title, slug, event_type, description, event_date, end_date, event_time, venue, event_image)
+                     VALUES (:title, :slug, :event_type, :description, :event_date, :end_date, :event_time, :venue, :event_image)'
                 );
                 $stmt->execute([
                     ':title' => $title,
+                    ':slug' => $slug,
                     ':event_type' => $eventType,
                     ':description' => $description !== '' ? $description : null,
                     ':event_date' => $eventDate,

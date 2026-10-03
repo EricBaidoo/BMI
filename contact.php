@@ -192,7 +192,7 @@ include 'includes/header.php';
                         </div>
                     <?php endif; ?>
 
-                    <form action="contact.php" method="POST" class="space-y-8">
+                    <form action="contact" method="POST" class="space-y-8">
                         <?php echo csrf_field(); ?>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div>
