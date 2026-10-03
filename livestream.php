@@ -6,6 +6,7 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/settings.php';
+require_once __DIR__ . '/includes/csrf.php';
 
 // For now, we will use the setting from the .env or backend as a fallback.
 $liveEmbedUrl = setting('live.embed_url', '');
@@ -567,20 +568,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = prompt("Enter your email address to receive these notes:");
             if (!email) return;
 
-            // Collect notes and fill in user inputs
-            let tempContainer = document.createElement('div');
-            tempContainer.innerHTML = document.getElementById('live-notes-container').innerHTML;
-            
-            const originalInputs = document.querySelectorAll('#live-notes-container .notes-input, #live-notes-container .notes-textarea');
-            const cloneInputs = tempContainer.querySelectorAll('.notes-input, .notes-textarea');
-            
-            cloneInputs.forEach((input, i) => {
-                if (originalInputs[i]) {
-                    const text = document.createElement('span');
-                    text.innerText = originalInputs[i].value || '________________';
-                    input.parentNode.replaceChild(text, input);
-                }
-            });
+            // The server builds the email from its own copy of the notes; send only the typed answers
+            const answers = document.querySelectorAll('#live-notes-container .notes-input, #live-notes-container .notes-textarea');
 
             const btnText = btnEmail.innerHTML;
             btnEmail.innerHTML = "Sending...";
@@ -589,7 +578,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const formData = new FormData();
             formData.append('action', 'email_notes');
             formData.append('email', email);
-            formData.append('notes_html', tempContainer.innerHTML);
+            formData.append('csrf_token', <?= json_encode(csrf_token()) ?>);
+            answers.forEach(input => formData.append('answers[]', input.value));
 
             fetch('api/live_state', {
                 method: 'POST',

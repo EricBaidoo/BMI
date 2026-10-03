@@ -62,7 +62,7 @@ $schema = [
             ['key' => 'giving.bank_account_number', 'label' => 'Account number',     'type' => 'text'],
             ['key' => 'giving.bank_branch',         'label' => 'Branch',             'type' => 'text'],
             ['key' => 'giving.momo_mtn',            'label' => 'MTN MoMo number',    'type' => 'tel'],
-            ['key' => 'giving.momo_vodafone',      'label' => 'Vodafone Cash number','type'=> 'tel'],
+            ['key' => 'giving.momo_vodafone',      'label' => 'Telecel Cash number', 'type' => 'tel'],
             ['key' => 'giving.momo_airteltigo',     'label' => 'AirtelTigo Money',   'type' => 'tel'],
             ['key' => 'giving.paystack_public_key', 'label' => 'Paystack public key (pk_live_… or pk_test_…)', 'type' => 'text'],
             ['key' => 'giving.currency',            'label' => 'Currency code (GHS, USD, …)','type'=> 'text'],
@@ -96,7 +96,6 @@ foreach ($schema as $group) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    file_put_contents(__DIR__ . '/files_dump.txt', print_r($_FILES, true) . "\n" . print_r($_POST, true));
     try {
         csrf_check();
         require_once __DIR__ . '/../includes/uploads.php';

@@ -11,6 +11,7 @@ $navItems = [
     'pages.php' => ['icon' => 'document-text', 'label' => 'Page Content'],
     'sermons.php' => ['icon' => 'video-camera', 'label' => 'Sermons'],
     'events.php' => ['icon' => 'calendar', 'label' => 'Events'],
+    'live-control.php' => ['icon' => 'video-camera', 'label' => 'Live Control'],
     // 'ministries.php' => ['icon' => 'user-group', 'label' => 'Ministries'], // Unused, frontend uses weekly_services
     'posts.php' => ['icon' => 'newspaper', 'label' => 'Blog Posts'],
     'messages.php' => ['icon' => 'inbox', 'label' => 'Inbox'],

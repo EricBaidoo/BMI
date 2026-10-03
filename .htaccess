@@ -60,9 +60,21 @@ ErrorDocument 404 /404.php
 # ------------------------------------------------------------------------------
 # Block direct access to sensitive files
 # ------------------------------------------------------------------------------
-<FilesMatch "^(\.env|\.gitignore|composer\.(json|lock)|package\.json|package-lock\.json|README\.md)$">
+<FilesMatch "^(\.env|\.gitignore|composer\.(json|lock)|package\.json|package-lock\.json|README\.md|tailwind\.config\.js)$">
     Require all denied
 </FilesMatch>
+
+# Database dumps, backups, logs, notes and text files are never served
+<FilesMatch "\.(sql|gz|zip|bak|old|log|md|txt|ini|sh)$">
+    Require all denied
+</FilesMatch>
+# robots.txt must stay public
+<Files "robots.txt">
+    Require all granted
+</Files>
+
+# Never serve dependency or tooling folders
+RedirectMatch 404 ^/(?:BMI/)?(node_modules|database|\.git)(/|$)
 
 # ------------------------------------------------------------------------------
 # Compression

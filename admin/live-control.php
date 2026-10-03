@@ -1,38 +1,52 @@
 <?php
-$pageTitle = 'Live Stream Control';
-require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/../includes/auth.php';
+auth_require();
 
-// Handle form submission
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/csrf.php';
+
+$error = '';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $prompt = $_POST['current_prompt_html'] ?? '';
-    $notes = $_POST['current_notes_html'] ?? '';
-    
-    $stmt = $pdo->prepare("INSERT INTO live_state (setting_key, setting_value) VALUES (:key, :val) ON DUPLICATE KEY UPDATE setting_value = :val2");
-    
-    // Save prompt
-    $stmt->execute([
-        ':key' => 'current_prompt_html',
-        ':val' => $prompt,
-        ':val2' => $prompt
-    ]);
-    
-    // Save notes
-    $stmt->execute([
-        ':key' => 'current_notes_html',
-        ':val' => $notes,
-        ':val2' => $notes
-    ]);
-    
-    set_flash_message('success', 'Live state updated successfully! It will push to viewers in ~5 seconds.');
-    redirect('live-control.php');
+    try {
+        csrf_check();
+        $pdo = db_connect();
+        $stmt = $pdo->prepare("INSERT INTO live_state (setting_key, setting_value) VALUES (:key, :val) ON DUPLICATE KEY UPDATE setting_value = :val2");
+        foreach (['current_prompt_html', 'current_notes_html'] as $key) {
+            $value = (string) ($_POST[$key] ?? '');
+            $stmt->execute([':key' => $key, ':val' => $value, ':val2' => $value]);
+        }
+        header('Location: live-control.php?status=updated');
+        exit;
+    } catch (Throwable $e) {
+        error_log((string) $e);
+        $error = 'Unable to save the live state. Please try again.';
+    }
 }
 
-// Fetch current state
-$stmt = $pdo->query("SELECT setting_key, setting_value FROM live_state");
-$settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-$currentPrompt = $settings['current_prompt_html'] ?? '';
-$currentNotes = $settings['current_notes_html'] ?? '';
+$feedback = ($_GET['status'] ?? '') === 'updated' ? 'Live state updated. Viewers will see it within a few seconds.' : '';
+
+$currentPrompt = '';
+$currentNotes = '';
+try {
+    $settings = db_connect()->query("SELECT setting_key, setting_value FROM live_state")->fetchAll(PDO::FETCH_KEY_PAIR);
+    $currentPrompt = $settings['current_prompt_html'] ?? '';
+    $currentNotes = $settings['current_notes_html'] ?? '';
+} catch (Throwable $e) {
+    error_log((string) $e);
+    $error = $error ?: 'Unable to load the current live state.';
+}
+
+$pageTitle = 'Live Stream Control';
+require_once __DIR__ . '/includes/header.php';
 ?>
+
+<?php if ($feedback !== ''): ?>
+    <div class="mb-6 rounded border border-green-200 bg-green-50 text-green-800 px-4 py-3 text-sm"><?php echo htmlspecialchars($feedback); ?></div>
+<?php endif; ?>
+<?php if ($error !== ''): ?>
+    <div class="mb-6 rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><?php echo htmlspecialchars($error); ?></div>
+<?php endif; ?>
 
 <div class="sm:flex sm:items-center sm:justify-between mb-8">
     <div>
@@ -49,6 +63,7 @@ $currentNotes = $settings['current_notes_html'] ?? '';
 <div class="bg-white shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg overflow-hidden">
     <div class="p-6">
         <form method="POST" action="live-control.php" class="space-y-8">
+            <?php echo csrf_field(); ?>
             
             <!-- Real-Time Prompt -->
             <div>

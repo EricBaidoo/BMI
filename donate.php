@@ -7,12 +7,33 @@ require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/settings.php';
 
-// Fetch the external ChMS Payment Portal URL from the environment or settings
-$chmsPaymentUrl = env('CHMS_PAYMENT_URL', '');
-if (empty($chmsPaymentUrl)) {
-    // Fallback if not configured in .env
-    $chmsPaymentUrl = setting('donate.chms_url', '#');
+// External giving portal (ChMS) URL from the environment or settings. Only http(s) links are used.
+$chmsPaymentUrl = (string) env('CHMS_PAYMENT_URL', '');
+if ($chmsPaymentUrl === '') {
+    $chmsPaymentUrl = setting('donate.chms_url', '');
 }
+if (!preg_match('#^https?://#i', $chmsPaymentUrl)) {
+    $chmsPaymentUrl = '';
+}
+
+// Giving details: structured fields from Settings first, then the free-text fields from Page Content.
+// A method is only shown when real details have been entered — never sample numbers.
+$bankLines = array_filter([
+    setting('giving.bank_name') !== '' ? 'Bank: ' . setting('giving.bank_name') : '',
+    setting('giving.bank_account_name') !== '' ? 'Account name: ' . setting('giving.bank_account_name') : '',
+    setting('giving.bank_account_number') !== '' ? 'Account number: ' . setting('giving.bank_account_number') : '',
+    setting('giving.bank_branch') !== '' ? 'Branch: ' . setting('giving.bank_branch') : '',
+]);
+$bankDetails = $bankLines ? implode("\n", $bankLines) : trim(setting('donate.bank_details'));
+
+$momoLines = array_filter([
+    setting('giving.momo_mtn') !== '' ? 'MTN MoMo: ' . setting('giving.momo_mtn') : '',
+    setting('giving.momo_vodafone') !== '' ? 'Telecel Cash: ' . setting('giving.momo_vodafone') : '',
+    setting('giving.momo_airteltigo') !== '' ? 'AirtelTigo Money: ' . setting('giving.momo_airteltigo') : '',
+]);
+$momoDetails = $momoLines ? implode("\n", $momoLines) : trim(setting('donate.momo_details'));
+
+$givingMethodCount = ($chmsPaymentUrl !== '' ? 1 : 0) + ($bankDetails !== '' ? 1 : 0) + ($momoDetails !== '' ? 1 : 0);
 
 include 'includes/header.php';
 
@@ -22,23 +43,30 @@ render_hero_cinematic([
     'subtitle' => 'Partnership',
     'bg_image' => setting('donate.hero_bg_image', 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1920&auto=format&fit=crop'),
     'button_text' => 'Give Securely Now',
-    'button_url' => $chmsPaymentUrl,
+    'button_url' => $chmsPaymentUrl !== '' ? $chmsPaymentUrl : '#ways-to-give',
     'is_video' => false
 ]);
 ?>
 
 <!-- WAYS TO GIVE SECTION -->
-<section class="py-24 md:py-32 bg-obsidian-900 relative overflow-hidden gs-reveal-section">
+<section id="ways-to-give" class="py-24 md:py-32 bg-obsidian-900 relative overflow-hidden gs-reveal-section">
     <!-- Ambient Glows -->
     <div class="absolute top-0 right-0 w-[50rem] h-[50rem] bg-accent-glow blur-[150px] rounded-full mix-blend-screen pointer-events-none z-0"></div>
 
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         
         <div class="text-center max-w-3xl mx-auto mb-20 gs-reveal-up">
-            <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">3 Ways to <i class="text-accent font-light">Give</i></h2>
+            <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">Ways to <i class="text-accent font-light">Give</i></h2>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <?php if ($givingMethodCount === 0): ?>
+        <div class="max-w-2xl mx-auto text-center bg-obsidian-800/40 p-10 lg:p-12 rounded-[2.5rem] border border-white/5 gs-reveal-up">
+            <p class="text-neutral-300 font-sans font-medium leading-relaxed mb-8">Online giving details are being set up. To give today, please contact our finance team and we will share the church's official account details with you.</p>
+            <?php render_button_primary(['text' => 'Contact Finance Team', 'url' => 'contact?subject=Giving', 'style' => 'light']); ?>
+        </div>
+        <?php else: ?>
+        <div class="grid grid-cols-1 <?= ['', 'max-w-xl mx-auto', 'md:grid-cols-2 max-w-5xl mx-auto', 'md:grid-cols-3'][$givingMethodCount] ?> gap-8">
+            <?php if ($chmsPaymentUrl !== ''): ?>
             <!-- Online -->
             <div class="bg-obsidian-800/40 p-10 lg:p-12 rounded-[2.5rem] shadow-glass border border-white/5 text-center group hover:border-accent/30 transition-all duration-700 hover:-translate-y-2 gs-reveal-up relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-t from-accent/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
@@ -52,7 +80,9 @@ render_hero_cinematic([
                 </p>
                 <?php render_button_primary(['text' => 'Give Online', 'url' => $chmsPaymentUrl, 'style' => 'light']); ?>
             </div>
+            <?php endif; ?>
 
+            <?php if ($bankDetails !== ''): ?>
             <!-- Bank Transfer -->
             <div class="bg-obsidian-800/40 p-10 lg:p-12 rounded-[2.5rem] shadow-glass border border-white/5 text-center group hover:border-white/20 transition-all duration-700 hover:-translate-y-2 gs-reveal-up relative overflow-hidden flex flex-col delay-100">
                 <div class="w-24 h-24 rounded-[1.5rem] bg-white/5 border border-white/10 text-neutral-400 flex items-center justify-center mx-auto mb-8 group-hover:bg-white group-hover:text-black transition-colors duration-500 shadow-inner">
@@ -60,10 +90,12 @@ render_hero_cinematic([
                 </div>
                 <h3 class="text-3xl font-display font-black uppercase text-white mb-6 tracking-normal leading-none group-hover:text-white/80 transition-colors">Bank Transfer</h3>
                 <div class="bg-obsidian-950/50 border border-white/5 rounded-2xl p-6 flex-grow shadow-inner">
-                    <p class="text-neutral-400 font-sans font-medium leading-loose whitespace-pre-wrap text-sm"><?= setting('donate.bank_details', "Bank Name: Faith Bank\nAccount: 1234567890\nBranch: Main Branch") ?></p>
+                    <p class="text-neutral-400 font-sans font-medium leading-loose whitespace-pre-wrap text-sm"><?= htmlspecialchars($bankDetails, ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
             </div>
+            <?php endif; ?>
 
+            <?php if ($momoDetails !== ''): ?>
             <!-- Mobile Money -->
             <div class="bg-obsidian-800/40 p-10 lg:p-12 rounded-[2.5rem] shadow-glass border border-white/5 text-center group hover:border-white/20 transition-all duration-700 hover:-translate-y-2 gs-reveal-up relative overflow-hidden flex flex-col delay-200">
                 <div class="w-24 h-24 rounded-[1.5rem] bg-white/5 border border-white/10 text-neutral-400 flex items-center justify-center mx-auto mb-8 group-hover:bg-white group-hover:text-black transition-colors duration-500 shadow-inner">
@@ -71,10 +103,12 @@ render_hero_cinematic([
                 </div>
                 <h3 class="text-3xl font-display font-black uppercase text-white mb-6 tracking-normal leading-none group-hover:text-white/80 transition-colors">Mobile Money</h3>
                 <div class="bg-obsidian-950/50 border border-white/5 rounded-2xl p-6 flex-grow shadow-inner">
-                    <p class="text-neutral-400 font-sans font-medium leading-loose whitespace-pre-wrap text-sm"><?= setting('donate.momo_details', "MTN MoMo: 055 123 4567\nVodafone Cash: 020 123 4567\nName: Bridge Ministries") ?></p>
+                    <p class="text-neutral-400 font-sans font-medium leading-loose whitespace-pre-wrap text-sm"><?= htmlspecialchars($momoDetails, ENT_QUOTES, 'UTF-8') ?></p>
                 </div>
             </div>
+            <?php endif; ?>
         </div>
+        <?php endif; ?>
     </div>
 </section>
 
@@ -95,7 +129,7 @@ render_hero_cinematic([
             </div>
             
             <div class="relative z-10 flex-shrink-0">
-                <?php render_button_primary(['text' => 'Contact Finance Team', 'url' => 'contact.php?subject=Giving', 'style' => 'outline']); ?>
+                <?php render_button_primary(['text' => 'Contact Finance Team', 'url' => 'contact?subject=Giving', 'style' => 'outline']); ?>
             </div>
         </div>
     </div>

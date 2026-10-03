@@ -6,6 +6,56 @@ require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/helpers.php';
 require_once __DIR__ . '/includes/config.php';
 require_once __DIR__ . '/includes/settings.php';
+require_once __DIR__ . '/includes/csrf.php';
+
+// Handle Plan a Visit submissions: save to the admin Inbox and notify the welcome team.
+$visitSuccess = '';
+$visitError = '';
+$visitOld = [];
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_check();
+    $visitOld = array_map(fn ($v) => is_string($v) ? trim($v) : '', $_POST);
+    $firstName = mb_substr($visitOld['first_name'] ?? '', 0, 60);
+    $lastName = mb_substr($visitOld['last_name'] ?? '', 0, 60);
+    $email = filter_var($visitOld['email'] ?? '', FILTER_VALIDATE_EMAIL);
+    $phone = mb_substr(preg_replace('/[^0-9+()\-\s]/', '', $visitOld['phone'] ?? ''), 0, 30);
+    $date = $visitOld['date'] ?? '';
+    $kids = ($visitOld['kids'] ?? '') === 'yes' ? 'Yes' : 'No';
+    $validDate = DateTime::createFromFormat('Y-m-d', $date);
+
+    if (($visitOld['website'] ?? '') !== '') {
+        // Honeypot field filled in: treat as spam but respond normally.
+        $visitSuccess = 'Thank you. We look forward to welcoming you.';
+    } elseif ($firstName === '' || $lastName === '' || !$email || !$validDate) {
+        $visitError = 'Please enter your name, a valid email address and the date you plan to visit.';
+    } else {
+        $fullName = $firstName . ' ' . $lastName;
+        $visitDate = $validDate->format('l, j F Y');
+        $details = "Planned visit: {$visitDate}\nBringing children: {$kids}\nPhone: " . ($phone !== '' ? $phone : 'not given');
+        try {
+            $stmt = db_connect()->prepare('INSERT INTO messages (full_name, email, subject, message, type) VALUES (:name, :email, :subject, :msg, :type)');
+            $stmt->execute([
+                ':name' => $fullName,
+                ':email' => $email,
+                ':subject' => 'Plan a Visit: ' . $visitDate,
+                ':msg' => $details,
+                ':type' => 'visit',
+            ]);
+
+            $teamEmail = setting('contact.email_general', 'info@bmiglobal.org');
+            $fromHost = parse_url(setting('site.url', 'https://bmiglobal.org'), PHP_URL_HOST) ?: 'bmiglobal.org';
+            $body = "Someone is planning to visit.\n\nName: {$fullName}\nEmail: {$email}\n{$details}\n\nLog in to the admin panel to view all messages.";
+            @mail($teamEmail, 'New visit planned: ' . $fullName, $body, "From: no-reply@{$fromHost}\r\nReply-To: {$email}\r\n");
+
+            $visitSuccess = "Thank you, {$firstName}. We look forward to welcoming you on {$visitDate}. Our welcome team will be in touch before your visit.";
+            $visitOld = [];
+        } catch (Throwable $e) {
+            error_log((string) $e);
+            $visitError = 'Sorry, we could not save your details. Please try again or contact us directly.';
+        }
+    }
+}
 
 include 'includes/header.php';
 ?>
@@ -208,40 +258,51 @@ include 'includes/header.php';
                 <!-- Inner Glow for Form -->
                 <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none rounded-[3rem]"></div>
                 
-                <form action="#" method="POST" class="space-y-6 relative z-10">
-                    
+                <?php if ($visitSuccess !== ''): ?>
+                <div id="plan-visit-form" role="status" class="relative z-10 text-center py-10">
+                    <h3 class="text-2xl font-bold text-white mb-4">You're all set</h3>
+                    <p class="text-neutral-300 leading-relaxed"><?= htmlspecialchars($visitSuccess, ENT_QUOTES, 'UTF-8') ?></p>
+                </div>
+                <?php else: ?>
+                <form id="plan-visit-form" action="visit#plan-visit-form" method="POST" class="space-y-6 relative z-10">
+                    <?= csrf_field() ?>
+                    <div class="hidden" aria-hidden="true"><label for="website">Leave this empty</label><input type="text" id="website" name="website" tabindex="-1" autocomplete="off"></div>
+                    <?php if ($visitError !== ''): ?>
+                    <p role="alert" class="rounded-2xl border border-red-500/30 bg-red-500/10 text-red-200 px-5 py-4 text-sm"><?= htmlspecialchars($visitError, ENT_QUOTES, 'UTF-8') ?></p>
+                    <?php endif; ?>
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="first_name" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">First Name</label>
-                            <input type="text" id="first_name" name="first_name" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                            <input type="text" id="first_name" name="first_name" value="<?= htmlspecialchars($visitOld['first_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
                         </div>
                         <div>
                             <label for="last_name" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Last Name</label>
-                            <input type="text" id="last_name" name="last_name" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                            <input type="text" id="last_name" name="last_name" value="<?= htmlspecialchars($visitOld['last_name'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="email" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Email Address</label>
-                            <input type="email" id="email" name="email" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
+                            <input type="email" id="email" name="email" value="<?= htmlspecialchars($visitOld['email'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner" required>
                         </div>
                         <div>
                             <label for="phone" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner">
+                            <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($visitOld['phone'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner">
                         </div>
                     </div>
 
                     <div>
                         <label for="date" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">When are you planning to visit?</label>
-                        <input type="date" id="date" name="date" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner [color-scheme:dark]" required>
+                        <input type="date" id="date" name="date" min="<?= date('Y-m-d') ?>" value="<?= htmlspecialchars($visitOld['date'] ?? '', ENT_QUOTES, 'UTF-8') ?>" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner [color-scheme:dark]" required>
                     </div>
 
                     <div>
                         <label for="kids" class="block text-xs font-bold uppercase tracking-[0.2em] text-white/60 mb-2">Will you be bringing any children?</label>
                         <select id="kids" name="kids" class="w-full bg-[#050505] border border-white/10 rounded-2xl px-5 py-4 text-white focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/50 transition-all shadow-inner appearance-none cursor-pointer">
                             <option value="no" class="bg-black">No children this time</option>
-                            <option value="yes" class="bg-black">Yes, I will bring my kids</option>
+                            <option value="yes" class="bg-black"<?= ($visitOld['kids'] ?? '') === 'yes' ? ' selected' : '' ?>>Yes, I will bring my kids</option>
                         </select>
                     </div>
 
@@ -251,6 +312,7 @@ include 'includes/header.php';
                         </button>
                     </div>
                 </form>
+                <?php endif; ?>
             </div>
         </div>
         
