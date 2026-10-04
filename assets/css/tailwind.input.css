@@ -160,11 +160,11 @@
   h1, h2 { text-align: center !important; }
 }
 
-/* --- Custom GSAP Cursor --- */
-body {
-  cursor: none;
-}
-a, button, input, [role="button"] {
+/* --- Custom GSAP Cursor ---
+   The normal cursor is only hidden once main.js has created the custom one (it adds
+   .has-custom-cursor), so touch devices, reduced motion and script failures keep a cursor. */
+.has-custom-cursor body,
+.has-custom-cursor a, .has-custom-cursor button, .has-custom-cursor input, .has-custom-cursor [role="button"] {
   cursor: none;
 }
 
@@ -192,7 +192,21 @@ a, button, input, [role="button"] {
   mix-blend-mode: difference;
 }
 
-/* --- GSAP Initial States --- */
-.gs-reveal-up, .gs-reveal-left, .gs-reveal-right, .gs-reveal-opacity {
+/* --- GSAP Initial States ---
+   Only hidden while animations are active (.js-anim is set in <head> and removed if GSAP
+   fails to load or the visitor prefers reduced motion), so content can never get stuck invisible. */
+.js-anim .gs-reveal-up, .js-anim .gs-reveal-left, .js-anim .gs-reveal-right, .js-anim .gs-reveal-opacity {
   visibility: hidden;
+}
+
+/* --- Reduced motion: stop decorative movement --- */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .film-grain, .custom-cursor { display: none !important; }
+  .animate-marquee { animation: none !important; }
 }

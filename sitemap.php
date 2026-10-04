@@ -20,6 +20,9 @@ $urls = [
     ['/blog',       '0.7', 'weekly'],
     ['/donate',     '0.5', 'monthly'],
     ['/contact',    '0.5', 'monthly'],
+    ['/flagship-programs', '0.7', 'monthly'],
+    ['/podcast',    '0.4', 'weekly'],
+    ['/privacy',    '0.2', 'yearly'],
 ];
 
 try {
@@ -35,16 +38,22 @@ try {
     // Sermons
     $sermons = $pdo->query("SELECT id, sermon_date AS lastmod FROM sermons ORDER BY sermon_date DESC LIMIT 500")->fetchAll();
     foreach ($sermons as $s) {
-        $urls[] = ['/sermon.php?id=' . (int) $s['id'], '0.8', 'weekly', (string) $s['lastmod']];
+        $urls[] = ['/sermon?id=' . (int) $s['id'], '0.8', 'weekly', (string) $s['lastmod']];
     }
     
+    // Ministries
+    foreach ($pdo->query("SELECT id FROM weekly_services ORDER BY sort_order, id")->fetchAll() as $m) {
+        $urls[] = ['/ministry_detail?id=' . (int) $m['id'], '0.6', 'monthly'];
+    }
+
     // Events
     $events = $pdo->query("SELECT id, event_date AS lastmod FROM events ORDER BY event_date DESC LIMIT 500")->fetchAll();
     foreach ($events as $e) {
-        $urls[] = ['/event-detail.php?id=' . (int) $e['id'], '0.7', 'weekly', (string) $e['lastmod']];
+        $urls[] = ['/event-detail?id=' . (int) $e['id'], '0.7', 'weekly', (string) $e['lastmod']];
     }
     
 } catch (Throwable $e) {
+    log_exception($e, 'sitemap');
     // ignore — still emit static URLs
 }
 

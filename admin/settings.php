@@ -1,10 +1,14 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
 auth_require();
+if (!auth_can('settings') && !auth_can('giving')) {
+    auth_forbidden();
+}
 
 require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/settings.php';
 require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/sanitize.php';
 
 $feedback = '';
 $error = '';
@@ -37,6 +41,7 @@ $schema = [
             ['key' => 'contact.email_prayer',    'label' => 'Prayer requests email','type' => 'email'],
             ['key' => 'contact.email_giving',    'label' => 'Giving / finance email','type'=> 'email'],
             ['key' => 'contact.map_query',       'label' => 'Google Maps search query (used to embed map)', 'type' => 'text'],
+            ['key' => 'contact.office_hours',    'label' => 'Office hours (one line per day, e.g. "Mon–Fri: 9:00 AM – 5:00 PM"; leave empty to hide)', 'type' => 'textarea'],
         ],
     ],
     'service' => [
@@ -87,6 +92,13 @@ $schema = [
     ],
 ];
 
+// Each role only sees (and can only save) the groups it is allowed to change.
+$groupCapability = ['giving' => 'giving', 'analytics' => 'users'];
+$schema = array_filter($schema, fn ($groupKey) => auth_can($groupCapability[$groupKey] ?? 'settings'), ARRAY_FILTER_USE_KEY);
+if (!$schema) {
+    auth_forbidden();
+}
+
 // Build the whitelist of allowed keys — anything not on this list is ignored on save.
 $allowedKeys = [];
 foreach ($schema as $group) {
@@ -121,8 +133,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 foreach ($posted[$postedKey] as $link) {
                                     $links[] = [
                                         'name' => trim((string)($link['name'] ?? '')),
-                                        'url' => trim((string)($link['url'] ?? '')),
-                                        'icon' => trim((string)($link['icon'] ?? ''))
+                                        'url' => safe_url(trim((string)($link['url'] ?? ''))),
+                                        'icon' => safe_html(trim((string)($link['icon'] ?? '')), 'svg')
                                     ];
                                 }
                             }
@@ -166,24 +178,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     } else if ($f['type'] === 'image') {
                         if (isset($_POST['active_group']) && $_POST['active_group'] === $groupKey) {
                             $fileInputName = 'setting_file_' . $postKey;
-                            if (isset($_FILES[$fileInputName]) && $_FILES[$fileInputName]['error'] === UPLOAD_ERR_OK) {
-                                $tmpName = $_FILES[$fileInputName]['tmp_name'];
-                                $fileName = basename($_FILES[$fileInputName]['name']);
-                                $ext = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
-                                $allowed = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
-                                if (in_array($ext, $allowed)) {
-                                    $uploadDir = __DIR__ . '/../uploads/';
-                                    if (!is_dir($uploadDir)) {
-                                        mkdir($uploadDir, 0755, true);
-                                    }
-                                    $newName = uniqid('thumb_') . '.' . $ext;
-                                    if (move_uploaded_file($tmpName, $uploadDir . $newName)) {
-                                        $update[$key] = 'uploads/' . $newName;
-                                    }
+                            // Same checks as every other upload: real file type, size limit, random name.
+                            $uploaded = upload_image($_FILES[$fileInputName] ?? null, str_replace('.', '_', $key), 20 * 1024 * 1024, 'settings');
+                            if ($uploaded !== null) {
+                                $update[$key] = $uploaded;
+                            } else if ($postedKey !== null && isset($posted[$postedKey])) {
+                                // Fallback to URL if typed manually (only http(s) or site-relative paths)
+                                $typed = trim((string) $posted[$postedKey]);
+                                if ($typed !== '' && safe_url($typed) === '') {
+                                    throw new RuntimeException('Image links must start with https:// or be a path on this site.');
                                 }
-                            } else if (isset($posted[$postedKey])) {
-                                // Fallback to URL if typed manually
-                                $update[$key] = trim((string) $posted[$postedKey]);
+                                $update[$key] = $typed;
                             }
                         }
                     } else if ($postedKey) {
@@ -266,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: settings.php?group=' . urlencode($group));
         exit;
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 

@@ -23,29 +23,8 @@ try {
     $specials = $stmtSpecial->fetchAll();
 
 } catch (Throwable $e) {
-    // Fallback to mock data for local UI review if database is not set up
-    $specials = [
-        [
-            'id' => 1,
-            'title' => 'Global Leadership Summit',
-            'slug' => 'global-leadership-summit',
-            'description' => 'A two-day intensive for leaders.',
-            'event_date' => date('Y') . '-10-15',
-            'event_time' => '09:00:00',
-            'venue' => 'Main Auditorium',
-            'event_image' => 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?q=80&w=1200&auto=format&fit=crop'
-        ],
-        [
-            'id' => 2,
-            'title' => 'Night of Worship',
-            'slug' => 'night-of-worship',
-            'description' => 'An evening of prophetic worship.',
-            'event_date' => date('Y') . '-11-05',
-            'event_time' => '18:00:00',
-            'venue' => 'Sanctuary',
-            'event_image' => 'https://images.unsplash.com/photo-1444053915174-884ee2678687?q=80&w=1200&auto=format&fit=crop'
-        ]
-    ];
+    log_exception($e, 'events');
+    $specials = [];
 }
 
 include 'includes/header.php';
@@ -56,7 +35,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden min-h-[50vh] flex items-center justify-center gs-reveal-section">
     <div class="absolute inset-0 z-0">
-        <img src="<?= setting('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale">
+        <img src="<?= setting_url('events.hero_bg_image', 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?q=80&w=1200&auto=format&fit=crop') ?>" alt="Events Background" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale">
         <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
     </div>
     
@@ -70,10 +49,10 @@ include 'includes/header.php';
             <div class="h-px w-16 bg-white/20"></div>
         </div>
         <h1 class="text-5xl md:text-6xl lg:text-8xl font-display font-black uppercase text-white/95 mb-6 tracking-tight leading-[1.0] drop-shadow-xl">
-            <?= setting('events.hero_title', 'Church <br/><i class="text-amber-500 font-light">Calendar</i>') ?>
+            <?= setting_html('events.hero_title', 'Church <br/><i class="text-amber-500 font-light">Calendar</i>') ?>
         </h1>
         <p class="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed">
-            <?= setting('events.hero_subtitle', 'From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.') ?>
+            <?= setting_html('events.hero_subtitle', 'From our major annual conferences to weekly cell meetings, discover where you belong at Bridge Ministries.') ?>
         </p>
     </div>
 </section>
@@ -151,7 +130,7 @@ include 'includes/header.php';
                                 <?php endif; ?>
                             </div>
 
-                            <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-between font-sans font-bold uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-5 rounded-[1.25rem] hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all duration-300 group/link mt-auto w-full text-left">
+                            <a href="event-detail?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-between font-sans font-bold uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-5 rounded-[1.25rem] hover:bg-amber-500 hover:text-black hover:border-amber-500 transition-all duration-300 group/link mt-auto w-full text-left">
                                 View Event Details 
                                 <svg class="w-5 h-5 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                             </a>
@@ -180,7 +159,7 @@ include 'includes/header.php';
                 Our flagship programs are not just dates on a calendar; they are milestones in our shared journey of faith. Discover our major annual events that shape our community.
             </p>
             
-            <a href="flagship-programs.php" class="inline-flex items-center justify-center bg-white text-black hover:bg-amber-500 px-12 py-6 font-bold uppercase tracking-[0.2em] text-sm rounded-full transition-all hover:-translate-y-1 relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)]">
+            <a href="flagship-programs" class="inline-flex items-center justify-center bg-white text-black hover:bg-amber-500 px-12 py-6 font-bold uppercase tracking-[0.2em] text-sm rounded-full transition-all hover:-translate-y-1 relative z-10 shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)]">
                 View Flagship Programs
                 <svg class="w-5 h-5 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>

@@ -52,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'email
         $stmt->execute([':k' => 'current_notes_html']);
         $notesHtml = (string) $stmt->fetchColumn();
     } catch (Throwable $e) {
-        error_log((string) $e);
+        log_exception($e, 'live_state');
+        log_exception($e, 'live_state');
         $fail(500, 'Notes are not available right now.');
     }
     if (trim($notesHtml) === '') {
@@ -107,18 +108,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'email
     exit;
 }
 
+// Every viewer polls this during a service, so the response is cached for a few seconds:
+// in a file on the server (one database read per 10 seconds, not one per viewer) and by
+// browsers/CDN via Cache-Control. Saving in admin Live Control clears the file immediately.
+$cacheFile = live_state_cache_file();
+$cacheSeconds = 10;
+header('Cache-Control: public, max-age=5, s-maxage=' . $cacheSeconds);
+if (is_file($cacheFile) && (time() - (int) @filemtime($cacheFile)) < $cacheSeconds && ($cached = @file_get_contents($cacheFile)) !== false) {
+    echo $cached;
+    exit;
+}
+
 try {
     $pdo = db_connect();
-    
+
     $stmt = $pdo->query("SELECT setting_key, setting_value FROM live_state");
     $settings = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
-    
-    echo json_encode([
+
+    $json = json_encode([
         'status' => 'success',
-        'current_prompt_html' => $settings['current_prompt_html'] ?? '',
-        'current_notes_html' => $settings['current_notes_html'] ?? ''
+        'current_prompt_html' => safe_html($settings['current_prompt_html'] ?? '', 'notes'),
+        'current_notes_html' => safe_html($settings['current_notes_html'] ?? '', 'notes')
     ]);
-} catch (Exception $e) {
+    @file_put_contents($cacheFile, $json, LOCK_EX);
+    echo $json;
+} catch (Throwable $e) {
+    header('Cache-Control: no-store');
+    log_exception($e, 'live_state');
     http_response_code(500);
     echo json_encode([
         'status' => 'error',

@@ -32,3 +32,6 @@ node_modules/
 # User uploads (event/sermon images get committed by mistake otherwise)
 /assets/image/event_*
 /assets/image/sermon_*
+
+# Application logs
+/logs/

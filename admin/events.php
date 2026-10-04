@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':venue' => $venue !== '' ? $venue : null,
                     ':event_image' => $eventImage,
                 ]);
+                audit('create', 'event', $pdo->lastInsertId(), 'Added event: ' . $title);
                 header('Location: events.php?status=added');
                 exit;
             }
@@ -96,6 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':venue' => $venue !== '' ? $venue : null,
                 ':event_image' => $finalImage,
             ]);
+            audit('update', 'event', $id, 'Updated event: ' . $title);
             header('Location: events.php?status=updated');
             exit;
         }
@@ -112,11 +114,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 upload_delete($existing['event_image']);
             }
             $pdo->prepare('DELETE FROM events WHERE id = :id')->execute([':id' => $id]);
+            audit('delete', 'event', $id, 'Deleted event #' . $id);
             header('Location: events.php?status=deleted');
             exit;
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 
@@ -129,7 +132,7 @@ if (isset($_GET['edit'])) {
             $stmt->execute([':id' => $editId]);
             $editingEvent = $stmt->fetch();
         } catch (Throwable $e) {
-            $error = 'Unable to load event: ' . $e->getMessage();
+            $error = user_error_message($e, 'Unable to load event.');
         }
     }
 }

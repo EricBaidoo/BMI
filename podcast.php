@@ -20,6 +20,7 @@ try {
          ORDER BY sermon_date DESC LIMIT 100"
     )->fetchAll();
 } catch (Throwable $e) {
+    log_exception($e, 'podcast');
     $sermons = [];
 }
 

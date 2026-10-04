@@ -22,7 +22,9 @@ try {
     $heroSlides = $pdo->query("SELECT * FROM hero_slides ORDER BY sort_order ASC")->fetchAll();
     $testimonies = $pdo->query("SELECT * FROM testimonies ORDER BY sort_order ASC")->fetchAll();
     $weeklyServices = $pdo->query("SELECT * FROM weekly_services WHERE show_on_homepage = 1 ORDER BY sort_order ASC")->fetchAll();
-} catch (Throwable $e) {}
+} catch (Throwable $e) {
+    log_exception($e, 'index');
+}
 
 include 'includes/header.php';
 ?>
@@ -38,15 +40,18 @@ render_hero_cinematic([
 <!-- ANIMATED MARQUEE TICKER -->
 <div class="w-full overflow-hidden bg-[#0A0A0B] py-8 border-b border-white/[0.03] relative z-20">
     <div class="whitespace-nowrap flex items-center animate-marquee font-sans font-bold tracking-[0.3em] uppercase text-xs text-white/40">
-        <?php for ($m = 0; $m < 4; $m++): ?>
-        <span class="mx-12 flex items-center gap-16">
-            <span>WORSHIP WITH US IN PERSON</span> 
-            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> 
-            <span class="text-white/95">OR JOIN OUR LIVESTREAM</span> 
-            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> 
-            <span>EXPERIENCE TRANSFORMATION</span> 
-            <span class="w-1.5 h-1.5 bg-amber-500 rounded-full"></span> 
-            <span>UNCOMPROMISED TRUTH</span> 
+        <?php
+        // Ticker phrases come from Admin → Ministries & Homepage (home.marquee_text1..5).
+        $marquee = array_values(array_filter(array_map(fn ($i) => trim(setting('home.marquee_text' . $i)), range(1, 5))));
+        if (!$marquee) {
+            $marquee = ['Worship with us in person', 'Or join our livestream', 'Experience transformation', 'Uncompromised truth'];
+        }
+        for ($m = 0; $m < 4; $m++): ?>
+        <span class="mx-12 flex items-center gap-16" <?php echo $m > 0 ? 'aria-hidden="true"' : ''; ?>>
+            <?php foreach ($marquee as $i => $phrase): ?>
+            <?php if ($i > 0): ?><span class="w-1.5 h-1.5 bg-amber-500 rounded-full" aria-hidden="true"></span><?php endif; ?>
+            <span class="<?php echo $i % 2 === 1 ? 'text-white/95' : ''; ?>"><?php echo htmlspecialchars($phrase); ?></span>
+            <?php endforeach; ?>
         </span>
         <?php endfor; ?>
     </div>
@@ -62,19 +67,18 @@ render_hero_cinematic([
             </div>
             
             <h2 class="text-5xl md:text-7xl lg:text-[7rem] font-display font-black text-white/95 mb-10 leading-[0.85] uppercase tracking-tighter">
-                Rooted In Faith.<br>Reaching The <span class="text-amber-500">World.</span>
+                <?= setting_html('home.mission_title', 'Rooted In Faith.<br>Reaching The <span class="text-amber-500">World.</span>') ?>
             </h2>
-            
+
             <div class="text-white/60 font-sans text-lg md:text-xl leading-relaxed mb-12 max-w-2xl font-light space-y-6">
-                <p>
-                    Under the visionary leadership of our General Overseer, Bridge Ministries International operates with a profound commitment to establishing a lasting, positive impact across the globe. We believe in the uncompromised truth of the Gospel.
-                </p>
-                <p>
-                    Our mandate is simple yet expansive: to empower communities, equip believers for leadership, and create a legacy of faith that transcends borders. Join us as we build bridges of hope to every nation.
-                </p>
+                <?php
+                $missionText = setting('home.mission_text', "Under the visionary leadership of our General Overseer, Bridge Ministries International operates with a profound commitment to establishing a lasting, positive impact across the globe. We believe in the uncompromised truth of the Gospel.\n\nOur mandate is simple yet expansive: to empower communities, equip believers for leadership, and create a legacy of faith that transcends borders. Join us as we build bridges of hope to every nation.");
+                foreach (preg_split('/\R{2,}/', trim($missionText)) as $para): ?>
+                <p><?= safe_html(nl2br(trim($para), false)) ?></p>
+                <?php endforeach; ?>
             </div>
-            
-            <a href="about.php" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors mt-4">
+
+            <a href="about" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors mt-4">
                 Discover Our Story
             </a>
         </div>
@@ -85,7 +89,7 @@ render_hero_cinematic([
                 <?php 
                     $founderImg = setting('home.founder_image') ?: 'assets/image/staff/IMG_0540.jpg';
                 ?>
-                <img src="<?= htmlspecialchars($founderImg) ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-80" alt="General Overseer">
+                <img loading="lazy" decoding="async" src="<?= htmlspecialchars($founderImg) ?>" class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-80" alt="General Overseer">
                 <div class="absolute inset-0 bg-gradient-to-t from-[#111113] via-transparent to-transparent"></div>
             </div>
         </div>
@@ -97,7 +101,7 @@ render_hero_cinematic([
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10">
         <div class="flex justify-between items-end mb-16 gs-reveal-up">
             <h2 class="text-5xl md:text-6xl font-display font-black text-white/95 uppercase tracking-tighter">Upcoming <span class="text-amber-500">Events</span></h2>
-            <a href="events.php" class="hidden md:flex items-center gap-3 text-xs font-bold text-white/50 uppercase tracking-[0.2em] hover:text-amber-500 transition-colors">
+            <a href="events" class="hidden md:flex items-center gap-3 text-xs font-bold text-white/50 uppercase tracking-[0.2em] hover:text-amber-500 transition-colors">
                 View Calendar <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
         </div>
@@ -106,9 +110,9 @@ render_hero_cinematic([
                 $dateObj = new DateTime($event['event_date']);
                 $imgSrc = empty($event['event_image']) ? 'https://images.unsplash.com/photo-1543165365-07232ed12fad?q=80&w=800&auto=format&fit=crop' : htmlspecialchars($event['event_image']);
             ?>
-            <a href="event.php?id=<?= $event['id'] ?>" class="group block gs-reveal-up" style="transition-delay: <?= $index * 0.1 ?>s;">
+            <a href="event-detail?id=<?= (int) $event['id'] ?>" class="group block gs-reveal-up" style="transition-delay: <?= $index * 0.1 ?>s;">
                 <div class="w-full aspect-[4/3] bg-black overflow-hidden relative border border-white/[0.03]">
-                    <img src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($event['title']) ?>" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]">
+                    <img loading="lazy" decoding="async" src="<?= $imgSrc ?>" alt="<?= htmlspecialchars($event['title']) ?>" class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-[2s]">
                     <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent"></div>
                 </div>
                 <div class="pt-6 flex gap-6">
@@ -141,8 +145,8 @@ render_hero_cinematic([
         <h2 class="text-5xl md:text-6xl font-display font-black text-white/95 uppercase tracking-tighter">Find Us <span class="text-amber-500">This Sunday</span></h2>
     </div>
     <div class="w-[90%] max-w-[112.5rem] mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 relative z-10">
-        <a href="visit.php" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up">
-            <img src="https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]">
+        <a href="visit" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up">
+            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]" alt="">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
             <div class="absolute bottom-10 left-10 right-10">
                 <div class="w-12 h-12 border border-white/10 flex items-center justify-center mb-6 text-amber-500 bg-[#0A0A0B]/80 backdrop-blur-sm group-hover:bg-amber-500 group-hover:text-black transition-colors duration-500">
@@ -152,8 +156,8 @@ render_hero_cinematic([
                 <span class="text-amber-500 text-[0.6rem] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all duration-300">Get Started &rarr;</span>
             </div>
         </a>
-        <a href="ministries.php" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up" style="transition-delay: 0.1s;">
-            <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]">
+        <a href="ministries" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up" style="transition-delay: 0.1s;">
+            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]" alt="">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
             <div class="absolute bottom-10 left-10 right-10">
                 <div class="w-12 h-12 border border-white/10 flex items-center justify-center mb-6 text-amber-500 bg-[#0A0A0B]/80 backdrop-blur-sm group-hover:bg-amber-500 group-hover:text-black transition-colors duration-500">
@@ -163,8 +167,8 @@ render_hero_cinematic([
                 <span class="text-amber-500 text-[0.6rem] font-bold uppercase tracking-[0.2em] flex items-center gap-2 group-hover:gap-4 transition-all duration-300">Explore Ministries &rarr;</span>
             </div>
         </a>
-        <a href="contact.php" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up" style="transition-delay: 0.2s;">
-            <img src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]">
+        <a href="contact" class="group block relative w-full aspect-[4/5] overflow-hidden bg-black border border-white/[0.03] gs-reveal-up" style="transition-delay: 0.2s;">
+            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=800&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-70 group-hover:scale-105 transition-all duration-[2s]" alt="">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent"></div>
             <div class="absolute bottom-10 left-10 right-10">
                 <div class="w-12 h-12 border border-white/10 flex items-center justify-center mb-6 text-amber-500 bg-[#0A0A0B]/80 backdrop-blur-sm group-hover:bg-amber-500 group-hover:text-black transition-colors duration-500">
@@ -182,7 +186,7 @@ render_hero_cinematic([
     <div class="w-[90%] max-w-[112.5rem] mx-auto mb-16 shrink-0 gs-reveal-up">
         <div class="flex justify-between items-end">
             <h2 class="text-5xl md:text-7xl font-display font-black text-white/95 uppercase tracking-tighter leading-[0.85]">SERVICES AND <span class="text-amber-500">MINISTRIES</span></h2>
-            <a href="ministries.php" class="hidden md:flex items-center gap-3 text-[0.65rem] font-bold text-white/50 uppercase tracking-[0.2em] hover:text-amber-500 transition-colors">
+            <a href="ministries" class="hidden md:flex items-center gap-3 text-[0.65rem] font-bold text-white/50 uppercase tracking-[0.2em] hover:text-amber-500 transition-colors">
                 View All <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
             </a>
         </div>
@@ -193,8 +197,8 @@ render_hero_cinematic([
         <?php foreach ($weeklyServices as $index => $service): 
             $imgSrc = empty($service['image_url']) ? 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=800&auto=format&fit=crop' : htmlspecialchars($service['image_url']);
         ?>
-        <a href="ministry_detail.php?id=<?= $service['id'] ?>" class="horizontal-panel relative w-[80vw] md:w-[40vw] lg:w-[30vw] h-full overflow-hidden shrink-0 group block bg-black border border-white/[0.03] hover:border-amber-500/50 transition-colors duration-700">
-            <img src="<?= $imgSrc ?>" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-[2s]" alt="<?= htmlspecialchars($service['title']) ?>">
+        <a href="ministry_detail?id=<?= $service['id'] ?>" class="horizontal-panel relative w-[80vw] md:w-[40vw] lg:w-[30vw] h-full overflow-hidden shrink-0 group block bg-black border border-white/[0.03] hover:border-amber-500/50 transition-colors duration-700">
+            <img loading="lazy" decoding="async" src="<?= $imgSrc ?>" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-[2s]" alt="<?= htmlspecialchars($service['title']) ?>">
             <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
             
             <div class="absolute bottom-10 left-10 right-10 flex flex-col justify-end">
@@ -214,7 +218,7 @@ render_hero_cinematic([
         
         <div class="flex flex-col md:flex-row justify-between items-end mb-20 gap-8 gs-reveal-up">
             <h2 class="text-5xl md:text-7xl font-display font-black text-white/95 uppercase tracking-tighter leading-[0.85]">Latest<br><span class="text-amber-500">Teachings</span></h2>
-            <a href="sermons.php" class="inline-flex items-center bg-transparent border border-white/20 text-white hover:border-amber-500 hover:text-amber-500 px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors">
+            <a href="sermons" class="inline-flex items-center bg-transparent border border-white/20 text-white hover:border-amber-500 hover:text-amber-500 px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors">
                 Sermon Archive
             </a>
         </div>
@@ -224,8 +228,8 @@ render_hero_cinematic([
                 $dateText = date('M d, Y', strtotime((string) $sermon['sermon_date']));
                 $imgSrc = empty($sermon['sermon_image']) ? 'https://images.unsplash.com/photo-1589903308904-1010c2294adc?q=80&w=800&auto=format&fit=crop' : htmlspecialchars($sermon['sermon_image']);
             ?>
-            <a href="sermon.php?id=<?= $sermon['id'] ?>" class="group relative overflow-hidden aspect-[3/4] bg-black border border-white/[0.03] hover:border-amber-500/50 transition-colors duration-700 gs-reveal-up block" style="transition-delay: <?= $index * 0.1 ?>s;">
-                <img src="<?= $imgSrc ?>" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-[2s]">
+            <a href="sermon?id=<?= $sermon['id'] ?>" class="group relative overflow-hidden aspect-[3/4] bg-black border border-white/[0.03] hover:border-amber-500/50 transition-colors duration-700 gs-reveal-up block" style="transition-delay: <?= $index * 0.1 ?>s;">
+                <img loading="lazy" decoding="async" src="<?= $imgSrc ?>" class="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-90 group-hover:scale-105 transition-all duration-[2s]" alt="<?= htmlspecialchars((string) $sermon['title']) ?>">
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent"></div>
                 
                 <!-- Play Button Overlay -->
@@ -268,7 +272,7 @@ render_hero_cinematic([
             <svg class="w-10 h-10 text-amber-500/30 mb-8" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
             <p class="text-white/70 font-sans text-lg font-medium leading-relaxed mb-12 flex-grow">"<?= htmlspecialchars((string) $testimony['quote']) ?>"</p>
             <div class="flex items-center gap-4 pt-8 border-t border-white/[0.03]">
-                <img src="<?= $avatar ?>" class="w-12 h-12 rounded-full object-cover grayscale opacity-80" alt="<?= htmlspecialchars((string)$testimony['author_name']) ?>">
+                <img loading="lazy" decoding="async" src="<?= $avatar ?>" class="w-12 h-12 rounded-full object-cover grayscale opacity-80" alt="<?= htmlspecialchars((string)$testimony['author_name']) ?>">
                 <div>
                     <h4 class="text-white/95 font-display font-black uppercase text-sm tracking-[0.1em]"><?= htmlspecialchars((string)$testimony['author_name']) ?></h4>
                     <?php if (!empty($testimony['author_role'])): ?>
@@ -295,7 +299,7 @@ render_hero_cinematic([
         <p class="text-white/60 font-sans text-xl font-medium leading-relaxed mb-12 max-w-2xl mx-auto">
             Your generous giving enables us to continue our global missions and the teaching of biblical truth around the world.
         </p>
-        <a href="give.php" class="inline-flex items-center bg-amber-500 text-black hover:bg-white hover:text-black px-12 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-[0_0_40px_rgba(245,158,11,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+        <a href="donate" class="inline-flex items-center bg-amber-500 text-black hover:bg-white hover:text-black px-12 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors shadow-[0_0_40px_rgba(245,158,11,0.2)] hover:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
             Give Online &rarr;
         </a>
     </div>
@@ -304,7 +308,7 @@ render_hero_cinematic([
 <!-- WATCH ONLINE (Cinematic Footer Lead-in) -->
 <section class="relative w-full py-40 flex items-center justify-center overflow-hidden bg-[#0A0A0B] gs-reveal-section">
     <div class="absolute inset-0 z-0">
-        <img src="<?= setting('home.watch_bg', 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop') ?>" alt="Watch Live" class="w-full h-full object-cover opacity-40 gs-parallax-bg">
+        <img loading="lazy" decoding="async" src="<?= setting_url('home.watch_bg', 'https://images.unsplash.com/photo-1490730141103-6cac27aaab94?q=80&w=2000&auto=format&fit=crop') ?>" alt="Watch Live" class="w-full h-full object-cover opacity-40 gs-parallax-bg">
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0B] via-[#0A0A0B]/60 to-[#0A0A0B]"></div>
     </div>
     
@@ -315,15 +319,15 @@ render_hero_cinematic([
         </div>
         
         <h2 class="font-display font-black text-6xl md:text-[8rem] tracking-tighter mb-8 text-white/95 leading-[0.85] uppercase drop-shadow-2xl">
-            Sundays.<br>Anywhere.
+            <?= setting_html('home.watch_title', 'Sundays.<br>Anywhere.') ?>
         </h2>
-        
+
         <p class="text-white/60 font-sans text-xl max-w-2xl mx-auto mb-12 font-medium">
-            Distance is no longer a barrier to fellowship. Join thousands of believers worldwide as we stream our services live every Sunday.
+            <?= htmlspecialchars(setting('home.watch_subtitle', 'Distance is no longer a barrier to fellowship. Join thousands of believers worldwide as we stream our services live every Sunday.')) ?>
         </p>
         
         <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
-            <a href="livestream.php" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors">
+            <a href="livestream" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-[0.2em] text-xs transition-colors">
                 Watch Live Service
             </a>
         </div>

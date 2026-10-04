@@ -4,7 +4,7 @@ require_once __DIR__ . '/includes/helpers.php';
 
 $id = (int) ($_GET['id'] ?? 0);
 if ($id <= 0) {
-    header('Location: ministries.php');
+    header('Location: ministries');
     exit;
 }
 
@@ -15,15 +15,16 @@ try {
     $ministry = $stmt->fetch();
     
     if (!$ministry) {
-        header('Location: ministries.php');
+        header('Location: ministries');
         exit;
     }
 } catch (Throwable $e) {
-    header('Location: ministries.php');
+    log_exception($e, 'ministry_detail');
+    header('Location: ministries');
     exit;
 }
 
-$pageTitle = htmlspecialchars($ministry['title']) . ' | Bridge Ministries International';
+$pageTitle = (string) $ministry['title'] . ' | Bridge Ministries International';
 $pageDescription = htmlspecialchars($ministry['description']);
 
 include 'includes/header.php';
@@ -58,7 +59,7 @@ $textColor = explode(' ', $themeClass)[0];
     <div class="w-[90%] max-w-[112.5rem] mx-auto relative z-10 text-center gs-reveal-up">
         <div class="inline-flex items-center gap-6 mb-6">
             <div class="h-px w-16 bg-white/20"></div>
-            <a href="ministries.php" class="text-white/50 hover:text-white font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase transition-colors">
+            <a href="ministries" class="text-white/50 hover:text-white font-sans font-bold text-[0.625rem] tracking-[0.4em] uppercase transition-colors">
                 &larr; Back to Ministries
             </a>
             <div class="h-px w-16 bg-white/20"></div>
@@ -89,7 +90,7 @@ $textColor = explode(' ', $themeClass)[0];
             <div class="lg:col-span-8 gs-reveal-left">
                 <?php if (!empty($ministry['long_description'])): ?>
                     <div class="prose prose-invert prose-lg prose-headings:font-display prose-headings:font-bold prose-headings:uppercase prose-p:font-sans prose-p:text-neutral-400 prose-p:leading-relaxed max-w-none">
-                        <?= $ministry['long_description'] ?>
+                        <?= safe_html($ministry['long_description']) ?>
                     </div>
                 <?php else: ?>
                     <div class="prose prose-invert prose-lg prose-p:font-sans prose-p:text-neutral-400 prose-p:leading-relaxed max-w-none">
@@ -120,7 +121,7 @@ $textColor = explode(' ', $themeClass)[0];
                             $heightClass = (count($gallery) === 3 && $index === 0) ? 'h-[25rem] md:h-[30rem]' : 'h-[20rem] md:h-[24rem]';
                         ?>
                             <div class="<?= $colSpanClass ?> rounded-3xl overflow-hidden group shadow-2xl relative bg-[#111]">
-                                <img src="<?= $img ?>" alt="Ministry Gallery Image" class="w-full <?= $heightClass ?> object-cover transition-transform duration-700 group-hover:scale-105">
+                                <img loading="lazy" decoding="async" src="<?= $img ?>" alt="Ministry Gallery Image" class="w-full <?= $heightClass ?> object-cover transition-transform duration-700 group-hover:scale-105">
                                 <div class="absolute inset-0 bg-black/20 group-hover:bg-transparent transition-colors duration-700"></div>
                             </div>
                         <?php endforeach; ?>
@@ -160,7 +161,7 @@ $textColor = explode(' ', $themeClass)[0];
                     <div class="mt-12 pt-8 border-t border-white/10">
                         <h4 class="font-display font-bold text-lg text-white mb-4">Get Connected</h4>
                         <p class="text-neutral-400 text-sm mb-6">Interested in joining or learning more? Reach out to us and we'll connect you with the leader.</p>
-                        <a href="contact.php" class="flex items-center justify-center gap-3 w-full bg-white text-black hover:bg-neutral-200 px-6 py-4 rounded-xl font-sans font-bold uppercase tracking-widest text-xs transition-colors">
+                        <a href="contact" class="flex items-center justify-center gap-3 w-full bg-white text-black hover:bg-neutral-200 px-6 py-4 rounded-xl font-sans font-bold uppercase tracking-widest text-xs transition-colors">
                             Contact Us
                         </a>
                     </div>

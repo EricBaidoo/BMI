@@ -42,7 +42,7 @@ include 'includes/header.php';
         <p>We use cookies to compile aggregate data about site traffic and site interaction so that we can offer better site experiences and tools in the future. We may contract with third-party service providers to assist us in better understanding our site visitors.</p>
 
         <h2>5. Contacting Us</h2>
-        <p>If there are any questions regarding this privacy policy, you may contact us using the information on our <a href="contact.php" class="text-amber-600 font-bold hover:underline">Contact Page</a>.</p>
+        <p>If there are any questions regarding this privacy policy, you may contact us using the information on our <a href="contact" class="text-amber-600 font-bold hover:underline">Contact Page</a>.</p>
     </div>
 </div>
 

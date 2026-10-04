@@ -1,11 +1,12 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/csrf.php';
 require_once __DIR__ . '/../includes/settings.php';
 require_once __DIR__ . '/../includes/helpers.php';
 require_once __DIR__ . '/../includes/uploads.php';
+require_once __DIR__ . '/../includes/sanitize.php';
 
 $feedback = '';
 $error = '';
@@ -106,6 +107,11 @@ $schema = [
     ],
 ];
 
+// Free-text bank and mobile money details need the giving permission.
+if (!auth_can('giving')) {
+    $schema['page_donate']['fields'] = array_values(array_filter($schema['page_donate']['fields'], fn ($f) => !audit_is_giving_key($f['key'])));
+}
+
 // Build the whitelist of allowed keys
 $allowedKeys = [];
 foreach ($schema as $group) {
@@ -152,9 +158,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } else {
                     $postKey = str_replace('.', '_', $k);
                     if (array_key_exists($k, $posted)) {
-                        $update[$k] = trim((string) $posted[$k]);
+                        $update[$k] = safe_html(trim((string) $posted[$k]));
                     } elseif (array_key_exists($postKey, $posted)) {
-                        $update[$k] = trim((string) $posted[$postKey]);
+                        $update[$k] = safe_html(trim((string) $posted[$postKey]));
                     }
                 }
             }
@@ -165,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header('Location: pages.php?group=' . urlencode($group));
         exit;
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -95,6 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':sort_order' => $sortOrder, ':bg_image' => $bgImage
                 ]);
             }
+            audit($id > 0 ? 'update' : 'create', 'hero_slide', $id > 0 ? $id : $pdo->lastInsertId(), 'Saved homepage hero_slide: ' . $title);
             header('Location: home_manager.php?tab=slides&status=saved');
             exit;
         }
@@ -104,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id > 0) {
                 $pdo->prepare('DELETE FROM hero_slides WHERE id = :id')->execute([':id' => $id]);
             }
+            audit('delete', 'hero_slide', $id, 'Deleted homepage hero_slide #' . $id);
             header('Location: home_manager.php?tab=slides&status=deleted');
             exit;
         }
@@ -135,6 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':quote' => $quote, ':sort_order' => $sortOrder, ':image_url' => $imageUrl
                 ]);
             }
+            audit($id > 0 ? 'update' : 'create', 'testimony', $id > 0 ? $id : $pdo->lastInsertId(), 'Saved homepage testimony: ' . $authorName);
             header('Location: home_manager.php?tab=testimonies&status=saved');
             exit;
         }
@@ -144,6 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id > 0) {
                 $pdo->prepare('DELETE FROM testimonies WHERE id = :id')->execute([':id' => $id]);
             }
+            audit('delete', 'testimony', $id, 'Deleted homepage testimony #' . $id);
             header('Location: home_manager.php?tab=testimonies&status=deleted');
             exit;
         }
@@ -189,6 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':g1' => $g1, ':g2' => $g2, ':g3' => $g3, ':show_on_homepage' => $showOnHomepage
                 ]);
             }
+            audit($id > 0 ? 'update' : 'create', 'weekly_service', $id > 0 ? $id : $pdo->lastInsertId(), 'Saved homepage weekly_service: ' . $title);
             header('Location: home_manager.php?tab=services&status=saved');
             exit;
         }
@@ -198,12 +203,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($id > 0) {
                 $pdo->prepare('DELETE FROM weekly_services WHERE id = :id')->execute([':id' => $id]);
             }
+            audit('delete', 'weekly_service', $id, 'Deleted homepage weekly_service #' . $id);
             header('Location: home_manager.php?tab=services&status=deleted');
             exit;
         }
         
     } catch (Throwable $ex) {
-        $error = $ex->getMessage();
+        $error = user_error_message($ex);
     }
 }
 

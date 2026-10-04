@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('inbox');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -19,13 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id > 0) {
                 $pdo->prepare('DELETE FROM messages WHERE id = :id')->execute([':id' => $id]);
+                audit('delete', 'message', $id, 'Deleted inbox message #' . $id);
                 flash('messages', 'deleted');
                 header('Location: messages.php');
                 exit;
             }
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 
@@ -77,7 +78,7 @@ require_once __DIR__ . '/includes/header.php';
                                 <div>
                                     <div class="flex items-center gap-3">
                                         <h3 class="font-bold text-slate-900 text-base"><?php echo e($m['full_name']); ?></h3>
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide uppercase <?php echo ['prayer' => 'bg-purple-100 text-purple-800 border border-purple-200/50', 'visit' => 'bg-emerald-100 text-emerald-800 border border-emerald-200/50'][$m['type']] ?? 'bg-slate-100 text-slate-700 border border-slate-200/50'; ?>">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold tracking-wide uppercase <?php echo ['prayer' => 'bg-purple-100 text-purple-800 border border-purple-200/50', 'visit' => 'bg-emerald-100 text-emerald-800 border border-emerald-200/50', 'newsletter' => 'bg-sky-100 text-sky-800 border border-sky-200/50'][$m['type']] ?? 'bg-slate-100 text-slate-700 border border-slate-200/50'; ?>">
                                             <?php echo e($m['type']); ?>
                                         </span>
                                     </div>

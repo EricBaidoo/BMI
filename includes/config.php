@@ -51,7 +51,8 @@ set_exception_handler(function (Throwable $e) use ($appDebug) {
     }
     
     // Always log the error securely
-    error_log((string)$e);
+    require_once __DIR__ . '/logger.php';
+    log_exception($e, 'uncaught');
 
     if ($appDebug) {
         echo "<div style='border:1px solid red; padding:20px; background:#fdd; font-family:monospace; margin:20px;'>";

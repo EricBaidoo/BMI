@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/sanitize.php';
 /**
  * Hardened image upload helper.
  *
@@ -36,7 +37,6 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
         'image/webp' => 'webp',
         'image/x-icon' => 'ico',
         'image/vnd.microsoft.icon' => 'ico',
-        'image/svg+xml' => 'svg',
         'video/mp4' => 'mp4',
         'video/webm' => 'webm',
     ];
@@ -44,7 +44,7 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
     $finfo = new finfo(FILEINFO_MIME_TYPE);
     $mime = (string) $finfo->file($file['tmp_name']);
     if (!isset($allowed[$mime])) {
-        throw new RuntimeException('Only JPG, PNG, GIF, WebP, SVG, ICO images, and MP4/WEBM videos are allowed.');
+        throw new RuntimeException('Only JPG, PNG, GIF, WebP, ICO images, and MP4/WEBM videos are allowed.');
     }
     $ext = $allowed[$mime];
 
@@ -53,7 +53,7 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
         throw new RuntimeException('Upload directory is not writable.');
     }
 
-    if (in_array($ext, ['webp', 'ico', 'svg', 'mp4', 'webm'])) {
+    if (in_array($ext, ['webp', 'ico', 'mp4', 'webm'])) {
         $name = sprintf('%s_%s_%s.%s', preg_replace('/[^a-z0-9_-]/i', '', $prefix), time(), bin2hex(random_bytes(6)), $ext);
         $destination = $uploadDir . $name;
         if (!move_uploaded_file($file['tmp_name'], $destination)) {
@@ -139,6 +139,9 @@ function handle_image_upload_or_link(?array $file, string $url, string $existing
     
     $url = trim($url);
     if ($url !== '') {
+        if (safe_url($url) === '' || preg_match('/^(mailto|tel):/i', $url)) {
+            throw new RuntimeException('Image links must start with https:// or be a path on this site.');
+        }
         return $url;
     }
 

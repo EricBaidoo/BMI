@@ -8,7 +8,7 @@ include 'includes/header.php';
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#000000] overflow-hidden gs-reveal-section">
     <div class="absolute inset-0 z-0">
-        <img loading="lazy" src="<?= setting('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 ">
+        <img fetchpriority="high" src="<?= setting_url('beliefs.hero_bg_image', 'https://images.unsplash.com/photo-1438283173091-5dbf5c5a3206?q=80&w=1200&auto=format&fit=crop') ?>" alt="Beliefs Background" class="w-full h-full object-cover opacity-20 ">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-900"></div>
     </div>
     
@@ -19,10 +19,10 @@ include 'includes/header.php';
             <div class="h-px w-12 bg-[#000000]"></div>
         </div>
         <h1 class="text-4xl md:text-7xl font-display font-black text-white mb-6 tracking-normal leading-tight">
-            <?= setting('beliefs.hero_title', 'What We <br/><span class="text-white/60">Believe.</span>') ?>
+            <?= setting_html('beliefs.hero_title', 'What We <br/><span class="text-white/60">Believe.</span>') ?>
         </h1>
         <p class="text-xl text-white/30 max-w-3xl mx-auto font-light leading-relaxed">
-            <?= setting('beliefs.intro_text', 'We are a Bible-believing, Christ-centred church standing in the historic stream of evangelical Christian faith. What follows is a summary of the core convictions that shape our preaching, our gatherings, and our life together.') ?>
+            <?= setting_html('beliefs.intro_text', 'We are a Bible-believing, Christ-centred church standing in the historic stream of evangelical Christian faith. What follows is a summary of the core convictions that shape our preaching, our gatherings, and our life together.') ?>
         </p>
     </div>
 </section>
@@ -33,7 +33,7 @@ include 'includes/header.php';
         <div class="max-w-4xl mx-auto text-center mb-20 gs-reveal-up">
             <h2 class="text-3xl md:text-5xl font-display font-black uppercase text-black mb-6 tracking-normal">A Note Before You Read</h2>
             <p class="text-lg md:text-xl text-black/60 font-sans font-medium leading-relaxed">
-                <?= setting('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
+                <?= setting_html('beliefs.note_text', 'We don\'t see this statement as the last word — only the Bible is. Rather, we see it as a faithful summary of what we believe the Scriptures teach. We hold these truths with conviction, teach them with clarity, and welcome honest questions from anyone exploring faith.') ?>
             </p>
         </div>
 

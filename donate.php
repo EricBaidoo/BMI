@@ -40,7 +40,7 @@ include 'includes/header.php';
 // Render Cinematic Hero
 render_hero_cinematic([
     'title' => setting('donate.hero_title', '<span class="italic font-light">Give</span> Online'),
-    'subtitle' => 'Partnership',
+    'subtitle' => setting('donate.hero_subtitle', 'Partnership'),
     'bg_image' => setting('donate.hero_bg_image', 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?q=80&w=1920&auto=format&fit=crop'),
     'button_text' => 'Give Securely Now',
     'button_url' => $chmsPaymentUrl !== '' ? $chmsPaymentUrl : '#ways-to-give',

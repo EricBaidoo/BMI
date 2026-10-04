@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/logger.php';
 
 /**
  * In-process cache so each page load hits the DB at most once for settings.
@@ -18,6 +19,7 @@ function settings_all(bool $forceRefresh = false): array
             $cache[(string) $r['setting_key']] = (string) ($r['setting_value'] ?? '');
         }
     } catch (Throwable $e) {
+        log_exception($e, 'settings');
         $cache = [];
     }
     return $cache;
@@ -58,13 +60,26 @@ function settings_group(string $group): array
  */
 function settings_save(array $kv): void
 {
+    require_once __DIR__ . '/audit.php';
+
+    $before = settings_all(true);
+    $changes = [];
+    foreach ($kv as $key => $value) {
+        if ((string) ($before[$key] ?? '') !== (string) $value) {
+            $changes[$key] = [(string) ($before[$key] ?? ''), (string) $value];
+        }
+    }
+    if (!$changes) {
+        return;
+    }
+
     $pdo = db_connect();
     $pdo->beginTransaction();
     try {
         $stmt = $pdo->prepare('INSERT INTO site_settings (setting_key, setting_value, setting_group) VALUES (:k, :v1, :g) ON DUPLICATE KEY UPDATE setting_value = :v2');
-        foreach ($kv as $key => $value) {
+        foreach ($changes as $key => [, $value]) {
             $group = str_contains($key, '.') ? explode('.', $key)[0] : 'general';
-            $stmt->execute([':k' => $key, ':v1' => (string) $value, ':g' => $group, ':v2' => (string) $value]);
+            $stmt->execute([':k' => $key, ':v1' => $value, ':g' => $group, ':v2' => $value]);
         }
         $pdo->commit();
         // Invalidate cache for the rest of this request
@@ -73,6 +88,40 @@ function settings_save(array $kv): void
         $pdo->rollBack();
         throw $e;
     }
+
+    $givingChanges = array_filter($changes, fn ($k) => audit_is_giving_key($k), ARRAY_FILTER_USE_KEY);
+    $keys = array_keys($changes);
+    audit('update', $givingChanges ? 'giving' : 'setting', null,
+        'Changed ' . count($keys) . ' setting(s): ' . implode(', ', array_slice($keys, 0, 6)) . (count($keys) > 6 ? '…' : ''),
+        ['changes' => $changes]);
+    audit_alert_giving_change($givingChanges);
+}
+
+/** Short-lived cache of the livestream prompt/notes served to viewers (see api/live_state.php). */
+function live_state_cache_file(): string
+{
+    return sys_get_temp_dir() . '/bmi_live_state_' . md5(__DIR__) . '.json';
+}
+
+/**
+ * Weekly service times from Settings → Service times, as [label => time] (empty entries skipped).
+ * Settings store "Sundays · 8:45 AM"; the day becomes the label when no separate label exists.
+ */
+function service_times(): array
+{
+    $labels = [
+        'service.sunday_worship' => 'Sunday Worship',
+        'service.bible_study' => 'Bible Study',
+        'service.prayer_service' => 'Prayer Service',
+    ];
+    $out = [];
+    foreach ($labels as $key => $label) {
+        $value = trim(setting($key));
+        if ($value !== '') {
+            $out[$label] = $value;
+        }
+    }
+    return $out;
 }
 
 /**
@@ -87,3 +136,5 @@ function settings_has_socials(): bool
     }
     return false;
 }
+
+require_once __DIR__ . '/sanitize.php';

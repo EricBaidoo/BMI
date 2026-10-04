@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':p' => $publish ? date('Y-m-d H:i:s') : null,
                     ':img' => $postImage,
                 ]);
+                audit('create', 'post', $pdo->lastInsertId(), 'Added post: ' . $title);
                 header('Location: posts.php?status=added');
                 exit;
             }
@@ -95,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':p' => $publishedAt,
                 ':img' => $postImage,
             ]);
+            audit('update', 'post', $id, 'Updated post: ' . $title);
             header('Location: posts.php?status=updated');
             exit;
         }
@@ -114,11 +116,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 upload_delete($row['post_image']);
             }
             
+            audit('delete', 'post', $id, 'Deleted post #' . $id);
+            
             header('Location: posts.php?status=deleted');
             exit;
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 

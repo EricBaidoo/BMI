@@ -60,6 +60,7 @@ try {
     $stmt->execute();
     $sermons = $stmt->fetchAll();
 } catch (Throwable $e) {
+    log_exception($e, 'sermons');
     $sermonsError = 'Sermons are temporarily unavailable.';
 }
 
@@ -70,7 +71,7 @@ include 'includes/header.php';
 // Render Cinematic Hero
 render_hero_cinematic([
     'title' => setting('sermons.hero_title', 'Watch, Listen, <br/><i class="font-light text-amber-500">Grow.</i>'),
-    'subtitle' => 'The Media Hub',
+    'subtitle' => setting('sermons.hero_subtitle', 'The Media Hub'),
     'bg_image' => setting('sermons.hero_bg_image', 'https://images.unsplash.com/photo-1543165365-07232ed12fad?q=80&w=1920&auto=format&fit=crop'),
     'is_video' => false
 ]);
@@ -208,10 +209,10 @@ render_hero_cinematic([
                 <p class="text-white/40 text-xl font-sans font-medium max-w-2xl">Join us in person or watch our services live online every week.</p>
             </div>
             <div class="flex flex-col sm:flex-row gap-6 flex-shrink-0">
-                <a href="livestream.php" class="bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors inline-flex items-center justify-center">
+                <a href="livestream" class="bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors inline-flex items-center justify-center">
                     Watch Live
                 </a>
-                <a href="visit.php" class="bg-transparent border border-white/20 text-white hover:border-amber-500 hover:text-amber-500 px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors inline-flex items-center justify-center">
+                <a href="visit" class="bg-transparent border border-white/20 text-white hover:border-amber-500 hover:text-amber-500 px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors inline-flex items-center justify-center">
                     Plan a Visit
                 </a>
             </div>

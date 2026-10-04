@@ -1,23 +1,46 @@
 <?php
 require_once __DIR__ . '/../../includes/auth.php';
 require_once __DIR__ . '/../../includes/settings.php';
+require_once __DIR__ . '/../../includes/csrf.php';
 auth_require();
 $user = auth_user();
 
 $currentPage = basename($_SERVER['PHP_SELF']);
+// Each item lists the capability needed to see it (null = everyone signed in).
 $navItems = [
-    'index.php' => ['icon' => 'home', 'label' => 'Dashboard'],
-    'home_manager.php' => ['icon' => 'home', 'label' => 'Ministries & Homepage'],
-    'pages.php' => ['icon' => 'document-text', 'label' => 'Page Content'],
-    'sermons.php' => ['icon' => 'video-camera', 'label' => 'Sermons'],
-    'events.php' => ['icon' => 'calendar', 'label' => 'Events'],
-    'live-control.php' => ['icon' => 'video-camera', 'label' => 'Live Control'],
-    // 'ministries.php' => ['icon' => 'user-group', 'label' => 'Ministries'], // Unused, frontend uses weekly_services
-    'posts.php' => ['icon' => 'newspaper', 'label' => 'Blog Posts'],
-    'messages.php' => ['icon' => 'inbox', 'label' => 'Inbox'],
-    'users.php' => ['icon' => 'shield-check', 'label' => 'User Management'],
-    'settings.php' => ['icon' => 'cog', 'label' => 'Settings'],
+    'index.php' => ['icon' => 'home', 'label' => 'Dashboard', 'cap' => null],
+    'home_manager.php' => ['icon' => 'home', 'label' => 'Ministries & Homepage', 'cap' => 'content'],
+    'pages.php' => ['icon' => 'document-text', 'label' => 'Page Content', 'cap' => 'content'],
+    'sermons.php' => ['icon' => 'video-camera', 'label' => 'Sermons', 'cap' => 'content'],
+    'events.php' => ['icon' => 'calendar', 'label' => 'Events', 'cap' => 'content'],
+    'live-control.php' => ['icon' => 'video-camera', 'label' => 'Live Control', 'cap' => 'live'],
+    'posts.php' => ['icon' => 'newspaper', 'label' => 'Blog Posts', 'cap' => 'content'],
+    'messages.php' => ['icon' => 'inbox', 'label' => 'Inbox', 'cap' => 'inbox'],
+    'settings.php' => ['icon' => 'cog', 'label' => 'Settings', 'cap' => ['settings', 'giving']],
+    'users.php' => ['icon' => 'shield-check', 'label' => 'User Management', 'cap' => 'users'],
+    'audit-log.php' => ['icon' => 'document-text', 'label' => 'Audit Log', 'cap' => 'audit'],
 ];
+$navItems = array_filter($navItems, function ($item) {
+    if ($item['cap'] === null) {
+        return true;
+    }
+    foreach ((array) $item['cap'] as $cap) {
+        if (auth_can($cap)) {
+            return true;
+        }
+    }
+    return false;
+});
+
+// Nudge staff who have not turned on two-step sign-in.
+$needs2fa = false;
+try {
+    $stmt = db_connect()->prepare('SELECT totp_secret IS NULL FROM users WHERE id = :id');
+    $stmt->execute([':id' => $user['id']]);
+    $needs2fa = (bool) $stmt->fetchColumn();
+} catch (Throwable $e) {
+    log_exception($e, 'admin header');
+}
 
 function render_icon($name) {
     $icons = [
@@ -148,7 +171,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
             </div>
             <div class="mt-4 flex gap-2">
                 <a href="profile.php" class="flex-1 text-center py-1.5 px-3 rounded bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 hover:text-white transition-colors border border-slate-700">Profile</a>
-                <a href="logout.php" class="flex-1 text-center py-1.5 px-3 rounded bg-red-900/30 hover:bg-red-900/50 text-xs font-medium text-red-400 hover:text-red-300 transition-colors border border-red-900/50">Sign out</a>
+                <form method="post" action="logout.php" class="flex-1"><?php echo csrf_field(); ?><button type="submit" class="w-full text-center py-1.5 px-3 rounded bg-red-900/30 hover:bg-red-900/50 text-xs font-medium text-red-400 hover:text-red-300 transition-colors border border-red-900/50">Sign out</button></form>
             </div>
         </div>
     </aside>
@@ -186,4 +209,10 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
 
         <!-- Main Scrollable Area -->
         <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+            <?php if ($needs2fa && $currentPage !== 'profile.php'): ?>
+                <div class="mb-6 rounded-lg border border-amber-200 bg-amber-50 text-amber-900 px-4 py-3 text-sm flex flex-wrap items-center justify-between gap-3">
+                    <span><strong>Protect your account:</strong> turn on two-step sign-in so a stolen password alone can't open the admin panel.</span>
+                    <a href="profile.php#two-step" class="font-semibold text-amber-900 underline">Set it up now</a>
+                </div>
+            <?php endif; ?>
 

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -40,6 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':s' => $schedule !== '' ? $schedule : null,
                     ':i' => $ministryImage,
                 ]);
+                audit('create', 'ministry', $pdo->lastInsertId(), 'Added ministry: ' . $name);
                 header('Location: ministries.php?status=added');
                 exit;
             }
@@ -73,6 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':s' => $schedule !== '' ? $schedule : null,
                 ':i' => $finalImage,
             ]);
+            audit('update', 'ministry', $id, 'Updated ministry: ' . $name);
             header('Location: ministries.php?status=updated');
             exit;
         }
@@ -89,11 +91,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 upload_delete($existing['ministry_image']);
             }
             $pdo->prepare('DELETE FROM ministries WHERE id = :id')->execute([':id' => $id]);
+            audit('delete', 'ministry', $id, 'Deleted ministry #' . $id);
             header('Location: ministries.php?status=deleted');
             exit;
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 

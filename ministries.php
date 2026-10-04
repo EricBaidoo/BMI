@@ -10,6 +10,7 @@ try {
     $pdo = db_connect();
     $ministries = $pdo->query('SELECT * FROM weekly_services ORDER BY sort_order ASC, id ASC')->fetchAll();
 } catch (Throwable $e) {
+    log_exception($e, 'ministries');
     $ministries = [];
 }
 
@@ -17,9 +18,9 @@ include 'includes/header.php';
 
 // Render Cinematic Hero
 render_hero_cinematic([
-    'title' => 'Our <i class="text-amber-500 font-light">Ministries</i>',
-    'subtitle' => 'Get Involved',
-    'bg_image' => 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1920&auto=format&fit=crop',
+    'title' => setting('ministries.hero_title', 'Our <i class="text-amber-500 font-light">Ministries</i>'),
+    'subtitle' => setting('ministries.hero_subtitle', 'Get Involved'),
+    'bg_image' => setting('ministries.hero_bg_image', 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=1920&auto=format&fit=crop'),
     'button_text' => 'Join A Ministry',
     'button_url' => '#join',
     'is_video' => false
@@ -46,7 +47,7 @@ render_hero_cinematic([
                 <?php foreach ($ministries as $index => $m):
                     $iconLetter = strtoupper(substr((string) $m['title'], 0, 1));
                 ?>
-                    <a href="ministry_detail.php?id=<?php echo $m['id']; ?>" class="group relative bg-[#0A0A0B] hover:bg-[#161619] transition-colors duration-700 hover:-translate-y-2 gs-reveal-up flex flex-col h-full overflow-hidden block">
+                    <a href="ministry_detail?id=<?php echo $m['id']; ?>" class="group relative bg-[#0A0A0B] hover:bg-[#161619] transition-colors duration-700 hover:-translate-y-2 gs-reveal-up flex flex-col h-full overflow-hidden block">
                         <div class="relative z-10 flex flex-col h-full p-10">
                             <div class="flex items-center gap-6 mb-10">
                                 <div class="w-16 h-16 bg-black flex flex-shrink-0 items-center justify-center text-amber-500/80 font-display font-black text-3xl group-hover:bg-amber-500 group-hover:text-black group-hover:-rotate-6 transition-all duration-500 shadow-lg shadow-black/50">
@@ -103,7 +104,7 @@ render_hero_cinematic([
             </div>
             
             <div class="relative z-10 flex-shrink-0">
-                <a href="contact.php" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors">
+                <a href="contact" class="inline-flex items-center bg-white text-black hover:bg-amber-500 hover:text-white px-10 py-5 rounded-full font-sans font-bold uppercase tracking-widest text-xs transition-colors">
                     Get Connected
                 </a>
             </div>

@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             
             $successMessage = "Thank you, $name. Your message has been received. Our team will reach out to you soon.";
         } catch (Throwable $e) {
-            error_log((string)$e);
+            log_exception($e, 'contact');
             $errorMessage = "Sorry, an error occurred while saving your message. Please try again later.";
         }
     } else {
@@ -56,7 +56,7 @@ include 'includes/header.php';
 <div class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#030303] overflow-hidden">
     <!-- Background Image -->
     <div class="absolute inset-0">
-        <img loading="lazy" src="<?= setting('contact.hero_bg_image', 'https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop') ?>" alt="Contact Background" class="w-full h-full object-cover opacity-10 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop';">
+        <img fetchpriority="high" src="<?= setting_url('contact.hero_bg_image', 'https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop') ?>" alt="Contact Background" class="w-full h-full object-cover opacity-10 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1516383740770-fbcc5ccbece0?q=80&w=1200&auto=format&fit=crop';">
         <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0c] via-[#030303]/80 to-[#030303]"></div>
     </div>
 
@@ -70,10 +70,10 @@ include 'includes/header.php';
             <div class="h-px w-16 bg-white/20"></div>
         </div>
         <h1 class="text-5xl md:text-7xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-300 to-neutral-600 tracking-normal mb-6 uppercase leading-[0.9]">
-            <?= setting('contact.hero_title', 'Get in <span class="italic font-light">Touch</span>') ?>
+            <?= setting_html('contact.hero_title', 'Get in <span class="italic font-light">Touch</span>') ?>
         </h1>
         <p class="text-xl text-neutral-400 max-w-2xl mx-auto font-medium">
-            <?= setting('contact.hero_subtitle', 'Whether you have a question, need prayer, or want to learn more about our ministries, we are here for you.') ?>
+            <?= setting_html('contact.hero_subtitle', 'Whether you have a question, need prayer, or want to learn more about our ministries, we are here for you.') ?>
         </p>
     </div>
 </div>
@@ -104,7 +104,7 @@ include 'includes/header.php';
                             <div>
                                 <h3 class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Mailing Address</h3>
                                 <p class="text-neutral-300 font-sans font-medium text-lg leading-snug group-hover/item:text-amber-500 transition-colors duration-500">
-                                    <?php echo htmlspecialchars(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>
+                                    <?php echo htmlspecialchars(setting('contact.address')); ?>
                                 </p>
                             </div>
                         </li>
@@ -127,8 +127,8 @@ include 'includes/header.php';
                             </div>
                             <div>
                                 <h3 class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Call Us</h3>
-                                <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', setting('contact.phone_primary', '+1 234 567 8900')); ?>" class="text-neutral-300 font-sans font-medium text-lg leading-snug hover:text-amber-500 transition-colors duration-300">
-                                    <?php echo htmlspecialchars(setting('contact.phone_primary', '+1 234 567 8900')); ?>
+                                <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', setting('contact.phone_primary')); ?>" class="text-neutral-300 font-sans font-medium text-lg leading-snug hover:text-amber-500 transition-colors duration-300">
+                                    <?php echo htmlspecialchars(setting('contact.phone_primary')); ?>
                                 </a>
                             </div>
                         </li>
@@ -139,12 +139,16 @@ include 'includes/header.php';
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 h-full">
                     
                     <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl gs-reveal-up group">
-                        <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Office Hours</h3>
+                        <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Service Times</h3>
                         <ul class="space-y-4 text-white/60 font-medium text-sm">
-                            <li class="flex flex-col"><span class="text-white">Mon - Thu</span> <span>9:00 AM - 5:00 PM</span></li>
-                            <li class="flex flex-col"><span class="text-white">Friday</span> <span>9:00 AM - 1:00 PM</span></li>
-                            <li class="flex flex-col"><span class="text-white">Sunday</span> <span class="text-amber-500">9:00 AM Services</span></li>
+                            <?php foreach (service_times() as $label => $time): ?>
+                                <li class="flex flex-col"><span class="text-white"><?php echo htmlspecialchars($label); ?></span> <span><?php echo htmlspecialchars($time); ?></span></li>
+                            <?php endforeach; ?>
                         </ul>
+                        <?php if (setting('contact.office_hours') !== ''): ?>
+                            <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mt-8 mb-3">Office Hours</h3>
+                            <p class="text-white/60 font-medium text-sm whitespace-pre-line"><?php echo htmlspecialchars(setting('contact.office_hours')); ?></p>
+                        <?php endif; ?>
                     </div>
 
                     <div class="bg-[#111111] border border-white/5 rounded-[2.5rem] p-8 text-white shadow-2xl gs-reveal-up flex flex-col justify-between group">
@@ -155,10 +159,10 @@ include 'includes/header.php';
                                 foreach ($dynamicSocials as $socialLink): 
                                     if(empty($socialLink['url'])) continue;
                             ?>
-                                <a href="<?php echo htmlspecialchars($socialLink['url']); ?>" class="w-14 h-14 rounded-2xl bg-white/5 text-white flex items-center justify-center hover:bg-amber-500 hover:text-black hover:-translate-y-1 transition-all duration-300" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>" title="<?php echo htmlspecialchars($socialLink['name']); ?>">
+                                <a href="<?php echo htmlspecialchars(safe_url($socialLink['url'])); ?>" class="w-14 h-14 rounded-2xl bg-white/5 text-white flex items-center justify-center hover:bg-amber-500 hover:text-black hover:-translate-y-1 transition-all duration-300" target="_blank" rel="noopener noreferrer" aria-label="<?php echo htmlspecialchars($socialLink['name']); ?>" title="<?php echo htmlspecialchars($socialLink['name']); ?>">
                                     <?php if (!empty($socialLink['icon'])): ?>
                                         <span class="w-6 h-6 flex items-center justify-center *:w-full *:h-full">
-                                            <?php echo $socialLink['icon']; ?>
+                                            <?php echo safe_html($socialLink['icon'], 'svg'); ?>
                                         </span>
                                     <?php else: ?>
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
@@ -209,10 +213,13 @@ include 'includes/header.php';
                             <label for="type" class="block text-xs font-bold text-white/40 uppercase tracking-widest mb-3">How can we help you?</label>
                             <div class="relative">
                                 <select id="type" name="type" class="w-full bg-white/5 border-none rounded-xl px-5 py-4 text-white focus:outline-none focus:ring-2 focus:ring-amber-500 transition-all font-medium appearance-none cursor-pointer">
-                                    <option class="bg-[#111111] text-white">General Inquiry</option>
-                                    <option class="bg-[#111111] text-white">Prayer Request</option>
-                                    <option class="bg-[#111111] text-white">Testimony</option>
-                                    <option class="bg-[#111111] text-white">Join a Ministry</option>
+                                    <?php
+                                    $subjects = ['General Inquiry', 'Prayer Request', 'Giving', 'Testimony', 'Join a Ministry'];
+                                    $preselect = (string) ($_POST['type'] ?? $_GET['subject'] ?? '');
+                                    foreach ($subjects as $subject):
+                                    ?>
+                                    <option class="bg-[#111111] text-white"<?php echo strcasecmp($preselect, $subject) === 0 ? ' selected' : ''; ?>><?php echo htmlspecialchars($subject); ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                                 <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-5 text-white/30">
                                     <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>

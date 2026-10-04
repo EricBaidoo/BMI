@@ -16,6 +16,11 @@ try {
         $stmt = $pdo->prepare('SELECT * FROM posts WHERE slug = :s AND published_at IS NOT NULL LIMIT 1');
         $stmt->execute([':s' => $slug]);
         $single = $stmt->fetch();
+        if (!$single) {
+            // Unknown post: show the list, but tell search engines the address doesn't exist.
+            http_response_code(404);
+            $noIndex = true;
+        }
     }
 
     if (!$single) {
@@ -31,6 +36,7 @@ try {
         $pageDescription = excerpt($single['content'], 30);
     }
 } catch (Throwable $e) {
+    log_exception($e, 'blog');
     $posts = [];
 }
 

@@ -21,29 +21,8 @@ try {
     $flagships = $stmtFlagship->fetchAll();
 
 } catch (Throwable $e) {
-    // Fallback to mock data for local UI review if database is not set up
-    $flagships = [
-        [
-            'id' => 1,
-            'title' => '21 Days of Fasting',
-            'slug' => '21-days-fasting',
-            'description' => "Our year begins with consecration. For 21 days, we gather to pray, fast, and seek God's face for the year ahead. It is a time of spiritual recalibration, prophetic direction, and miraculous encounters.\n\nJoin us daily as we press into the presence of God.",
-            'event_date' => date('Y') . '-01-02',
-            'end_date' => date('Y') . '-01-22',
-            'venue' => 'Main Auditorium',
-            'event_image' => 'https://images.unsplash.com/photo-1444053915174-884ee2678687?q=80&w=1200&auto=format&fit=crop'
-        ],
-        [
-            'id' => 2,
-            'title' => 'Annual Convention',
-            'slug' => 'annual-convention',
-            'description' => "The high point of our ministry calendar. The Annual Convention is a week-long gathering of all branches and partners globally. Expect powerful word ministration, explosive worship, and impartation from seasoned guest ministers.\n\nYou do not want to miss this milestone event.",
-            'event_date' => date('Y') . '-08-15',
-            'end_date' => date('Y') . '-08-21',
-            'venue' => 'National Sports Stadium',
-            'event_image' => 'https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?q=80&w=1200&auto=format&fit=crop'
-        ]
-    ];
+    log_exception($e, 'flagship-programs');
+    $flagships = [];
 }
 
 include 'includes/header.php';
@@ -55,17 +34,17 @@ include 'includes/header.php';
     <!-- Ambient Glowing Orbs -->
     <div class="absolute top-10 left-1/4 w-[30rem] h-[30rem] bg-amber-500/10 blur-[120px] rounded-full mix-blend-screen pointer-events-none"></div>
     <div class="absolute bottom-0 right-1/4 w-[40rem] h-[40rem] bg-indigo-600/10 blur-[150px] rounded-full mix-blend-screen pointer-events-none"></div>
-    <div class="absolute inset-0 bg-[url('<?= setting('flagship.hero_bg_image', 'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop') ?>')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
+    <div class="absolute inset-0 bg-[url('<?= setting_url('flagship.hero_bg_image', 'https://images.unsplash.com/photo-1544365558-35aa4afc111c?q=80&w=1200&auto=format&fit=crop') ?>')] bg-cover bg-center opacity-20 mix-blend-overlay"></div>
     
     <div class="relative z-10 text-center px-6 max-w-5xl mx-auto gs-reveal-up">
         <span class="inline-block py-2 px-4 rounded-full bg-white/5 border border-white/10 text-amber-500 text-xs font-bold tracking-[0.25em] uppercase mb-8 backdrop-blur-md shadow-2xl">
             Our Milestones
         </span>
         <h1 class="text-6xl md:text-8xl lg:text-9xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-200 to-neutral-600 uppercase tracking-normal mb-6 leading-[0.9]">
-            <?= setting('flagship.hero_title', 'Flagship <br/><span class="italic font-light text-white/50">Programs</span>') ?>
+            <?= setting_html('flagship.hero_title', 'Flagship <br/><span class="italic font-light text-white/50">Programs</span>') ?>
         </h1>
         <p class="text-lg md:text-2xl text-neutral-400 font-medium max-w-3xl mx-auto leading-relaxed">
-            <?= setting('flagship.hero_subtitle', 'Discover the core annual events that define our spiritual journey, bringing believers together for extraordinary moments of divine encounter.') ?>
+            <?= setting_html('flagship.hero_subtitle', 'Discover the core annual events that define our spiritual journey, bringing believers together for extraordinary moments of divine encounter.') ?>
         </p>
     </div>
 </section>
@@ -157,7 +136,7 @@ include 'includes/header.php';
                         </p>
 
                         <div class="flex flex-wrap items-center gap-6 mt-auto">
-                            <a href="event-detail.php?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-center bg-white text-black hover:bg-amber-500 hover:text-white px-8 py-4 rounded-full font-sans font-bold text-xs tracking-[0.2em] uppercase transition-all duration-500 transform group-hover:translate-x-2">
+                            <a href="event-detail?id=<?php echo (int)$event['id']; ?>" class="inline-flex items-center justify-center bg-white text-black hover:bg-amber-500 hover:text-white px-8 py-4 rounded-full font-sans font-bold text-xs tracking-[0.2em] uppercase transition-all duration-500 transform group-hover:translate-x-2">
                                 Discover More
                                 <svg class="w-4 h-4 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                             </a>

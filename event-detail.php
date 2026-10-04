@@ -8,7 +8,7 @@ $event = null;
 $error = null;
 
 if (!$id && !$slug) {
-    header('Location: events.php');
+    header('Location: events');
     exit;
 }
 
@@ -23,14 +23,41 @@ try {
     }
     $event = $stmt->fetch();
 } catch (Throwable $e) {
+    log_exception($e, 'event-detail');
     $error = "Unable to fetch event details.";
 }
 
 if (!$event) {
-    $pageTitle = 'Event Not Found';
+    // A real 404 (or 503 if the database failed) so search engines drop dead links.
+    http_response_code($error ? 503 : 404);
+    $noIndex = true;
+    $pageTitle = 'Event Not Found | Bridge Ministries International';
 } else {
-    $pageTitle = htmlspecialchars((string)$event['title']) . ' | Bridge Ministries International';
-    $pageDescription = substr(strip_tags((string)$event['description']), 0, 160);
+    require_once __DIR__ . '/includes/settings.php';
+    $pageTitle = (string) $event['title'] . ' | Bridge Ministries International';
+    $pageDescription = mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags((string) $event['description']))), 0, 160);
+    $canonicalUrl = $siteUrl . '/event-detail?id=' . (int) $event['id'];
+    if (!empty($event['event_image'])) {
+        $ogImage = (string) $event['event_image'];
+    }
+    $start = (string) $event['event_date'] . (!empty($event['event_time']) ? 'T' . substr((string) $event['event_time'], 0, 5) : '');
+    $structuredData = [array_filter([
+        '@context' => 'https://schema.org',
+        '@type' => 'Event',
+        'name' => (string) $event['title'],
+        'description' => $pageDescription ?: null,
+        'startDate' => $start,
+        'endDate' => !empty($event['end_date']) ? (string) $event['end_date'] : null,
+        'eventStatus' => 'https://schema.org/EventScheduled',
+        'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+        'image' => !empty($event['event_image']) ? (preg_match('~^https?://~i', $event['event_image']) ? $event['event_image'] : $siteUrl . '/' . ltrim($event['event_image'], '/')) : null,
+        'location' => [
+            '@type' => 'Place',
+            'name' => (string) ($event['venue'] ?: setting('site.name', 'Bridge Ministries International')),
+            'address' => setting('contact.address') ?: 'Accra, Ghana',
+        ],
+        'organizer' => ['@type' => 'Organization', 'name' => setting('site.name', 'Bridge Ministries International'), 'url' => $siteUrl . '/'],
+    ])];
 }
 
 include 'includes/header.php';
@@ -136,7 +163,7 @@ include 'includes/header.php';
                             <?php endif; ?>
                         </div>
 
-                        <a href="contact.php" class="block w-full bg-[#000000] text-white text-center px-6 py-4 -none font-bold hover:bg-[#60a5fa] transition-all  hover:-translate-y-1">
+                        <a href="contact" class="block w-full bg-[#000000] text-white text-center px-6 py-4 -none font-bold hover:bg-[#60a5fa] transition-all  hover:-translate-y-1">
                             Register Now
                         </a>
                         <p class="text-center text-xs text-white/40 mt-4">Registration may be required for certain events.</p>

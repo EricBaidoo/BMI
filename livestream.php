@@ -316,7 +316,7 @@ include 'includes/header.php';
             <div id="tab-pray" class="hidden space-y-4">
                 
                 <!-- Submit Prayer Request -->
-                <a href="contact.php" class="block bg-[#000000] border border-white/10 rounded-[1.5rem] p-5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-amber-500/50 transition-all group">
+                <a href="contact" class="block bg-[#000000] border border-white/10 rounded-[1.5rem] p-5 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:border-amber-500/50 transition-all group">
                     <div class="flex items-start gap-4">
                         <div class="text-white flex-shrink-0 mt-0.5 relative">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
@@ -455,7 +455,7 @@ function playPastService(url) {
 document.addEventListener('DOMContentLoaded', () => {
     let lastPromptHtml = '';
     let lastNotesHtml = '';
-    const pollInterval = 5000; // 5 seconds
+    const pollInterval = 15000; // 15 seconds (+ up to 5s random offset)
     
     function fetchLiveState() {
         fetch('api/live_state')
@@ -512,9 +512,17 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => console.error('Live State Sync Error:', err));
     }
 
-    // Initial fetch & loop
+    // Initial fetch, then poll only while the tab is visible. A random offset spreads
+    // thousands of viewers' requests out instead of hitting the server at the same moment.
     fetchLiveState();
-    setInterval(fetchLiveState, pollInterval);
+    const schedule = () => setTimeout(() => {
+        if (!document.hidden) fetchLiveState();
+        schedule();
+    }, pollInterval + Math.floor(Math.random() * 5000));
+    schedule();
+    document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) fetchLiveState();
+    });
     // Print Logic
     const btnPrint = document.getElementById('btn-print-notes');
     if (btnPrint) {

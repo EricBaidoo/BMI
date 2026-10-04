@@ -8,20 +8,50 @@ if (auth_check()) {
 }
 
 $error = '';
+$notice = [
+    'timeout' => 'You were signed out after a period of inactivity. Please sign in again.',
+    'disabled' => 'Your account is no longer active. Contact an administrator if this is unexpected.',
+    'signed_out' => 'You have been signed out.',
+][(string) ($_GET['reason'] ?? '')] ?? '';
 $email = '';
+$redirect = auth_safe_redirect((string) ($_GET['redirect'] ?? 'index.php'));
+$step = isset($_SESSION['auth_pending']) ? 'code' : 'password';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
-    $email = trim((string) ($_POST['email'] ?? ''));
-    $password = (string) ($_POST['password'] ?? '');
+    $notice = '';
 
-    if (auth_attempt($email, $password)) {
-        $redirect = (string) ($_GET['redirect'] ?? 'index.php');
-        $safe = filter_var($redirect, FILTER_VALIDATE_URL) ? 'index.php' : $redirect;
-        header('Location: ' . $safe);
-        exit;
+    if (($_POST['step'] ?? '') === 'cancel') {
+        unset($_SESSION['auth_pending']);
+        $step = 'password';
+    } elseif (($_POST['step'] ?? '') === 'code') {
+        $result = auth_verify_second_factor((string) ($_POST['code'] ?? ''));
+        if ($result === 'ok') {
+            header('Location: ' . $redirect);
+            exit;
+        }
+        if ($result === 'expired') {
+            $step = 'password';
+            $error = 'That sign-in attempt expired. Please enter your email and password again.';
+        } else {
+            $step = 'code';
+            $error = 'That code is not correct. Check the time on your phone and try the newest code.';
+        }
+    } else {
+        $email = trim((string) ($_POST['email'] ?? ''));
+        $result = auth_attempt($email, (string) ($_POST['password'] ?? ''));
+        if ($result === 'ok') {
+            header('Location: ' . $redirect);
+            exit;
+        }
+        if ($result === '2fa') {
+            $step = 'code';
+        } elseif ($result === 'locked') {
+            $error = 'Too many failed sign-in attempts. For your security, sign-in is paused for 15 minutes.';
+        } else {
+            $error = 'The email or password is not correct.';
+        }
     }
-    $error = 'Invalid credentials, or too many failed attempts. Please try again later.';
 }
 ?>
 <!DOCTYPE html>
@@ -99,10 +129,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <?php echo htmlspecialchars($error); ?>
                 </div>
             <?php endif; ?>
+            <?php if ($notice !== ''): ?>
+                <div class="mt-6 rounded-lg border border-blue-200 bg-blue-50 text-blue-800 px-4 py-3 text-sm"><?php echo htmlspecialchars($notice); ?></div>
+            <?php endif; ?>
 
-            <form method="post" class="mt-8 space-y-5" autocomplete="off">
+            <?php if ($step === 'code'): ?>
+            <form method="post" action="login.php?<?php echo htmlspecialchars(http_build_query(['redirect' => $redirect])); ?>" class="mt-8 space-y-5" autocomplete="off">
                 <?php echo csrf_field(); ?>
-                
+                <input type="hidden" name="step" value="code">
+                <div>
+                    <label for="code" class="block text-sm font-medium text-slate-700 mb-1.5">Authentication code</label>
+                    <p class="text-sm text-slate-500 mb-3">Open your authenticator app and enter the 6-digit code for BMI Admin. Lost your phone? Enter one of your recovery codes instead.</p>
+                    <input type="text" id="code" name="code" required autofocus inputmode="text" autocomplete="one-time-code" maxlength="9"
+                           class="w-full border border-slate-300 rounded-lg px-4 py-2.5 text-lg tracking-[0.3em] font-mono focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none transition-all"
+                           placeholder="123456">
+                </div>
+                <button type="submit" class="w-full rounded-lg bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white px-4 py-2.5 font-semibold transition-colors shadow-sm shadow-blue-500/30 mt-2">
+                    Verify and sign in
+                </button>
+            </form>
+            <form method="post" class="mt-3 text-center">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="step" value="cancel">
+                <button type="submit" class="text-sm text-slate-500 hover:text-blue-600">Use a different account</button>
+            </form>
+            <?php else: ?>
+            <form method="post" action="login.php?<?php echo htmlspecialchars(http_build_query(['redirect' => $redirect])); ?>" class="mt-8 space-y-5" autocomplete="off">
+                <?php echo csrf_field(); ?>
+                <input type="hidden" name="step" value="password">
+
                 <div>
                     <label class="block text-sm font-medium text-slate-700 mb-1.5">Email address</label>
                     <input type="email" name="email" required value="<?php echo htmlspecialchars($email); ?>"
@@ -121,6 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     Sign in to Dashboard
                 </button>
             </form>
+            <?php endif; ?>
 
             <div class="mt-8 pt-6 border-t border-slate-100 text-center">
                 <a href="../index.php" class="text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors inline-flex items-center gap-1.5">

@@ -1,9 +1,11 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('live');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/sanitize.php';
+require_once __DIR__ . '/../includes/settings.php';
 
 $error = '';
 
@@ -13,9 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = db_connect();
         $stmt = $pdo->prepare("INSERT INTO live_state (setting_key, setting_value) VALUES (:key, :val) ON DUPLICATE KEY UPDATE setting_value = :val2");
         foreach (['current_prompt_html', 'current_notes_html'] as $key) {
-            $value = (string) ($_POST[$key] ?? '');
+            $value = safe_html((string) ($_POST[$key] ?? ''), 'notes');
             $stmt->execute([':key' => $key, ':val' => $value, ':val2' => $value]);
         }
+        @unlink(live_state_cache_file()); // viewers see the change on their next poll
+        audit('update', 'live_state', null, 'Updated livestream prompt and notes');
         header('Location: live-control.php?status=updated');
         exit;
     } catch (Throwable $e) {

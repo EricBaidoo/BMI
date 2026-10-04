@@ -29,10 +29,8 @@ function db_connect(): PDO
         $pdo = new PDO($dsn, $dbUser, $dbPass, $options);
         return $pdo;
     } catch (PDOException $e) {
-        throw new RuntimeException(
-            'Database connection failed on ' . $host . ':' . $port . '. Confirm XAMPP MySQL is running and "' . $dbName . '" exists. Error: ' . $e->getMessage(),
-            0,
-            $e
-        );
+        // Keep connection details out of the message (it can reach the screen); the original
+        // error, with host and database name, is attached as the previous exception for the log.
+        throw new RuntimeException('Database connection failed.', 0, $e);
     }
 }

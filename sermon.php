@@ -7,7 +7,7 @@ $sermon = null;
 $error = null;
 
 if ($id <= 0) {
-    header('Location: sermons.php');
+    header('Location: sermons');
     exit;
 }
 
@@ -17,14 +17,34 @@ try {
     $stmt->execute([$id]);
     $sermon = $stmt->fetch();
 } catch (Throwable $e) {
+    log_exception($e, 'sermon');
     $error = "Unable to fetch sermon details.";
 }
 
 if (!$sermon) {
+    // A real 404 (or 503 if the database failed) so search engines drop dead links.
+    http_response_code($error ? 503 : 404);
+    $noIndex = true;
     $pageTitle = 'Sermon Not Found | Bridge Ministries International';
 } else {
-    $pageTitle = htmlspecialchars((string)$sermon['title']) . ' | Bridge Ministries International';
-    $pageDescription = substr(strip_tags((string)$sermon['content']), 0, 160);
+    $pageTitle = (string) $sermon['title'] . ' | Bridge Ministries International';
+    $pageDescription = mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags((string) $sermon['content']))), 0, 160);
+    $ogType = 'article';
+    if (!empty($sermon['sermon_image'])) {
+        $ogImage = (string) $sermon['sermon_image'];
+    }
+    if (($sermon['media_type'] ?? '') === 'video' && !empty($sermon['media_url'])) {
+        $thumb = !empty($sermon['sermon_image']) ? (preg_match('~^https?://~i', $sermon['sermon_image']) ? $sermon['sermon_image'] : $siteUrl . '/' . ltrim($sermon['sermon_image'], '/')) : null;
+        $structuredData = [array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'VideoObject',
+            'name' => (string) $sermon['title'],
+            'description' => $pageDescription ?: (string) $sermon['title'],
+            'uploadDate' => !empty($sermon['sermon_date']) ? date('c', strtotime($sermon['sermon_date'])) : null,
+            'thumbnailUrl' => $thumb,
+            'contentUrl' => (string) $sermon['media_url'],
+        ])];
+    }
 }
 
 // Helper to convert youtube/facebook watch URLs to embed URLs
@@ -55,7 +75,7 @@ include 'includes/header.php';
         <div class="max-w-3xl mx-auto px-4 py-32 text-center relative z-10 gs-reveal-up">
             <h1 class="text-5xl md:text-7xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-red-600 mb-6 uppercase tracking-normal">Sermon Not Found</h1>
             <p class="text-xl text-neutral-400 mb-10 font-medium"><?php echo $error ?? "We couldn't find the message you were looking for."; ?></p>
-            <a href="sermons.php" class="inline-block bg-white text-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-amber-500 hover:text-white transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] hover:-translate-y-1">Return to Archive</a>
+            <a href="sermons" class="inline-block bg-white text-black px-10 py-5 rounded-full font-bold uppercase tracking-widest text-sm hover:bg-amber-500 hover:text-white transition-all shadow-[0_0_30px_rgba(255,255,255,0.1)] hover:shadow-[0_0_40px_rgba(245,158,11,0.3)] hover:-translate-y-1">Return to Archive</a>
         </div>
     <?php else: 
         $imageUrl = !empty($sermon['sermon_image']) ? $sermon['sermon_image'] : 'https://images.unsplash.com/photo-1543165365-07232ed12fad?q=80&w=1200&auto=format&fit=crop';
@@ -71,7 +91,7 @@ include 'includes/header.php';
 
         <div class="w-[95%] max-w-7xl mx-auto gs-reveal-up">
             <div class="inline-flex items-center gap-4 mb-8">
-                <a href="sermons.php" class="text-white/40 hover:text-white transition-colors flex items-center gap-2 font-sans font-bold text-xs uppercase tracking-widest">
+                <a href="sermons" class="text-white/40 hover:text-white transition-colors flex items-center gap-2 font-sans font-bold text-xs uppercase tracking-widest">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
                     Back to Archive
                 </a>

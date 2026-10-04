@@ -9,6 +9,7 @@ function initCustomCursor() {
     const cursor = document.createElement('div');
     cursor.classList.add('custom-cursor');
     document.body.appendChild(cursor);
+    document.documentElement.classList.add('has-custom-cursor');
 
     document.addEventListener('mousemove', (e) => {
         cursor.style.left = e.clientX + 'px';
@@ -28,6 +29,7 @@ function initCustomCursor() {
 function initGSAP() {
     if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
         console.warn("GSAP not loaded. Running fallback.");
+        document.documentElement.classList.remove('js-anim');
         document.querySelectorAll('.opacity-0').forEach(el => {
             el.classList.remove('opacity-0');
             el.style.opacity = 1;
@@ -178,32 +180,60 @@ function initSmartHeader() {
 /* ============================================================
    INITIALIZATION
    ============================================================ */
-/* ============================================================
-   INITIALIZATION
-   ============================================================ */
-document.addEventListener('DOMContentLoaded', function () {
-    try {
-        initGSAP();
-    } catch (e) {
-        console.error("GSAP Initialization failed:", e);
-        // Fallback: force show text if GSAP fails
-        document.querySelectorAll('.opacity-0').forEach(el => el.style.opacity = 1);
-    }
-    initCustomCursor();
-});
+const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hasFinePointer = window.matchMedia && window.matchMedia('(pointer: fine)').matches;
 
-// Re-initialize on Swup page transitions
-document.addEventListener('swup:pageView', function () {
-    ScrollTrigger.getAll().forEach(t => t.kill()); // Kill old triggers
-    initGSAP();
-    
-    // Reattach cursor listeners
-    const cursor = document.querySelector('.custom-cursor');
-    if (cursor) {
-        const hoverElements = document.querySelectorAll('a, button, input, .horizontal-panel, [role="button"]');
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+/* ============================================================
+   BACKGROUND VIDEOS (video.bg-video with data-src)
+   Downloaded and played only when motion and data use are welcome; each gets a pause button.
+   ============================================================ */
+function initBackgroundVideos() {
+    const saveData = navigator.connection && navigator.connection.saveData;
+    document.querySelectorAll('video.bg-video[data-src]').forEach(video => {
+        if (prefersReducedMotion || saveData) return;
+        video.src = video.dataset.src;
+        video.play().catch(() => {});
+
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'absolute bottom-6 right-6 z-20 w-11 h-11 rounded-full border border-white/30 bg-black/30 text-white flex items-center justify-center hover:bg-white hover:text-black transition-colors';
+        const setState = paused => {
+            btn.setAttribute('aria-label', paused ? 'Play background video' : 'Pause background video');
+            btn.innerHTML = paused
+                ? '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>'
+                : '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+        };
+        setState(false);
+        btn.addEventListener('click', () => {
+            if (video.paused) { video.play().catch(() => {}); setState(false); }
+            else { video.pause(); setState(true); }
         });
+        // Attach to the banner (the video's layer sits below the page content).
+        (video.parentElement.parentElement || video.parentElement).appendChild(btn);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    initSmartHeader();
+    initBackgroundVideos();
+
+    if (prefersReducedMotion) {
+        // Show everything immediately: no scroll reveals, parallax or pinned scrolling.
+        document.documentElement.classList.add('reduce-motion');
+        document.querySelectorAll('.opacity-0').forEach(el => el.style.opacity = 1);
+    } else {
+        try {
+            initGSAP();
+        } catch (e) {
+            console.error("GSAP Initialization failed:", e);
+            // Fallback: force show text if GSAP fails
+            document.documentElement.classList.remove('js-anim');
+            document.querySelectorAll('.opacity-0').forEach(el => el.style.opacity = 1);
+        }
+    }
+
+    // The custom cursor only makes sense with a mouse, and not when motion is reduced.
+    if (hasFinePointer && !prefersReducedMotion) {
+        initCustomCursor();
     }
 });

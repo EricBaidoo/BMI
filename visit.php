@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $visitSuccess = "Thank you, {$firstName}. We look forward to welcoming you on {$visitDate}. Our welcome team will be in touch before your visit.";
             $visitOld = [];
         } catch (Throwable $e) {
-            error_log((string) $e);
+            log_exception($e, 'visit');
             $visitError = 'Sorry, we could not save your details. Please try again or contact us directly.';
         }
     }
@@ -66,13 +66,13 @@ include 'includes/header.php';
     <!-- Background Image -->
     <div class="absolute inset-0 z-0">
         <?php 
-            $visitHeroBg = setting('visit.hero_bg_image', 'assets/image/PXL_20240329_213926615.jpg');
+            $visitHeroBg = setting('visit.hero_bg_image', 'assets/image/uncategorized/IMG_4059.JPG');
             $is_video = preg_match('/\.(mp4|webm)$/i', $visitHeroBg);
         ?>
         <?php if ($is_video): ?>
-            <video src="<?= htmlspecialchars($visitHeroBg) ?>" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" autoplay loop muted playsinline></video>
+            <video data-src="<?= htmlspecialchars(safe_url($visitHeroBg)) ?>" class="bg-video w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" loop muted playsinline preload="none" aria-hidden="true"></video>
         <?php else: ?>
-            <img loading="lazy" src="<?= htmlspecialchars($visitHeroBg) ?>" alt="Church Worship" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
+            <img fetchpriority="high" src="<?= htmlspecialchars(safe_url($visitHeroBg)) ?>" alt="" class="w-full h-full object-cover opacity-20 mix-blend-luminosity grayscale" onerror="this.src='https://images.unsplash.com/photo-1543332143-4e8c27e3256f?q=80&w=1200&auto=format&fit=crop';">
         <?php endif; ?>
         <div class="absolute inset-0 bg-gradient-to-b from-[#030303]/90 via-[#030303]/80 to-[#0a0a0c]"></div>
     </div>
@@ -87,10 +87,10 @@ include 'includes/header.php';
             <div class="h-px w-16 bg-white/20"></div>
         </div>
         <h1 class="text-5xl md:text-7xl lg:text-9xl font-display font-black text-transparent bg-clip-text bg-gradient-to-br from-white via-neutral-300 to-neutral-600 mb-6 tracking-normal uppercase leading-[0.9]">
-            <?= setting('visit.hero_title', 'Plan a <span class="italic font-light">Visit</span>') ?>
+            <?= setting_html('visit.hero_title', 'Plan a <span class="italic font-light">Visit</span>') ?>
         </h1>
         <p class="text-xl md:text-2xl text-neutral-400 max-w-3xl mx-auto font-medium leading-relaxed mb-12">
-            <?= setting('visit.hero_subtitle', 'We can\'t wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.') ?>
+            <?= setting_html('visit.hero_subtitle', 'We can\'t wait to welcome you to our family. Experience powerful worship, transforming truth, and genuine community.') ?>
         </p>
     </div>
 </div>
@@ -116,17 +116,17 @@ include 'includes/header.php';
                         <div>
                             <h3 class="text-2xl font-display font-black uppercase text-white mb-4 tracking-normal group-hover:text-amber-500 transition-colors">Service Times</h3>
                             <ul class="space-y-4 text-neutral-400 font-medium">
-                                <?php
-                                $services = db_connect()->query("SELECT title, time_info FROM weekly_services ORDER BY sort_order ASC, id ASC")->fetchAll();
-                                foreach ($services as $svc):
-                                ?>
-                                <li class="flex items-center gap-4 bg-[#050505] border border-white/5 rounded-2xl p-4 hover:border-white/20 transition-colors">
-                                    <span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]"></span>
-                                    <span class="text-white"><?php echo htmlspecialchars($svc['title']); ?></span>
-                                    <span class="ml-auto text-amber-500 font-bold"><?php echo htmlspecialchars($svc['time_info']); ?></span>
+                                <?php foreach (service_times() as $label => $time): ?>
+                                <li class="flex flex-wrap items-center gap-x-4 gap-y-1 bg-[#050505] border border-white/5 rounded-2xl p-4 hover:border-white/20 transition-colors">
+                                    <span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" aria-hidden="true"></span>
+                                    <span class="text-white"><?php echo htmlspecialchars($label); ?></span>
+                                    <span class="ml-auto text-amber-500 font-bold"><?php echo htmlspecialchars($time); ?></span>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>
+                            <?php if (setting('service.notes') !== ''): ?>
+                                <p class="mt-4 text-sm text-neutral-400"><?php echo htmlspecialchars(setting('service.notes')); ?></p>
+                            <?php endif; ?>
                         </div>
                     </div>
 
@@ -139,9 +139,9 @@ include 'includes/header.php';
                             <h3 class="text-2xl font-display font-black uppercase text-white mb-4 tracking-normal group-hover:text-amber-500 transition-colors">Location</h3>
                             <div class="bg-[#050505] border border-white/5 rounded-2xl p-6">
                                 <p class="text-neutral-400 font-medium leading-relaxed mb-6">
-                                    <?php echo htmlspecialchars(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>
+                                    <?php echo htmlspecialchars(setting('contact.address')); ?>
                                 </p>
-                                <a href="https://maps.google.com/?q=<?php echo urlencode(setting('contact.address', '123 Bridge Avenue, Faith City, FC 12345')); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center font-bold font-sans uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-300 group/btn">
+                                <a href="https://maps.google.com/?q=<?php echo urlencode(setting('contact.address')); ?>" target="_blank" rel="noopener noreferrer" class="inline-flex items-center font-bold font-sans uppercase tracking-[0.2em] text-xs text-white bg-white/5 border border-white/10 px-6 py-4 rounded-full hover:bg-white hover:text-black transition-all duration-300 group/btn">
                                     Get Directions
                                     <svg class="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
@@ -153,7 +153,7 @@ include 'includes/header.php';
 
             <!-- Image/Map Container -->
             <div class="relative overflow-hidden rounded-[3rem] shadow-2xl gs-reveal-left group border border-white/10 h-full min-h-[400px]">
-                <img loading="lazy" src="<?= setting('visit.church_image', 'assets/image/church-building.jpg') ?>" alt="Church Exterior" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
+                <img loading="lazy" src="<?= setting_url('visit.church_image', 'assets/image/uncategorized/IMG_3156.JPG') ?>" alt="Our welcome team ready to greet you" class="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105 opacity-80 group-hover:opacity-100" onerror="this.src='https://images.unsplash.com/photo-1438032005730-c779502df39b?q=80&w=1000&auto=format&fit=crop';">
                 <div class="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80"></div>
                 <div class="absolute bottom-10 left-10 right-10">
                     <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 flex items-center justify-between">
@@ -182,7 +182,7 @@ include 'includes/header.php';
         <div class="text-center max-w-3xl mx-auto mb-20 gs-reveal-up">
             <h2 class="text-4xl md:text-5xl lg:text-7xl font-display font-black text-white uppercase tracking-normal mb-6 leading-[1.0]">What to <i class="text-amber-500 font-light">Expect</i></h2>
             <p class="text-lg text-neutral-400 font-medium leading-relaxed">
-                <?= setting('visit.expect_text', 'Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.') ?>
+                <?= setting_html('visit.expect_text', 'Visiting a new church can be intimidating, but we want you to feel right at home. Here is a brief look at what our services are like.') ?>
             </p>
         </div>
 
@@ -222,7 +222,7 @@ include 'includes/header.php';
                 </div>
                 <h3 class="text-3xl font-display font-black uppercase text-white mb-4 tracking-normal leading-none group-hover:text-amber-500 transition-colors">BMI Kids</h3>
                 <p class="text-neutral-400 font-medium leading-relaxed relative z-10">
-                    We offer a safe, fun, and educational environment for children (infants through 5th grade) during all main services.
+                    We provide a safe, caring environment for children during the main Sunday service, so parents can worship with peace of mind.
                 </p>
             </div>
         </div>
@@ -245,11 +245,7 @@ include 'includes/header.php';
                 </p>
                 
                 <div class="mt-12 flex items-center gap-6">
-                    <div class="flex -space-x-4">
-                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
-                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
-                        <img class="w-12 h-12 rounded-full border-2 border-[#0a0a0c]" src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&h=100&q=80" alt="Team member">
-                    </div>
+                    <img class="w-16 h-16 rounded-full border-2 border-[#0a0a0c] object-cover" src="<?= setting_url('visit.church_image', 'assets/image/uncategorized/IMG_3156.JPG') ?>" alt="" loading="lazy" decoding="async">
                     <p class="text-sm text-neutral-400 font-medium">Our welcome team <br>is ready for you.</p>
                 </div>
             </div>

@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../includes/auth.php';
-auth_require();
+auth_require('content');
 
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/csrf.php';
@@ -52,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     ':content' => $content !== '' ? $content : null,
                     ':sermon_image' => $sermonImage,
                 ]);
+                audit('create', 'sermon', $pdo->lastInsertId(), 'Added sermon: ' . $title);
                 header('Location: sermons.php?status=added');
                 exit;
             }
@@ -89,6 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':content' => $content !== '' ? $content : null,
                 ':sermon_image' => $finalImage,
             ]);
+            audit('update', 'sermon', $id, 'Updated sermon: ' . $title);
             header('Location: sermons.php?status=updated');
             exit;
         }
@@ -105,11 +107,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 upload_delete($existing['sermon_image']);
             }
             $pdo->prepare('DELETE FROM sermons WHERE id = :id')->execute([':id' => $id]);
+            audit('delete', 'sermon', $id, 'Deleted sermon #' . $id);
             header('Location: sermons.php?status=deleted');
             exit;
         }
     } catch (Throwable $e) {
-        $error = $e->getMessage();
+        $error = user_error_message($e);
     }
 }
 
@@ -122,7 +125,7 @@ if (isset($_GET['edit'])) {
             $stmt->execute([':id' => $editId]);
             $editingSermon = $stmt->fetch();
         } catch (Throwable $e) {
-            $error = 'Unable to load sermon: ' . $e->getMessage();
+            $error = user_error_message($e, 'Unable to load sermon.');
         }
     }
 }
