@@ -30,7 +30,7 @@ if (!function_exists('audit')) {
                 ':eid' => $entityId !== null ? mb_substr((string) $entityId, 0, 64) : null,
                 ':summary' => mb_substr($summary, 0, 255),
                 ':details' => $details ? json_encode($details, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) : null,
-                ':ip' => mb_substr((string) ($_SERVER['REMOTE_ADDR'] ?? ''), 0, 45),
+                ':ip' => client_ip(),
                 ':ua' => mb_substr((string) ($_SERVER['HTTP_USER_AGENT'] ?? ''), 0, 255),
             ]);
         } catch (Throwable $e) {
@@ -70,7 +70,7 @@ if (!function_exists('audit')) {
             }
             $host = parse_url((string) env('APP_URL', 'https://bmiglobal.org'), PHP_URL_HOST) ?: 'bmiglobal.org';
             $body = "Giving details on the website were changed.\n\nChanged by: {$who}\nTime: " . date('Y-m-d H:i:s T')
-                . "\nIP address: " . ($_SERVER['REMOTE_ADDR'] ?? '?') . "\n\n" . implode("\n", $lines)
+                . "\nIP address: " . (client_ip() ?: '?') . "\n\n" . implode("\n", $lines)
                 . "\n\nIf you did not expect this change, sign in to the admin panel, check the Audit Log and correct the details immediately.";
             require_once __DIR__ . '/mailer.php';
             send_mail($to, "[{$host}] Giving details changed", $body);

@@ -65,6 +65,7 @@ $navLinks = [
 ];
 $menuLinks = [
     'visit' => "I'm New",
+    'locations' => 'Locations',
     'livestream' => 'Watch Live',
     'about' => 'About Us',
     'beliefs' => 'Our Beliefs',

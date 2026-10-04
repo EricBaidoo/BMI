@@ -6,7 +6,7 @@
  * admin_crud_page($resource). This file does the rest: validation, image upload or link,
  * slugs, publish toggles, audit log entries, the add/edit form, the list and pagination.
  *
- * Field types: text, textarea, date, time, url, select, publish (checkbox stored as a
+ * Field types: text, textarea, date, time, url, email, number, select, publish (checkbox stored as a
  * publish timestamp or NULL). Field options:
  *   label, type, required, max (length), options (select), default, hint, rows, wide (full row)
  */
@@ -34,6 +34,9 @@ function admin_crud_values(array $resource, array $post, ?array $existing): arra
         }
 
         $value = trim((string) ($post[$name] ?? ''));
+        if (!mb_check_encoding($value, 'UTF-8')) {
+            throw new RuntimeException("{$label} contains characters that couldn't be read. Please retype them and save again.");
+        }
         if ($value === '') {
             if (!empty($f['required'])) {
                 throw new RuntimeException("{$label} is required.");
@@ -65,6 +68,17 @@ function admin_crud_values(array $resource, array $post, ?array $existing): arra
                 if (!filter_var($value, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $value)) {
                     throw new RuntimeException("{$label} must be a full link starting with https://");
                 }
+                break;
+            case 'email':
+                if (!filter_var($value, FILTER_VALIDATE_EMAIL)) {
+                    throw new RuntimeException("{$label} must be a valid email address.");
+                }
+                break;
+            case 'number':
+                if (filter_var($value, FILTER_VALIDATE_INT) === false) {
+                    throw new RuntimeException("{$label} must be a whole number.");
+                }
+                $value = (string) (int) $value;
                 break;
         }
         $values[$name] = $value;

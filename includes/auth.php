@@ -134,7 +134,7 @@ function auth_forbidden(): void
 
 function auth_client_ip(): string
 {
-    return substr((string) ($_SERVER['REMOTE_ADDR'] ?? ''), 0, 45);
+    return client_ip();
 }
 
 function auth_is_locked(string $email): bool

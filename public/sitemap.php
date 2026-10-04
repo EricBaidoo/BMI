@@ -20,6 +20,7 @@ $urls = [
     ['/blog',       '0.7', 'weekly'],
     ['/donate',     '0.5', 'monthly'],
     ['/contact',    '0.5', 'monthly'],
+    ['/locations',  '0.8', 'monthly'],
     ['/flagship-programs', '0.7', 'monthly'],
     ['/podcast',    '0.4', 'weekly'],
     ['/privacy',    '0.2', 'yearly'],

@@ -15,6 +15,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo = db_connect();
         $action = (string) ($_POST['action'] ?? '');
 
+        // Privacy requests: delete everything one person has sent (contact, prayer, visit, newsletter).
+        if ($action === 'delete_email') {
+            $email = strtolower(trim((string) ($_POST['email'] ?? '')));
+            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                throw new RuntimeException('Enter a valid email address.');
+            }
+            $stmt = $pdo->prepare('DELETE FROM messages WHERE LOWER(email) = :e');
+            $stmt->execute([':e' => $email]);
+            $deleted = $stmt->rowCount();
+            // The address itself is not written to the audit log, so the deletion is complete.
+            audit('delete', 'message', null, "Privacy request: deleted {$deleted} message(s) from one sender");
+            flash('messages', "Deleted {$deleted} message(s) from that address.");
+            header('Location: messages.php');
+            exit;
+        }
+
         if ($action === 'delete') {
             $id = (int) ($_POST['id'] ?? 0);
             if ($id > 0) {
@@ -30,22 +46,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-if (flash('messages') === 'deleted') {
-    $feedback = 'Message deleted.';
+$flashMessage = flash('messages');
+if ($flashMessage !== null) {
+    $feedback = $flashMessage === 'deleted' ? 'Message deleted.' : $flashMessage;
+}
+
+$lookup = strtolower(trim((string) ($_GET['lookup'] ?? '')));
+if ($lookup !== '' && !filter_var($lookup, FILTER_VALIDATE_EMAIL)) {
+    $error = $error ?: 'Enter a full email address to look someone up.';
+    $lookup = '';
 }
 
 $messages = [];
 try {
     $pdo = db_connect();
-    $page = max(1, (int)($_GET['p'] ?? 1));
-    $limit = 15;
-    $offset = ($page - 1) * $limit;
-    $total = $pdo->query('SELECT COUNT(*) FROM messages')->fetchColumn();
-    $totalPages = max(1, ceil($total / $limit));
+    if ($lookup !== '') {
+        $stmt = $pdo->prepare('SELECT * FROM messages WHERE LOWER(email) = :e ORDER BY created_at DESC');
+        $stmt->execute([':e' => $lookup]);
+        $messages = $stmt->fetchAll();
+        $totalPages = 1;
+    } else {
+        $page = max(1, (int)($_GET['p'] ?? 1));
+        $limit = 15;
+        $offset = ($page - 1) * $limit;
+        $total = $pdo->query('SELECT COUNT(*) FROM messages')->fetchColumn();
+        $totalPages = max(1, ceil($total / $limit));
 
-    $messages = $pdo->query("SELECT * FROM messages ORDER BY created_at DESC LIMIT $limit OFFSET $offset")->fetchAll();
+        $messages = $pdo->query("SELECT * FROM messages ORDER BY created_at DESC LIMIT $limit OFFSET $offset")->fetchAll();
+    }
 } catch (Throwable $e) {
-    $error = 'Unable to load messages.';
+    $error = user_error_message($e, 'Unable to load messages.');
 }
 ?>
 <?php
@@ -63,6 +93,30 @@ require_once ADMIN_TEMPLATES . '/header.php';
         <?php if ($error !== ''): ?>
             <div class="mt-6 rounded border border-red-200 bg-red-50 text-red-800 px-4 py-3 text-sm"><?php echo e($error); ?></div>
         <?php endif; ?>
+
+        <div class="mt-6 bg-white border border-slate-200 rounded-xl shadow-sm p-5">
+            <form method="get" class="flex flex-wrap items-end gap-3">
+                <div class="flex-1 min-w-[16rem]">
+                    <label for="lookup" class="block text-sm font-semibold text-slate-700 mb-1.5">Find everything from one person <span class="font-normal text-slate-500">(for privacy requests)</span></label>
+                    <input type="email" id="lookup" name="lookup" value="<?php echo e($lookup); ?>" placeholder="name@example.com" class="w-full border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 outline-none">
+                </div>
+                <button type="submit" class="rounded-lg bg-slate-800 hover:bg-slate-900 text-white px-5 py-2.5 text-sm font-semibold">Find</button>
+                <?php if ($lookup !== ''): ?><a href="messages.php" class="px-3 py-2.5 text-sm text-slate-600 hover:text-slate-900">Show all messages</a><?php endif; ?>
+            </form>
+            <?php if ($lookup !== ''): ?>
+                <div class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-slate-50 border border-slate-200 px-4 py-3 text-sm">
+                    <span><strong><?php echo count($messages); ?></strong> message(s) from <?php echo e($lookup); ?>. To answer a request for a copy, reply with the messages below.</span>
+                    <?php if ($messages): ?>
+                    <form method="post" onsubmit="return confirm('Permanently delete all <?php echo count($messages); ?> message(s) from this address?');">
+                        <?php echo csrf_field(); ?>
+                        <input type="hidden" name="action" value="delete_email">
+                        <input type="hidden" name="email" value="<?php echo e($lookup); ?>">
+                        <button type="submit" class="rounded-lg bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-semibold">Delete all from this person</button>
+                    </form>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        </div>
 
         <div class="mt-8 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
             <?php if (empty($messages)): ?>

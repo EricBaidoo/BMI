@@ -62,15 +62,22 @@ $schema = [
     'giving' => [
         'label' => 'Giving',
         'fields' => [
-            ['key' => 'giving.bank_name',           'label' => 'Bank name',          'type' => 'text'],
-            ['key' => 'giving.bank_account_name',   'label' => 'Account name',       'type' => 'text'],
-            ['key' => 'giving.bank_account_number', 'label' => 'Account number',     'type' => 'text'],
-            ['key' => 'giving.bank_branch',         'label' => 'Branch',             'type' => 'text'],
-            ['key' => 'giving.momo_mtn',            'label' => 'MTN MoMo number',    'type' => 'tel'],
-            ['key' => 'giving.momo_vodafone',      'label' => 'Telecel Cash number', 'type' => 'tel'],
-            ['key' => 'giving.momo_airteltigo',     'label' => 'AirtelTigo Money',   'type' => 'tel'],
-            ['key' => 'giving.paystack_public_key', 'label' => 'Paystack public key (pk_live_… or pk_test_…)', 'type' => 'text'],
-            ['key' => 'giving.currency',            'label' => 'Currency code (GHS, USD, …)','type'=> 'text'],
+            // Ghana (GH₵)
+            ['key' => 'giving.gh_online_url',       'label' => 'Ghana: online giving link (e.g. Paystack payment page for MoMo and cards)', 'type' => 'url'],
+            ['key' => 'giving.bank_name',           'label' => 'Ghana: bank name',          'type' => 'text'],
+            ['key' => 'giving.bank_account_name',   'label' => 'Ghana: account name',       'type' => 'text'],
+            ['key' => 'giving.bank_account_number', 'label' => 'Ghana: account number',     'type' => 'text'],
+            ['key' => 'giving.bank_branch',         'label' => 'Ghana: branch',             'type' => 'text'],
+            ['key' => 'giving.momo_mtn',            'label' => 'Ghana: MTN MoMo number',    'type' => 'tel'],
+            ['key' => 'giving.momo_vodafone',       'label' => 'Ghana: Telecel Cash number', 'type' => 'tel'],
+            ['key' => 'giving.momo_airteltigo',     'label' => 'Ghana: AirtelTigo Money number', 'type' => 'tel'],
+            // United States (US$)
+            ['key' => 'giving.us_online_url',       'label' => 'USA: online giving link (e.g. Stripe Payment Link: cards, Apple Pay, Google Pay, bank transfer, recurring)', 'type' => 'url'],
+            ['key' => 'giving.us_zelle',            'label' => 'USA: Zelle email or phone', 'type' => 'text'],
+            ['key' => 'giving.us_check_payable',    'label' => 'USA: make checks payable to', 'type' => 'text'],
+            ['key' => 'giving.us_check_address',    'label' => 'USA: mail checks to (address)', 'type' => 'textarea'],
+            ['key' => 'giving.us_entity_name',      'label' => 'USA: registered 501(c)(3) name — leave empty unless the church has one; it controls the tax-deductible wording', 'type' => 'text'],
+            ['key' => 'giving.us_ein',              'label' => 'USA: EIN of that nonprofit (e.g. 12-3456789)', 'type' => 'text'],
         ],
     ],
     'live' => [
@@ -193,6 +200,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     } else if ($postedKey) {
                         $val = trim((string) $posted[$postedKey]);
+                        if ($f['type'] === 'url' && $val !== '' && !preg_match('#^https://[^\s]+$#i', $val)) {
+                            throw new RuntimeException($f['label'] . ': links must be full addresses starting with https://');
+                        }
+                        if ($f['type'] === 'email' && $val !== '' && !filter_var($val, FILTER_VALIDATE_EMAIL)) {
+                            throw new RuntimeException($f['label'] . ': enter a valid email address.');
+                        }
+                        if ($key === 'giving.us_ein' && $val !== '' && !preg_match('/^\d{2}-\d{7}$/', $val)) {
+                            throw new RuntimeException('The EIN must look like 12-3456789.');
+                        }
                         
                         // Automatically convert YouTube standard links to Embed links
                         if ($key === 'live.embed_url' && $val !== '') {

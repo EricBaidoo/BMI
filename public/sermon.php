@@ -100,7 +100,7 @@ include __DIR__ . '/../includes/header.php';
             <?php if ($sermon['media_type'] === 'video' && $hasMedia && (strpos($embedUrl, 'youtube.com/embed') !== false || strpos($embedUrl, 'facebook.com/plugins') !== false)): ?>
                 <div class="w-full aspect-video rounded-[2rem] bg-black relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden ring-1 ring-white/5 group">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-10"></div>
-                    <iframe src="<?php echo htmlspecialchars($embedUrl); ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full absolute inset-0 z-0 bg-black"></iframe>
+                    <iframe src="<?php echo htmlspecialchars(privacy_embed_url($embedUrl)); ?>" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen class="w-full h-full absolute inset-0 z-0 bg-black"></iframe>
                 </div>
             <?php else: ?>
                 <div class="w-full aspect-[21/9] rounded-[2rem] bg-black relative z-10 shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10 overflow-hidden ring-1 ring-white/5">

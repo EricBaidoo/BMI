@@ -13,6 +13,7 @@ $navItems = [
     'pages.php' => ['icon' => 'document-text', 'label' => 'Page Content', 'cap' => 'content'],
     'sermons.php' => ['icon' => 'video-camera', 'label' => 'Sermons', 'cap' => 'content'],
     'events.php' => ['icon' => 'calendar', 'label' => 'Events', 'cap' => 'content'],
+    'locations.php' => ['icon' => 'home', 'label' => 'Locations', 'cap' => 'content'],
     'live-control.php' => ['icon' => 'video-camera', 'label' => 'Live Control', 'cap' => 'live'],
     'posts.php' => ['icon' => 'newspaper', 'label' => 'Blog Posts', 'cap' => 'content'],
     'messages.php' => ['icon' => 'inbox', 'label' => 'Inbox', 'cap' => 'inbox'],

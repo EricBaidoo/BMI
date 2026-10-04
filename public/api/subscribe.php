@@ -54,7 +54,7 @@ $fh = fopen($limitFile, 'c+');
 flock($fh, LOCK_EX);
 $log = json_decode(stream_get_contents($fh) ?: '[]', true) ?: [];
 $now = time();
-$ip = (string) ($_SERVER['REMOTE_ADDR'] ?? '');
+$ip = client_ip();
 $log = array_values(array_filter($log, fn ($e) => $e['t'] > $now - 3600));
 $limited = count(array_filter($log, fn ($e) => $e['ip'] === $ip)) >= 5;
 if (!$limited) {

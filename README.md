@@ -32,6 +32,7 @@ BMI/
 │   ├── migrations/          numbered database changes (000_baseline … )
 │   ├── run_migrations.php   applies pending migrations
 │   ├── backup.php           compressed backup to BACKUP_DIR (outside the website)
+│   ├── purge.php            deletes messages past the retention period
 │   └── seed_admin.php       creates the first admin account
 ├── bin/
 │   ├── smoke-test.php       loads every page and checks private files are blocked
@@ -86,7 +87,30 @@ already run on the live site; add a new one instead.
 6. Run `php bin/smoke-test.php https://bmiglobal.org`; every check should pass.
 7. Point the domain's document root at `public/` if the host allows it. If not (Hostinger
    `public_html`), the root `.htaccess` sends every request into `public/` automatically.
-8. Add a nightly cron job: `php /path/to/BMI/database/backup.php`.
+8. Add a nightly cron job (backup, then delete data past its retention period as the Privacy Policy promises):
+   `php /path/to/BMI/database/backup.php && php /path/to/BMI/database/purge.php`
+
+## Serving Ghana and the USA
+
+- **Times:** everything staff enter is in `APP_TIMEZONE` (default `Africa/Accra`, GMT all year).
+  Visitors in other zones automatically see their own time next to it, e.g.
+  "Sundays · 8:45 AM GMT (4:45 AM EDT your time)". Each branch on the Locations page has its own zone.
+- **Locations:** Admin → Locations. Write service times in the branch's local time, one per line.
+- **Giving:** Admin → Settings → Giving (Finance or Administrator role). The Give page shows a
+  Ghana / United States switch; only methods with real details appear. Use hosted payment pages
+  (Paystack payment page for Ghana, Stripe Payment Link for the USA), so card data never touches this site.
+  The tax-deductible wording appears only when a US 501(c)(3) name and EIN are entered.
+- **Privacy:** the Privacy Policy covers Ghana's Data Protection Act and US state privacy laws.
+  Messages are deleted after `MESSAGE_RETENTION_MONTHS` (default 24) by `database/purge.php`.
+  For a deletion request, use Admin → Inbox → "Find everything from one person".
+- **Cloudflare (recommended for speed in both countries):**
+  1. Add the domain to Cloudflare (free plan is enough to start) and switch the nameservers.
+  2. SSL/TLS mode **Full (strict)**; turn on "Always Use HTTPS", then enable HSTS in `public/.htaccess`.
+  3. Cache rule: bypass cache for `/admin/*`, `/api/*` and any request with a `PHPSESSID` cookie.
+     Public pages already send `s-maxage=300`, so Cloudflare can cache them for 5 minutes.
+  4. Set `TRUST_CLOUDFLARE=true` in `.env` so login lockouts and rate limits see each visitor's real
+     IP (and the Give page can default to the visitor's country). Only do this when all traffic goes
+     through Cloudflare, otherwise the IP header could be faked.
 
 ## Staff roles
 

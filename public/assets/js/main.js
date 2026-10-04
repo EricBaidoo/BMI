@@ -213,9 +213,43 @@ function initBackgroundVideos() {
     });
 }
 
+/* ============================================================
+   LOCAL TIMES (span.js-local-time with data-ts and data-tz)
+   Adds the visitor's own time next to a church time, only when their zone differs:
+   "Sundays · 8:45 AM GMT (4:45 AM EDT your time)".
+   ============================================================ */
+function initLocalTimes() {
+    if (!window.Intl || !Intl.DateTimeFormat) return;
+    const visitorTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const zoneName = (date, tz) => {
+        const part = new Intl.DateTimeFormat('en-US', { timeZone: tz, timeZoneName: 'short' })
+            .formatToParts(date).find(p => p.type === 'timeZoneName');
+        return part ? part.value : tz;
+    };
+    const stamp = (date, tz) => new Intl.DateTimeFormat('en-US', {
+        timeZone: tz, weekday: 'short', hour: 'numeric', minute: '2-digit', hour12: true,
+    }).format(date);
+
+    document.querySelectorAll('.js-local-time[data-ts]').forEach(el => {
+        const date = new Date(parseInt(el.dataset.ts, 10) * 1000);
+        const sourceTz = el.dataset.tz || 'Africa/Accra';
+        if (isNaN(date.getTime()) || !visitorTz || stamp(date, sourceTz) === stamp(date, visitorTz)) {
+            return; // same local time: nothing to add
+        }
+        const sameDay = new Intl.DateTimeFormat('en-US', { timeZone: sourceTz, weekday: 'short' }).format(date)
+            === new Intl.DateTimeFormat('en-US', { timeZone: visitorTz, weekday: 'short' }).format(date);
+        const local = new Intl.DateTimeFormat('en-US', {
+            timeZone: visitorTz, hour: 'numeric', minute: '2-digit', hour12: true,
+            weekday: sameDay ? undefined : 'short',
+        }).format(date);
+        el.textContent = ' ' + zoneName(date, sourceTz) + ' (' + local + ' ' + zoneName(date, visitorTz) + ' your time)';
+    });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     initSmartHeader();
     initBackgroundVideos();
+    initLocalTimes();
 
     if (prefersReducedMotion) {
         // Show everything immediately: no scroll reveals, parallax or pinned scrolling.

@@ -120,7 +120,7 @@ include __DIR__ . '/../includes/header.php';
                                 <li class="flex flex-wrap items-center gap-x-4 gap-y-1 bg-[#050505] border border-white/5 rounded-2xl p-4 hover:border-white/20 transition-colors">
                                     <span class="w-2 h-2 rounded-full bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]" aria-hidden="true"></span>
                                     <span class="text-white"><?php echo htmlspecialchars($label); ?></span>
-                                    <span class="ml-auto text-amber-500 font-bold"><?php echo htmlspecialchars($time); ?></span>
+                                    <span class="ml-auto text-amber-500 font-bold text-right"><?php echo time_with_local($time); ?></span>
                                 </li>
                                 <?php endforeach; ?>
                             </ul>
@@ -145,6 +145,7 @@ include __DIR__ . '/../includes/header.php';
                                     Get Directions
                                     <svg class="w-4 h-4 ml-2 group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                                 </a>
+                                <p class="mt-6 text-sm text-neutral-400">Not in Accra? <a href="locations" class="text-amber-500 font-semibold hover:text-white">See all our locations in Ghana and the USA</a>, or <a href="livestream" class="text-amber-500 font-semibold hover:text-white">join online</a>.</p>
                             </div>
                         </div>
                     </div>
@@ -306,6 +307,7 @@ include __DIR__ . '/../includes/header.php';
                         <button type="submit" class="w-full bg-white text-black font-bold uppercase tracking-[0.2em] text-sm py-6 rounded-2xl hover:bg-amber-500 hover:-translate-y-1 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.1)] hover:shadow-[0_0_30px_rgba(245,158,11,0.3)]">
                             Plan My Visit
                         </button>
+                        <p class="mt-4 text-xs text-neutral-500 leading-relaxed text-center">We use these details only to welcome you. See our <a href="privacy" class="underline hover:text-white">Privacy Policy</a>.</p>
                     </div>
                 </form>
                 <?php endif; ?>

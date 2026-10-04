@@ -63,7 +63,7 @@ function php_errors(string $body): string
 
 echo "Smoke test for {$base}\n\n== Public pages\n";
 $pages = ['/', '/about', '/beliefs', '/visit', '/sermons', '/events', '/flagship-programs', '/ministries',
-    '/livestream', '/blog', '/donate', '/contact', '/privacy'];
+    '/livestream', '/blog', '/donate', '/contact', '/privacy', '/locations'];
 foreach ($pages as $p) {
     $r = fetch($base . $p);
     $err = php_errors($r['body']);

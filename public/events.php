@@ -117,7 +117,7 @@ include __DIR__ . '/../includes/header.php';
                                         <div class="w-12 h-12 rounded-[1rem] bg-white/5 border border-white/10 flex items-center justify-center flex-shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-black transition-colors duration-300">
                                             <svg class="w-5 h-5 text-amber-500 group-hover/item:text-black transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                                         </div>
-                                        <span class="text-neutral-400 font-medium group-hover/item:text-white transition-colors"><?php echo htmlspecialchars($eventTime); ?></span>
+                                        <span class="text-neutral-400 font-medium group-hover/item:text-white transition-colors"><?php echo htmlspecialchars($eventTime) . local_time_hint((int) strtotime($event['event_date'] . ' ' . $event['event_time'])); ?></span>
                                     </div>
                                 <?php endif; ?>
                                 

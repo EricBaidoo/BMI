@@ -138,3 +138,4 @@ function settings_has_socials(): bool
 }
 
 require_once __DIR__ . '/sanitize.php';
+require_once __DIR__ . '/localtime.php';

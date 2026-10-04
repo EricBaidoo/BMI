@@ -30,6 +30,7 @@
                 Subscribe
             </button>
         </form>
+        <p class="text-xs text-white/30 mb-2">Occasional news and events. Unsubscribe any time. <a href="privacy" class="underline hover:text-white">Privacy Policy</a></p>
         <p class="mb-24 min-h-[1.5rem] text-sm <?php echo $subscribeMessages[$subscribeStatus][1] ?? ''; ?>" role="status"><?php echo htmlspecialchars($subscribeMessages[$subscribeStatus][0] ?? ''); ?></p>
 
         <!-- Service times and location -->
@@ -37,7 +38,7 @@
         <?php if ($footerTimes || setting('contact.address') !== ''): ?>
         <div class="flex flex-wrap justify-center gap-x-12 gap-y-4 mb-16 text-sm text-white/60 max-w-4xl mx-auto">
             <?php foreach ($footerTimes as $label => $time): ?>
-                <p><span class="text-white/90 font-semibold"><?php echo htmlspecialchars($label); ?>:</span> <?php echo htmlspecialchars($time); ?></p>
+                <p><span class="text-white/90 font-semibold"><?php echo htmlspecialchars($label); ?>:</span> <?php echo time_with_local($time); ?></p>
             <?php endforeach; ?>
             <?php if (setting('contact.address') !== ''): ?>
                 <p class="w-full"><?php echo htmlspecialchars(setting('contact.address')); ?></p>
@@ -48,6 +49,7 @@
         <!-- Minimalist Site Map -->
         <div class="flex flex-wrap justify-center gap-x-16 gap-y-8 mb-24 max-w-4xl mx-auto">
             <a href="visit" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Plan a Visit</a>
+            <a href="locations" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Locations</a>
             <a href="about" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">About Us</a>
             <a href="ministries" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Ministries</a>
             <a href="sermons" class="text-white/40 hover:text-white font-sans text-[0.65rem] font-bold uppercase tracking-widest-xl transition-colors">Sermons</a>
@@ -95,57 +97,6 @@
     </div>
 </footer>
 <?php endif; ?>
-
-<!-- Cookie Consent Toast -->
-<div id="cookie-banner" class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 max-w-sm w-[calc(100%-2rem)] sm:w-auto bg-[#111111]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl z-[100] opacity-0 pointer-events-none transition-all duration-500 translate-y-8 p-5">
-    <p class="text-white/80 text-sm font-sans leading-relaxed mb-4">
-        We use cookies to enhance your browsing experience and analyze traffic. 
-        <a href="privacy" class="text-amber-500 hover:text-amber-400 font-bold ml-1">Read More</a>
-    </p>
-    <div class="flex items-center gap-3">
-        <button onclick="acceptCookies()" class="flex-1 bg-amber-500 text-black px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-amber-400 transition-colors">Accept</button>
-        <button onclick="dismissCookies()" class="flex-1 bg-white/10 text-white px-4 py-2.5 rounded-xl font-bold text-sm hover:bg-white/20 transition-colors">Decline</button>
-    </div>
-</div>
-
-<script>
-    function acceptCookies() {
-        try {
-            localStorage.setItem('cookieConsent', 'accepted');
-        } catch (e) {
-            console.warn('Local storage is disabled or blocked.');
-        }
-        hideCookieBanner();
-    }
-    function dismissCookies() {
-        try {
-            localStorage.setItem('cookieConsent', 'declined');
-        } catch (e) {
-            console.warn('Local storage is disabled or blocked.');
-        }
-        hideCookieBanner();
-    }
-    function hideCookieBanner() {
-        const banner = document.getElementById('cookie-banner');
-        if (banner) {
-            banner.classList.remove('opacity-100', 'translate-y-0');
-            banner.classList.add('opacity-0', 'pointer-events-none', 'translate-y-8');
-        }
-    }
-    
-    // Check consent on load
-    document.addEventListener('DOMContentLoaded', () => {
-        if (!localStorage.getItem('cookieConsent')) {
-            setTimeout(() => {
-                const banner = document.getElementById('cookie-banner');
-                if (banner) {
-                    banner.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-8');
-                    banner.classList.add('opacity-100', 'translate-y-0');
-                }
-            }, 1000);
-        }
-    });
-</script>
 
 <!-- Swiper JS (pinned version; deferred so it never blocks rendering) -->
 <script defer src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js"></script>

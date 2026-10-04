@@ -46,7 +46,7 @@ include __DIR__ . '/../includes/header.php';
             <div class="relative w-full lg:max-w-6xl mx-auto bg-black lg:rounded-[2.5rem] overflow-hidden aspect-video shadow-[0_0_50px_rgba(0,0,0,0.8)] border-y border-white/10 lg:border border-white/10 lg:ring-1 lg:ring-white/5 gs-reveal-up group">
                 <?php if ($liveEmbedUrl !== ''): ?>
                     <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none z-10"></div>
-                    <iframe id="main-player" src="<?php echo htmlspecialchars($liveEmbedUrl); ?>" class="absolute inset-0 w-full h-full z-0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe id="main-player" src="<?php echo htmlspecialchars(privacy_embed_url($liveEmbedUrl)); ?>" class="absolute inset-0 w-full h-full z-0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                 <?php else: ?>
                     <div id="offline-overlay" class="absolute inset-0 flex flex-col items-center justify-center bg-[#050505]">
                         <div class="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent z-10"></div>
@@ -229,7 +229,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="absolute inset-0 bg-gradient-to-r from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
                         <div class="absolute top-0 left-0 w-1.5 h-full bg-amber-500 rounded-l-[2rem]"></div>
                         
-                        <p class="font-display font-black text-3xl text-white leading-none tracking-normal mb-2"><?php echo htmlspecialchars($upNext['time_formatted']); ?></p>
+                        <p class="font-display font-black text-3xl text-white leading-none tracking-normal mb-2"><?php echo htmlspecialchars($upNext['time_formatted']); ?><span class="block text-base mt-2"><?php echo local_time_hint((int) $upNext['timestamp']); ?></span></p>
                         <p class="text-sm text-neutral-400 font-medium mb-8"><?php echo htmlspecialchars($upNext['name']); ?></p>
                         
                         <div class="flex items-center justify-between gap-2 md:gap-4 text-center bg-white/5 border border-white/10 rounded-[1.25rem] p-4 shadow-inner">
@@ -267,7 +267,7 @@ include __DIR__ . '/../includes/header.php';
                         <div class="space-y-3">
                             <?php foreach ($dayEvents as $event): ?>
                             <div class="bg-[#050505] border border-white/5 rounded-2xl p-5 hover:border-amber-500/30 transition-colors duration-300">
-                                <p class="font-display font-black text-xl text-white tracking-normal mb-1"><?php echo htmlspecialchars($event['time_formatted']); ?></p>
+                                <p class="font-display font-black text-xl text-white tracking-normal mb-1"><?php echo htmlspecialchars($event['time_formatted']); ?><span class="text-sm"><?php echo local_time_hint((int) $event['timestamp']); ?></span></p>
                                 <p class="text-sm text-neutral-400 font-medium"><?php echo htmlspecialchars($event['name']); ?></p>
                             </div>
                             <?php endforeach; ?>
@@ -443,7 +443,8 @@ function switchTab(tab) {
 function playPastService(url) {
     const iframe = document.getElementById('main-player');
     if (iframe) {
-        iframe.src = url;
+        // Privacy-enhanced YouTube: no tracking cookies until the visitor presses play.
+        iframe.src = String(url).replace(/^https?:\/\/(www\.)?youtube\.com\/embed\//i, 'https://www.youtube-nocookie.com/embed/');
         iframe.classList.remove('hidden');
         const offlineOverlay = document.getElementById('offline-overlay');
         if (offlineOverlay) offlineOverlay.classList.add('hidden');

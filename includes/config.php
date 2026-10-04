@@ -1,6 +1,7 @@
 <?php
 require_once __DIR__ . '/env.php';
 require_once __DIR__ . '/paths.php';
+require_once __DIR__ . '/client_ip.php';
 
 // Site identity
 $siteName = 'Bridge Ministries International';
@@ -14,6 +15,11 @@ $dbPort = (int) env('DB_PORT', 3306);
 $dbName = (string) env('DB_NAME', 'church_website');
 $dbUser = (string) env('DB_USER', 'root');
 $dbPass = (string) env('DB_PASS', '');
+
+// Church time zone: every time entered in the admin (services, livestream, events) is in this zone.
+// Ghana is GMT all year. Visitors elsewhere see their own local time next to it.
+$appTimezone = (string) env('APP_TIMEZONE', 'Africa/Accra');
+date_default_timezone_set(in_array($appTimezone, timezone_identifiers_list(), true) ? $appTimezone : 'Africa/Accra');
 
 // Application
 $appEnv = (string) env('APP_ENV', 'production');

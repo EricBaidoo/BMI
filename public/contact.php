@@ -131,7 +131,7 @@ include __DIR__ . '/../includes/header.php';
                             </div>
                             <div>
                                 <h3 class="text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">Call Us</h3>
-                                <a href="tel:<?php echo preg_replace('/[^0-9+]/', '', setting('contact.phone_primary')); ?>" class="text-neutral-300 font-sans font-medium text-lg leading-snug hover:text-amber-500 transition-colors duration-300">
+                                <a href="tel:<?php echo e(phone_tel(setting('contact.phone_primary'), 'GH')); ?>" class="text-neutral-300 font-sans font-medium text-lg leading-snug hover:text-amber-500 transition-colors duration-300">
                                     <?php echo htmlspecialchars(setting('contact.phone_primary')); ?>
                                 </a>
                             </div>
@@ -146,7 +146,7 @@ include __DIR__ . '/../includes/header.php';
                         <h3 class="text-xs font-bold text-amber-500 uppercase tracking-widest mb-6">Service Times</h3>
                         <ul class="space-y-4 text-white/60 font-medium text-sm">
                             <?php foreach (service_times() as $label => $time): ?>
-                                <li class="flex flex-col"><span class="text-white"><?php echo htmlspecialchars($label); ?></span> <span><?php echo htmlspecialchars($time); ?></span></li>
+                                <li class="flex flex-col"><span class="text-white"><?php echo htmlspecialchars($label); ?></span> <span><?php echo time_with_local($time); ?></span></li>
                             <?php endforeach; ?>
                         </ul>
                         <?php if (setting('contact.office_hours') !== ''): ?>
@@ -239,6 +239,7 @@ include __DIR__ . '/../includes/header.php';
                         <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-black font-bold uppercase tracking-widest text-sm py-5 rounded-2xl hover:-translate-y-1 transition-all duration-300">
                             Send Message
                         </button>
+                        <p class="text-xs text-neutral-500 leading-relaxed">We use your details only to reply to you; prayer requests are seen only by the staff who pray for them. See our <a href="privacy" class="underline hover:text-white">Privacy Policy</a>.</p>
                     </form>
                 </div>
             </div>

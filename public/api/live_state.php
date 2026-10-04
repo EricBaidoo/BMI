@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'email
     flock($fh, LOCK_EX);
     $log = json_decode(stream_get_contents($fh) ?: '[]', true) ?: [];
     $log = array_values(array_filter($log, fn ($e) => $e['t'] > $now - 3600));
-    $ip = $_SERVER['REMOTE_ADDR'] ?? '';
+    $ip = client_ip();
     $byIp = count(array_filter($log, fn ($e) => $e['ip'] === $ip && $e['t'] > $now - 600));
     $byTo = count(array_filter($log, fn ($e) => $e['to'] === strtolower($email)));
     if ($byIp >= 3 || $byTo >= 3) {
