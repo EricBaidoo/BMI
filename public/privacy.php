@@ -2,12 +2,12 @@
 $pageTitle = 'Privacy Policy | Bridge Ministries International';
 $pageDescription = 'Our Privacy Policy and Data Collection terms.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- HERO SECTION -->
@@ -46,4 +46,4 @@ include 'includes/header.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

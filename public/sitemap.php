@@ -2,8 +2,8 @@
 /**
  * Dynamic XML sitemap. Apache rewrites /sitemap.xml -> /sitemap.php.
  */
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/config.php';
 
 header('Content-Type: application/xml; charset=utf-8');
 

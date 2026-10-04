@@ -151,7 +151,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.js"></script>
 
 <!-- Site JS -->
-<script defer src="assets/js/main.js?v=<?php echo filemtime(__DIR__ . '/../assets/js/main.js') ?: time(); ?>"></script>
+<script defer src="assets/js/main.js?v=<?php echo filemtime(PUBLIC_DIR . '/assets/js/main.js') ?: time(); ?>"></script>
 
 </body>
 </html>

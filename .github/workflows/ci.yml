@@ -1,0 +1,78 @@
+# Runs on every push and pull request. A red result means: do not deploy.
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: church_website
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -proot"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+
+    env:
+      APP_ENV: testing
+      APP_DEBUG: 'false'
+      APP_URL: http://127.0.0.1:8000
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: church_website
+      DB_USER: root
+      DB_PASS: root
+      MAIL_TRANSPORT: log
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Scan for committed secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql, gd, dom, mbstring, curl
+          coverage: none
+
+      - name: Install PHP dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Syntax check
+        run: php bin/lint.php
+
+      - name: Static analysis (PHPStan level 5)
+        run: vendor/bin/phpstan analyse --memory-limit=1G --no-progress
+
+      - name: Build CSS (fails if Tailwind config is broken)
+        run: npm ci && npm run build:css
+
+      - name: Create database from migrations
+        run: |
+          php database/run_migrations.php
+          php database/run_migrations.php | grep -q "up to date"
+
+      - name: Smoke test every page
+        run: |
+          php -S 127.0.0.1:8000 -t public bin/router.php > server.log 2>&1 &
+          sleep 2
+          php bin/smoke-test.php http://127.0.0.1:8000 --builtin-server
+
+      - name: Show server log on failure
+        if: failure()
+        run: cat server.log logs/*.log 2>/dev/null || true

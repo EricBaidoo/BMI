@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require('content');
 
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/csrf.php';
-require_once __DIR__ . '/../includes/settings.php';
-require_once __DIR__ . '/../includes/helpers.php';
-require_once __DIR__ . '/../includes/uploads.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/settings.php';
+require_once __DIR__ . '/../../includes/helpers.php';
+require_once __DIR__ . '/../../includes/uploads.php';
 
 $feedback = '';
 $error = '';
@@ -219,7 +219,7 @@ if (isset($_GET['status'])) {
 }
 
 $pageTitle = 'Homepage Manager | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
 <div class="mb-6">
     <h1 class="text-2xl font-bold text-slate-800">Homepage Manager</h1>
@@ -764,4 +764,4 @@ require_once __DIR__ . '/includes/header.php';
   });
 </script>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

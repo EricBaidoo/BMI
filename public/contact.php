@@ -2,11 +2,12 @@
 $pageTitle = 'Contact Us | Bridge Ministries International';
 $pageDescription = 'Get in touch with Bridge Ministries International. Submit a prayer request or send us a message.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
-require_once __DIR__ . '/includes/csrf.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 // Handle contact form submission
 $successMessage = '';
@@ -31,12 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ':msgtype' => (stripos($type, 'prayer') !== false ? 'prayer' : 'contact')
             ]);
             
-            // Send email notification to Admin
-            $adminEmail = setting('contact.email_general', 'info@bmiglobal.org');
-            $subjectLine = "New Website Submission: " . $type;
-            $emailBody = "You have received a new submission from the website.\n\nName: $name\nEmail: $email\nType: $type\nMessage:\n$message\n\nLog in to the admin panel to view all messages.";
-            $headers = "From: no-reply@" . parse_url(setting('site.url', 'https://bmiglobal.org'), PHP_URL_HOST) . "\r\n";
-            @mail($adminEmail, $subjectLine, $emailBody, $headers);
+            // Notify the right team: prayer and giving messages go to their own inboxes when set.
+            $general = setting('contact.email_general', 'info@bmiglobal.org');
+            $adminEmail = match (true) {
+                stripos($type, 'prayer') !== false => setting('contact.email_prayer') ?: $general,
+                stripos($type, 'giving') !== false => setting('contact.email_giving') ?: $general,
+                default => $general,
+            };
+            $emailBody = "You have received a new submission from the website.\n\nName: $name\nEmail: $email\nType: $type\nMessage:\n$message\n\nReply to this email to answer them, or sign in to the admin panel to see all messages.";
+            send_mail($adminEmail, 'New website message: ' . $type, $emailBody, ['reply_to' => $email, 'reply_name' => $name]);
             
             $successMessage = "Thank you, $name. Your message has been received. Our team will reach out to you soon.";
         } catch (Throwable $e) {
@@ -48,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -243,5 +247,4 @@ include 'includes/header.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

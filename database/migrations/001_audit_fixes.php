@@ -4,7 +4,8 @@
  * image paths moved into assets/image subfolders.
  */
 return function (PDO $pdo): void {
-    $root = dirname(__DIR__, 2);
+    require_once dirname(__DIR__, 2) . '/includes/paths.php';
+    $root = PUBLIC_DIR;
     $hasColumn = function (string $table, string $column) use ($pdo): bool {
         $stmt = $pdo->prepare('SELECT COUNT(*) FROM information_schema.columns WHERE table_schema = DATABASE() AND table_name = ? AND column_name = ?');
         $stmt->execute([$table, $column]);

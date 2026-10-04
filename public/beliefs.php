@@ -2,8 +2,8 @@
 $pageTitle = 'What We Believe | Bridge Ministries International';
 $pageDescription = 'Our statement of faith — what Bridge Ministries International believes about Scripture, God, salvation, the church, and the Christian life.';
 
-require_once __DIR__ . '/includes/helpers.php';
-include 'includes/header.php';
+require_once __DIR__ . '/../includes/helpers.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 <!-- HERO SECTION -->
 <section class="relative pt-32 pb-20 md:pt-48 md:pb-32 bg-[#000000] overflow-hidden gs-reveal-section">
@@ -191,5 +191,4 @@ include 'includes/header.php';
         
     </div>
 </section>
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

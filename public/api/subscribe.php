@@ -7,8 +7,8 @@
  * must come from this site (Origin/Referer check), pass a hidden honeypot field, and respect
  * a per-IP rate limit.
  */
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/settings.php';
 
 $back = function (string $status) {
     $ref = (string) ($_SERVER['HTTP_REFERER'] ?? '');

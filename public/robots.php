@@ -3,7 +3,7 @@
  * robots.txt (Apache rewrites /robots.txt here) so the sitemap address is always absolute
  * and matches APP_URL on each server.
  */
-require_once __DIR__ . '/includes/config.php';
+require_once __DIR__ . '/../includes/config.php';
 
 header('Content-Type: text/plain; charset=utf-8');
 header('Cache-Control: public, max-age=86400');

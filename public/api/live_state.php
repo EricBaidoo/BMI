@@ -1,13 +1,13 @@
 <?php
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/settings.php';
 header('Content-Type: application/json');
 
 // Email the current sermon notes to a viewer.
 // The email is built from the notes stored on the server; the viewer only supplies
 // their address and the plain-text answers they typed into the blanks.
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'email_notes') {
-    require_once __DIR__ . '/../includes/csrf.php';
+    require_once __DIR__ . '/../../includes/csrf.php';
 
     $fail = function (int $code, string $message): void {
         http_response_code($code);
@@ -89,18 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['action'] ?? '') === 'email
     }
 
     $siteTitle = setting('site.title', 'Bridge Ministries International');
-    $fromHost = parse_url(setting('site.url', 'https://bmiglobal.org'), PHP_URL_HOST) ?: 'bmiglobal.org';
     $subject = 'Your Sermon Notes - ' . $siteTitle;
-    $headers = "MIME-Version: 1.0\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-    $headers .= "From: no-reply@{$fromHost}\r\n";
     $message = '<html><body style="font-family:sans-serif;padding:20px;color:#333;line-height:1.6">'
         . '<h2 style="color:#000">Your Sermon Notes</h2>' . $body
         . '<p style="color:#888;font-size:12px">Sent from ' . htmlspecialchars($siteTitle, ENT_QUOTES, 'UTF-8')
         . ' because this address was entered on the livestream page.</p>'
         . '</body></html>';
 
-    if (@mail($email, $subject, $message, $headers)) {
+    require_once __DIR__ . '/../../includes/mailer.php';
+    if (send_mail($email, $subject, $message, ['html' => true])) {
         echo json_encode(['status' => 'success']);
     } else {
         $fail(500, 'Failed to send email.');

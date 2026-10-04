@@ -2,8 +2,8 @@
 $pageTitle = 'Good News | Bridge Ministries International';
 $pageDescription = 'News, announcements, and devotionals from Bridge Ministries International.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $slug = trim((string) ($_GET['post'] ?? ''));
 $single = null;
@@ -40,7 +40,7 @@ try {
     $posts = [];
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 <section class="page-hero gs-reveal-section">
     <div class="max-w-6xl mx-auto px-4 py-14 md:py-16">
@@ -88,5 +88,4 @@ include 'includes/header.php';
         <a href="contact" class="secondary-action">Subscribe</a>
     </div>
 </section>
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

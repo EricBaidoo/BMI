@@ -66,7 +66,8 @@ if (!function_exists('log_exception')) {
             . 'URL: ' . ($_SERVER['REQUEST_URI'] ?? 'CLI') . "\n\n"
             . "Full details are in logs/app-" . date('Y-m-d') . ".log on the server.\n"
             . "Further alerts are paused for one hour.";
-        @mail($to, "[{$host}] Website error", $body, "From: no-reply@{$host}\r\n");
+        require_once __DIR__ . '/mailer.php';
+        send_mail($to, "[{$host}] Website error", $body);
     }
 
     /**

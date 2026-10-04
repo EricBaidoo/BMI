@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../../includes/auth.php';
+require_once __DIR__ . '/../../includes/csrf.php';
 
 if (auth_check()) {
     header('Location: index.php');

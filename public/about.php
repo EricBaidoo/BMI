@@ -2,14 +2,14 @@
 $pageTitle = 'About Us | Bridge Ministries International';
 $pageDescription = 'Learn about Bridge Ministries International — our story, mission, vision, values, and leadership team. A Christ-centred church family in Accra, Ghana.';
 
-require_once __DIR__ . '/includes/settings.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $founded = setting('site.founded_year', '2005');
 $siteName = setting('site.name', 'Bridge Ministries International');
 $svcSunday = setting('service.sunday_worship');
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -164,5 +164,4 @@ include 'includes/header.php';
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

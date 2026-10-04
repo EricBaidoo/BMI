@@ -2,11 +2,12 @@
 $pageTitle = 'Plan a Visit | Bridge Ministries International';
 $pageDescription = 'Join us this Sunday at Bridge Ministries International. Find service times, location, and what to expect.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
-require_once __DIR__ . '/includes/csrf.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../includes/csrf.php';
+require_once __DIR__ . '/../includes/mailer.php';
 
 // Handle Plan a Visit submissions: save to the admin Inbox and notify the welcome team.
 $visitSuccess = '';
@@ -44,9 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ]);
 
             $teamEmail = setting('contact.email_general', 'info@bmiglobal.org');
-            $fromHost = parse_url(setting('site.url', 'https://bmiglobal.org'), PHP_URL_HOST) ?: 'bmiglobal.org';
-            $body = "Someone is planning to visit.\n\nName: {$fullName}\nEmail: {$email}\n{$details}\n\nLog in to the admin panel to view all messages.";
-            @mail($teamEmail, 'New visit planned: ' . $fullName, $body, "From: no-reply@{$fromHost}\r\nReply-To: {$email}\r\n");
+            $body = "Someone is planning to visit.\n\nName: {$fullName}\nEmail: {$email}\n{$details}\n\nReply to this email to welcome them, or sign in to the admin panel to see all messages.";
+            send_mail($teamEmail, 'New visit planned: ' . $fullName, $body, ['reply_to' => $email, 'reply_name' => $fullName]);
 
             $visitSuccess = "Thank you, {$firstName}. We look forward to welcoming you on {$visitDate}. Our welcome team will be in touch before your visit.";
             $visitOld = [];
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -315,5 +315,4 @@ include 'includes/header.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

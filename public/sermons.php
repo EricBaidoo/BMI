@@ -2,8 +2,8 @@
 $pageTitle = 'Sermons | Bridge Ministries International';
 $pageDescription = 'Browse messages by date, speaker, and topic from Bridge Ministries International.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $perPage = 12;
 $page = max(1, (int) ($_GET['page'] ?? 1));
@@ -66,7 +66,7 @@ try {
 
 $totalPages = (int) ceil(max(1, $total) / $perPage);
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 
 // Render Cinematic Hero
 render_hero_cinematic([
@@ -220,4 +220,4 @@ render_hero_cinematic([
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

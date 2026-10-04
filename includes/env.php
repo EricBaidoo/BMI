@@ -28,7 +28,8 @@ if (!function_exists('env')) {
             if ($value !== '' && ($value[0] === '"' || $value[0] === "'")) {
                 $value = trim($value, "\"'");
             }
-            if ($key === '' || array_key_exists($key, $_ENV)) {
+            // Real environment variables (server config, CI) win over the .env file.
+            if ($key === '' || array_key_exists($key, $_ENV) || getenv($key) !== false) {
                 continue;
             }
             $_ENV[$key] = $value;
@@ -39,7 +40,7 @@ if (!function_exists('env')) {
     function env(string $key, $default = null)
     {
         $value = $_ENV[$key] ?? getenv($key);
-        if ($value === false || $value === null || $value === '') {
+        if ($value === false || $value === '') {
             return $default;
         }
         if (in_array(strtolower((string) $value), ['true', '(true)'], true)) {

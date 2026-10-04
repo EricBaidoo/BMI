@@ -2,8 +2,8 @@
 $pageTitle = 'Ministries | Bridge Ministries International';
 $pageDescription = 'Find your community at Bridge Ministries International — youth, children, women, men, and serving teams.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $ministries = [];
 try {
@@ -14,7 +14,7 @@ try {
     $ministries = [];
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 
 // Render Cinematic Hero
 render_hero_cinematic([
@@ -112,4 +112,4 @@ render_hero_cinematic([
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

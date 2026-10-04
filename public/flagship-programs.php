@@ -2,8 +2,8 @@
 $pageTitle = 'Flagship Programs | Bridge Ministries International';
 $pageDescription = 'Experience transformation through our major annual events and milestones.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $flagships = [];
 $eventsError = null;
@@ -23,9 +23,10 @@ try {
 } catch (Throwable $e) {
     log_exception($e, 'flagship-programs');
     $flagships = [];
+    $eventsError = 'Our programmes are temporarily unavailable. Please check back shortly.';
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -177,5 +178,4 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

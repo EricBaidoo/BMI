@@ -122,13 +122,13 @@ function auth_forbidden(): void
 {
     http_response_code(403);
     $pageTitle = 'Access denied | BMI Admin';
-    require __DIR__ . '/../admin/includes/header.php';
+    require ADMIN_TEMPLATES . '/header.php';
     echo '<div class="max-w-xl mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">'
         . '<h1 class="text-xl font-bold text-slate-800">You don\'t have access to this page</h1>'
         . '<p class="mt-3 text-slate-600">Your role (' . htmlspecialchars(ROLE_LABELS[auth_user()['role'] ?? ''] ?? 'unknown') . ') does not include this area. '
         . 'If you need it, ask an administrator to change your role.</p>'
         . '<a href="index.php" class="inline-block mt-6 text-blue-600 font-medium hover:underline">Back to the dashboard</a></div>';
-    require __DIR__ . '/../admin/includes/footer.php';
+    require ADMIN_TEMPLATES . '/footer.php';
     exit;
 }
 

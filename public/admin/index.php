@@ -1,12 +1,12 @@
 <?php
-$pageTitle = 'Dashboard | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../../includes/auth.php';
+auth_require();
+require_once __DIR__ . '/../../includes/db.php';
 
 $counts = [
     'sermons' => 0,
     'events' => 0,
-    'ministries' => 0,
+    'weekly_services' => 0,
     'posts' => 0,
     'messages' => 0,
 ];
@@ -16,8 +16,11 @@ try {
         $counts[$table] = (int) $pdo->query("SELECT COUNT(*) FROM `$table`")->fetchColumn();
     }
 } catch (Throwable $e) {
-    // ignore — dashboard still renders
+    log_exception($e, 'dashboard');
 }
+
+$pageTitle = 'Dashboard | BMI Admin';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
 
 <div class="mb-8">
@@ -152,5 +155,4 @@ try {
     </div>
 </div>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
-
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

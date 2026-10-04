@@ -11,6 +11,11 @@ AddDefaultCharset utf-8
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # This folder is served at the site root. Its own name never appears in addresses,
+    # so /public/... is refused rather than becoming a second copy of every page.
+    RewriteCond %{THE_REQUEST} \s/+([^?\s]*/)?public(/|[?\s]) [NC]
+    RewriteRule ^ - [R=404,L]
+
     # Map /sitemap.xml to sitemap.php
     RewriteRule ^sitemap\.xml$ sitemap.php [L]
 
@@ -32,6 +37,7 @@ AddDefaultCharset utf-8
     # Redirect any visible /something.php -> /something (dynamic).
     # Skipped for admin/: its forms post to .php URLs, and a redirect would turn a POST into a GET.
     RewriteCond %{REQUEST_URI} !/admin/ [NC]
+    RewriteCond %{REQUEST_FILENAME} -f
     RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.php([?\s]) [NC]
     RewriteRule ^ /%1 [R=301,L,NE,QSA]
 
@@ -52,6 +58,8 @@ ErrorDocument 404 /404.php
 # Security headers
 # ------------------------------------------------------------------------------
 <IfModule mod_headers.c>
+    Header always unset X-Powered-By
+    Header unset X-Powered-By
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
@@ -79,8 +87,6 @@ ErrorDocument 404 /404.php
     Require all granted
 </Files>
 
-# Never serve dependency or tooling folders
-RedirectMatch 404 ^/(?:BMI/)?(node_modules|database|logs|\.git)(/|$)
 
 # ------------------------------------------------------------------------------
 # Compression

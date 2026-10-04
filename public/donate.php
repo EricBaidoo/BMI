@@ -2,10 +2,10 @@
 $pageTitle = 'Give Online | Bridge Ministries International';
 $pageDescription = 'Partner with us financially to spread the Gospel and empower communities globally.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
 
 // External giving portal (ChMS) URL from the environment or settings. Only http(s) links are used.
 $chmsPaymentUrl = (string) env('CHMS_PAYMENT_URL', '');
@@ -35,7 +35,7 @@ $momoDetails = $momoLines ? implode("\n", $momoLines) : trim(setting('donate.mom
 
 $givingMethodCount = ($chmsPaymentUrl !== '' ? 1 : 0) + ($bankDetails !== '' ? 1 : 0) + ($momoDetails !== '' ? 1 : 0);
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 
 // Render Cinematic Hero
 render_hero_cinematic([
@@ -135,4 +135,4 @@ render_hero_cinematic([
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

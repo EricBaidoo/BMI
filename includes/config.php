@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/env.php';
+require_once __DIR__ . '/paths.php';
 
 // Site identity
 $siteName = 'Bridge Ministries International';
@@ -36,7 +37,10 @@ if ($appDebug) {
     ini_set('log_errors', '1');
 }
 
-// Global Security Headers
+// Global Security Headers (and don't announce the PHP version)
+if (!headers_sent()) {
+    header_remove('X-Powered-By');
+}
 if (!headers_sent()) {
     header('X-Frame-Options: SAMEORIGIN');
     header('X-Content-Type-Options: nosniff');

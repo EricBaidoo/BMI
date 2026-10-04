@@ -1,0 +1,21 @@
+parameters:
+    level: 5
+    paths:
+        - includes
+        - templates
+        - public
+        - database
+        - bin
+    excludePaths:
+        - public/assets
+    bootstrapFiles:
+        - includes/paths.php
+    scanFiles:
+        - includes/settings.php
+        - includes/helpers.php
+        - includes/sanitize.php
+        - includes/logger.php
+    ignoreErrors:
+        # Page templates are included into other files and share their variables on purpose.
+        - '#Variable \$[A-Za-z_]+ might not be defined#'
+    reportUnmatchedIgnoredErrors: false

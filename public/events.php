@@ -2,8 +2,8 @@
 $pageTitle = 'Events | Bridge Ministries International';
 $pageDescription = 'Plan your week with upcoming services, outreach, and special gatherings at BMI.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $flagships = [];
 $specials = [];
@@ -25,9 +25,10 @@ try {
 } catch (Throwable $e) {
     log_exception($e, 'events');
     $specials = [];
+    $eventsError = 'Events are temporarily unavailable. Please check back shortly.';
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 
@@ -167,4 +168,4 @@ include 'includes/header.php';
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

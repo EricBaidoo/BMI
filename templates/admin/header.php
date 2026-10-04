@@ -215,4 +215,3 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
                     <a href="profile.php#two-step" class="font-semibold text-amber-900 underline">Set it up now</a>
                 </div>
             <?php endif; ?>
-

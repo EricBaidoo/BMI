@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require('users');
 
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/csrf.php';
-require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/helpers.php';
 
 $currentUser = auth_user();
 $feedback = '';
@@ -178,7 +178,7 @@ try {
 $roleBadge = ['admin' => 'bg-blue-100 text-blue-800', 'editor' => 'bg-slate-200 text-slate-700', 'finance' => 'bg-amber-100 text-amber-800'];
 
 $pageTitle = 'Manage Users | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-slate-800">Manage Users</h1>
@@ -314,4 +314,4 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
             <?php endif; ?>
         </div>
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

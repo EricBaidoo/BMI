@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
 
 header('Content-Type: application/rss+xml; charset=utf-8');
 

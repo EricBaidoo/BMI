@@ -48,7 +48,7 @@ function upload_image(?array $file, string $prefix = 'upload', int $maxBytes = 2
     }
     $ext = $allowed[$mime];
 
-    $uploadDir = dirname(__DIR__) . '/assets/image/' . ltrim($category . '/', '/');
+    $uploadDir = PUBLIC_DIR . '/assets/image/' . ltrim($category . '/', '/');
     if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
         throw new RuntimeException('Upload directory is not writable.');
     }
@@ -109,11 +109,11 @@ function upload_delete(?string $relativePath): void
     if (!$relativePath || strpos($relativePath, 'http://') === 0 || strpos($relativePath, 'https://') === 0) {
         return;
     }
-    $base = realpath(dirname(__DIR__) . '/assets/image');
+    $base = realpath(PUBLIC_DIR . '/assets/image');
     if (!$base) {
         return;
     }
-    $absolute = realpath(dirname(__DIR__) . '/' . ltrim($relativePath, '/'));
+    $absolute = realpath(PUBLIC_DIR . '/' . ltrim($relativePath, '/'));
     if (!$absolute || strpos($absolute, $base) !== 0) {
         return;
     }

@@ -72,7 +72,8 @@ if (!function_exists('audit')) {
             $body = "Giving details on the website were changed.\n\nChanged by: {$who}\nTime: " . date('Y-m-d H:i:s T')
                 . "\nIP address: " . ($_SERVER['REMOTE_ADDR'] ?? '?') . "\n\n" . implode("\n", $lines)
                 . "\n\nIf you did not expect this change, sign in to the admin panel, check the Audit Log and correct the details immediately.";
-            @mail(implode(',', $to), "[{$host}] Giving details changed", $body, "From: no-reply@{$host}\r\n");
+            require_once __DIR__ . '/mailer.php';
+            send_mail($to, "[{$host}] Giving details changed", $body);
         } catch (Throwable $e) {
             log_exception($e, 'giving alert');
         }

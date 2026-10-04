@@ -2,11 +2,11 @@
 $pageTitle = 'Livestream | Bridge Ministries International';
 $pageDescription = 'Watch BMI services live and replay recent recordings.';
 
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
-require_once __DIR__ . '/includes/config.php';
-require_once __DIR__ . '/includes/settings.php';
-require_once __DIR__ . '/includes/csrf.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../includes/config.php';
+require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../includes/csrf.php';
 
 // For now, we will use the setting from the .env or backend as a fallback.
 $liveEmbedUrl = setting('live.embed_url', '');
@@ -24,7 +24,7 @@ if (str_contains($liveEmbedUrl, 'youtube.com/watch?v=')) {
     $liveEmbedUrl = "https://www.facebook.com/plugins/video.php?href={$encodedUrl}&show_text=0";
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -616,4 +616,4 @@ document.addEventListener('DOMContentLoaded', () => {
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

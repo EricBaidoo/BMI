@@ -1,5 +1,5 @@
 <?php
-// admin/includes/footer.php
+// templates/admin/footer.php
 ?>
         </main>
         

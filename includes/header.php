@@ -128,7 +128,7 @@ $isLiveNow = setting('live.is_streaming_now') === '1';
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
 
     <!-- Compiled Tailwind CSS -->
-    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo filemtime(__DIR__ . '/../assets/css/styles.css') ?: time(); ?>">
+    <link rel="stylesheet" href="assets/css/styles.css?v=<?php echo filemtime(PUBLIC_DIR . '/assets/css/styles.css') ?: time(); ?>">
 
     <!-- Swiper CSS (pinned version) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11.1.14/swiper-bundle.min.css">

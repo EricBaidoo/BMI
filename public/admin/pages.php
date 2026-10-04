@@ -1,12 +1,12 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require('content');
 
-require_once __DIR__ . '/../includes/csrf.php';
-require_once __DIR__ . '/../includes/settings.php';
-require_once __DIR__ . '/../includes/helpers.php';
-require_once __DIR__ . '/../includes/uploads.php';
-require_once __DIR__ . '/../includes/sanitize.php';
+require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/settings.php';
+require_once __DIR__ . '/../../includes/helpers.php';
+require_once __DIR__ . '/../../includes/uploads.php';
+require_once __DIR__ . '/../../includes/sanitize.php';
 
 $feedback = '';
 $error = '';
@@ -184,7 +184,7 @@ $activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['
 ?>
 <?php
 $pageTitle = 'Page Content | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-slate-800">Page Content</h1>
@@ -261,5 +261,4 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
             </form>
         </div>
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
-
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

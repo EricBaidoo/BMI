@@ -1,9 +1,9 @@
 <?php
 $pageTitle = 'Bridge Ministries International';
 $pageDescription = 'An international ministry dedicated to empowering communities, teaching uncompromised biblical truth, and fostering a global legacy of faith and action.';
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/settings.php';
-require_once __DIR__ . '/includes/helpers.php'; // Autoloads components
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../includes/helpers.php'; // Autoloads components
 
 $upcomingEvents = [];
 $latestSermons = [];
@@ -26,7 +26,7 @@ try {
     log_exception($e, 'index');
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- HERO SECTION: Cinematic GSAP Slider -->
@@ -334,4 +334,4 @@ render_hero_cinematic([
     </div>
 </section>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

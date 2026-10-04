@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $id = (int) ($_GET['id'] ?? 0);
 if ($id <= 0) {
@@ -27,7 +27,7 @@ try {
 $pageTitle = (string) $ministry['title'] . ' | Bridge Ministries International';
 $pageDescription = htmlspecialchars($ministry['description']);
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 
 $heroImage = empty($ministry['image_url']) ? 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?q=80&w=2000&auto=format&fit=crop' : (strpos($ministry['image_url'], 'http') === 0 ? htmlspecialchars($ministry['image_url']) : '/BMI/' . htmlspecialchars($ministry['image_url']));
 $themeColor = htmlspecialchars($ministry['theme_color'] ?? 'cyan');
@@ -193,4 +193,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
-<?php include 'includes/footer.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>

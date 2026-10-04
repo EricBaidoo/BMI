@@ -24,14 +24,17 @@ Thumbs.db
 
 # Build artefacts
 node_modules/
-/assets/css/styles.tailwind.css
+/public/assets/css/styles.tailwind.css
 
 # Logs
 *.log
 
 # User uploads (event/sermon images get committed by mistake otherwise)
-/assets/image/event_*
-/assets/image/sermon_*
+/public/assets/image/event_*
+/public/assets/image/sermon_*
 
 # Application logs
 /logs/
+
+# Composer dependencies (run composer install on each server)
+/vendor/

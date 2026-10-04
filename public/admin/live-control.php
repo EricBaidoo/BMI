@@ -1,11 +1,11 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require('live');
 
-require_once __DIR__ . '/../includes/db.php';
-require_once __DIR__ . '/../includes/csrf.php';
-require_once __DIR__ . '/../includes/sanitize.php';
-require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../../includes/db.php';
+require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/sanitize.php';
+require_once __DIR__ . '/../../includes/settings.php';
 
 $error = '';
 
@@ -42,7 +42,7 @@ try {
 }
 
 $pageTitle = 'Live Stream Control';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
 
 <?php if ($feedback !== ''): ?>
@@ -146,4 +146,4 @@ function setNotesPreset(type) {
 }
 </script>
 
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

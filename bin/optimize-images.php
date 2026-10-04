@@ -37,7 +37,7 @@ ini_set('memory_limit', '1024M');
 $before = 0;
 $after = 0;
 $changed = 0;
-$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . '/assets/image', FilesystemIterator::SKIP_DOTS));
+$it = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . '/public/assets/image', FilesystemIterator::SKIP_DOTS));
 foreach ($it as $file) {
     $path = $file->getPathname();
     $ext = strtolower($file->getExtension());

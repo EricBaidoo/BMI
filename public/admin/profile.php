@@ -1,10 +1,10 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require();
 
-require_once __DIR__ . '/../includes/csrf.php';
-require_once __DIR__ . '/../includes/helpers.php';
-require_once __DIR__ . '/../includes/settings.php';
+require_once __DIR__ . '/../../includes/csrf.php';
+require_once __DIR__ . '/../../includes/helpers.php';
+require_once __DIR__ . '/../../includes/settings.php';
 
 $user = auth_user();
 $feedback = '';
@@ -92,7 +92,7 @@ $setupSecret = (string) ($_SESSION['totp_setup'] ?? '');
 $setupUri = $setupSecret !== '' ? totp_uri($setupSecret, $user['email'], setting('site.name', 'BMI') . ' Admin') : '';
 
 $pageTitle = 'My Profile | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-slate-800">My Profile</h1>
@@ -247,4 +247,4 @@ require_once __DIR__ . '/includes/header.php';
                 </div>
             </form>
         </div>
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>

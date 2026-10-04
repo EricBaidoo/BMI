@@ -2,7 +2,7 @@
 http_response_code(404);
 $pageTitle = 'Page Not Found | Bridge Ministries International';
 $pageDescription = 'The page you were looking for could not be found.';
-include __DIR__ . '/includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 <section class="page-hero gs-reveal-section">
     <div class="max-w-6xl mx-auto px-4 py-20 text-center">
@@ -17,5 +17,4 @@ include __DIR__ . '/includes/header.php';
         </div>
     </div>
 </section>
-<?php include __DIR__ . '/includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

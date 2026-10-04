@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $id = $_GET['id'] ?? null;
 $slug = $_GET['slug'] ?? null;
@@ -33,7 +33,7 @@ if (!$event) {
     $noIndex = true;
     $pageTitle = 'Event Not Found | Bridge Ministries International';
 } else {
-    require_once __DIR__ . '/includes/settings.php';
+    require_once __DIR__ . '/../includes/settings.php';
     $pageTitle = (string) $event['title'] . ' | Bridge Ministries International';
     $pageDescription = mb_substr(trim(preg_replace('/\s+/', ' ', strip_tags((string) $event['description']))), 0, 160);
     $canonicalUrl = $siteUrl . '/event-detail?id=' . (int) $event['id'];
@@ -60,7 +60,7 @@ if (!$event) {
     ])];
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <div class="pt-20 md:pt-24 bg-[#050505] min-h-screen">
@@ -177,5 +177,4 @@ include 'includes/header.php';
     <?php endif; ?>
 </div>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

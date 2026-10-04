@@ -1,0 +1,25 @@
+# Bridge Ministries International — project root
+#
+# Only the public/ folder is a website. Everything else here (includes, templates,
+# database, bin, logs, vendor, .env) is application code and data that must never be served.
+#
+# Best: point the domain's document root at public/ (then this file is not used).
+# On shared hosting where that isn't possible (e.g. Hostinger public_html), this file
+# sends every request into public/ so nothing outside it can be reached.
+
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Without mod_rewrite nothing can be served safely from here.
+<IfModule !mod_rewrite.c>
+    Require all denied
+</IfModule>
+
+# Belt and braces for secrets and tooling files at this level.
+<FilesMatch "^(\.env.*|composer\.(json|lock)|package(-lock)?\.json|tailwind\.config\.js|README\.md)$">
+    Require all denied
+</FilesMatch>

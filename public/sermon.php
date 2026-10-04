@@ -1,6 +1,6 @@
 <?php
-require_once __DIR__ . '/includes/db.php';
-require_once __DIR__ . '/includes/helpers.php';
+require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/helpers.php';
 
 $id = (int)($_GET['id'] ?? 0);
 $sermon = null;
@@ -63,7 +63,7 @@ function getEmbedUrl($url) {
     return $url; // Return original if not youtube/facebook, or write other embed handlers if needed
 }
 
-include 'includes/header.php';
+include __DIR__ . '/../includes/header.php';
 ?>
 
 <!-- CUSTOM ANIMATION STYLES -->
@@ -221,5 +221,4 @@ include 'includes/header.php';
     <?php endif; ?>
 </div>
 
-<?php include 'includes/footer.php'; ?>
-
+<?php include __DIR__ . '/../includes/footer.php'; ?>

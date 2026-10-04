@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/../includes/auth.php';
+require_once __DIR__ . '/../../includes/auth.php';
 auth_require('audit');
 
-require_once __DIR__ . '/../includes/helpers.php';
+require_once __DIR__ . '/../../includes/helpers.php';
 
 $perPage = 50;
 $page = max(1, (int) ($_GET['page'] ?? 1));
@@ -43,7 +43,7 @@ $actionStyle = function (string $action): string {
 };
 
 $pageTitle = 'Audit Log | BMI Admin';
-require_once __DIR__ . '/includes/header.php';
+require_once ADMIN_TEMPLATES . '/header.php';
 ?>
         <div class="mb-6">
             <h1 class="text-2xl font-bold text-slate-800">Audit Log</h1>
@@ -112,4 +112,4 @@ require_once __DIR__ . '/includes/header.php';
                 <?php if ($page < $pages): ?><a class="text-blue-600 font-medium" href="audit-log.php?filter=<?php echo e($filter); ?>&page=<?php echo $page + 1; ?>">Older</a><?php endif; ?>
             </div>
         <?php endif; ?>
-<?php require_once __DIR__ . '/includes/footer.php'; ?>
+<?php require_once ADMIN_TEMPLATES . '/footer.php'; ?>
