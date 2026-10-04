@@ -54,6 +54,18 @@ if (!headers_sent()) {
     header('X-XSS-Protection: 1; mode=block');
 }
 
+// PHP warnings and notices also go to logs/app-*.log, next to every other error, so
+// problems are visible even when the host's own error log isn't easy to reach.
+set_error_handler(function (int $severity, string $message, string $file, int $line): bool {
+    if (!(error_reporting() & $severity)) {
+        return false; // silenced with @
+    }
+    $levels = [E_WARNING => 'WARNING', E_NOTICE => 'NOTICE', E_DEPRECATED => 'DEPRECATED', E_USER_WARNING => 'WARNING', E_USER_NOTICE => 'NOTICE', E_USER_DEPRECATED => 'DEPRECATED'];
+    require_once __DIR__ . '/logger.php';
+    log_message($levels[$severity] ?? 'PHP', $message . ' in ' . $file . ':' . $line . ' | ' . ($_SERVER['REQUEST_URI'] ?? 'CLI'));
+    return false; // continue with PHP's normal handling
+});
+
 // Global Exception Handler
 set_exception_handler(function (Throwable $e) use ($appDebug) {
     if (!headers_sent()) {

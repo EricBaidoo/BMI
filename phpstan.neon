@@ -7,7 +7,11 @@ parameters:
         - database
         - bin
     excludePaths:
-        - public/assets
+        analyseAndScan:
+            - public/assets
+        analyse:
+            # bundled third-party library: read for definitions, not checked
+            - includes/lib
     bootstrapFiles:
         - includes/paths.php
     scanFiles:

@@ -20,6 +20,7 @@ $navItems = [
     'settings.php' => ['icon' => 'cog', 'label' => 'Settings', 'cap' => ['settings', 'giving']],
     'users.php' => ['icon' => 'shield-check', 'label' => 'User Management', 'cap' => 'users'],
     'audit-log.php' => ['icon' => 'document-text', 'label' => 'Audit Log', 'cap' => 'audit'],
+    'website-updates.php' => ['icon' => 'cog', 'label' => 'Website Updates', 'cap' => 'system'],
 ];
 $navItems = array_filter($navItems, function ($item) {
     if ($item['cap'] === null) {
@@ -68,7 +69,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
     <meta name="robots" content="noindex,nofollow">
     <title><?php echo htmlspecialchars($pageTitle); ?></title>
     <?php if (setting('site.favicon')): ?>
-        <link rel="icon" href="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars(setting('site.favicon')); ?>">
+        <link rel="icon" href="<?php echo htmlspecialchars(rtrim((string) env('APP_URL', ''), '/') . '/' . ltrim(setting('site.favicon'), '/')); ?>">
     <?php endif; ?>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -132,7 +133,7 @@ $pageTitle = $pageTitle ?? 'Admin Dashboard | Bridge Ministries International';
         <div class="flex items-center justify-between h-16 px-6 bg-brand-900/50 border-b border-slate-800 relative z-10">
             <div class="flex items-center gap-3">
                 <?php if (setting('site.favicon')): ?>
-                    <img src="<?php echo rtrim((string)$siteUrl, '/'); ?>/<?php echo htmlspecialchars(setting('site.favicon')); ?>" alt="Logo" class="w-8 h-8 rounded object-contain bg-white">
+                    <img src="<?php echo htmlspecialchars(rtrim((string) env('APP_URL', ''), '/') . '/' . ltrim(setting('site.favicon'), '/')); ?>" alt="Logo" class="w-8 h-8 rounded object-contain bg-white">
                 <?php else: ?>
                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-700 rounded mx-auto flex items-center justify-center text-white font-extrabold shadow-lg shadow-blue-500/30 border border-white/10">
                         B

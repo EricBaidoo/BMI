@@ -23,9 +23,10 @@ const AUTH_MAX_FAILS_PER_IP = 20;
  *  giving   bank, mobile money and online giving details
  *  users    staff accounts
  *  audit    audit log
+ *  system   website updates, backups and site health
  */
 const ROLE_CAPABILITIES = [
-    'admin' => ['content', 'live', 'inbox', 'settings', 'giving', 'users', 'audit'],
+    'admin' => ['content', 'live', 'inbox', 'settings', 'giving', 'users', 'audit', 'system'],
     'editor' => ['content', 'live', 'inbox', 'settings'],
     'finance' => ['giving'],
 ];
@@ -285,6 +286,10 @@ function auth_complete_login(array $user): void
         log_exception($e, 'auth_complete_login');
     }
     audit('login', 'user', $user['id'], 'Signed in' . (!empty($user['totp_secret']) ? ' with two-factor' : ''));
+
+    // Daily data-retention clean-up (see Privacy Policy); replaces a cron job.
+    require_once __DIR__ . '/maintenance.php';
+    maybe_run_daily_purge();
 }
 
 /**

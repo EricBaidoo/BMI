@@ -283,7 +283,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         settings_save($update);
         flash('settings', 'saved');
-        $group = isset($_POST['active_group']) && isset($schema[$_POST['active_group']]) ? $_POST['active_group'] : 'general';
+        $group = isset($_POST['active_group']) && isset($schema[$_POST['active_group']]) ? $_POST['active_group'] : (string) array_key_first($schema);
         header('Location: settings.php?group=' . urlencode($group));
         exit;
     } catch (Throwable $e) {
@@ -296,7 +296,7 @@ if (flash('settings') === 'saved') {
 }
 
 $values = settings_all(true);
-$activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['group'] : 'general';
+$activeGroup = isset($_GET['group']) && isset($schema[$_GET['group']]) ? $_GET['group'] : (string) array_key_first($schema); // first group this role may see
 ?>
 <?php
 $pageTitle = 'Site Settings | BMI Admin';

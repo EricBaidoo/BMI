@@ -8,10 +8,12 @@ and groups live in the church's management system, which the site links to.
 
 ## Stack
 
-- PHP 8.1+ (no framework) with a few Composer libraries: PHPMailer (email), PHPStan (code checks)
-- MySQL 8
-- Tailwind CSS (compiled), GSAP and Swiper for animation
-- Apache (`.htaccess`) in production; PHP's built-in server for local checks and CI
+- Plain PHP 8.1+ and MySQL 8: a normal website. Nothing to build or install on the server;
+  everything it needs (including the compiled CSS and the PHPMailer email library in `includes/lib/`)
+  is in this repository.
+- Tailwind CSS (compiled into `public/assets/css/styles.css`), GSAP and Swiper for animation
+- Apache (`.htaccess`) in production
+- Developer tools only, never needed on the server: Composer (PHPStan code checks), npm (rebuilding CSS)
 
 ## Folder layout
 
@@ -49,7 +51,7 @@ BMI/
 
 1. Clone into `C:\xampp\htdocs\BMI`, then copy `.env.example` to `.env` and fill it in.
    Set `MAIL_TRANSPORT=log` locally: emails are written to `logs/mail-*.log` instead of being sent.
-2. Install dependencies: `composer install` and `npm install`.
+2. Developer tools (optional, for code checks and rebuilding CSS): `composer install` and `npm install`.
 3. Create the database (empty) in phpMyAdmin, then build it:
    ```
    C:\xampp\php\php.exe database\run_migrations.php
@@ -75,20 +77,55 @@ Create `database/migrations/NNN_short_name.php` (next number) returning `functio
 Write it so it is safe to run twice (check before adding columns). Never edit a migration that has
 already run on the live site; add a new one instead.
 
-## Deploying (Hostinger or any Apache host)
+## Deploying to Hostinger (push to GitHub, Hostinger pulls it)
 
-1. **Back up first:** `php database/backup.php`.
-2. Upload the code (git pull, or upload everything except `node_modules/`, `logs/`, `.env`).
-3. On the server: `composer install --no-dev --optimize-autoloader`.
-4. Make sure the server's `.env` is complete (see `.env.example`): `APP_ENV=production`,
-   `APP_DEBUG=false`, real `APP_SECRET`, database user that is **not** root, `MAIL_*` SMTP settings,
-   `BACKUP_DIR` outside the website, `ALERT_EMAIL`.
-5. Run `php database/run_migrations.php`.
-6. Run `php bin/smoke-test.php https://bmiglobal.org`; every check should pass.
-7. Point the domain's document root at `public/` if the host allows it. If not (Hostinger
-   `public_html`), the root `.htaccess` sends every request into `public/` automatically.
-8. Add a nightly cron job (backup, then delete data past its retention period as the Privacy Policy promises):
-   `php /path/to/BMI/database/backup.php && php /path/to/BMI/database/purge.php`
+This is a normal website: there is nothing to build, install or run on the server. Hostinger copies
+the repository from GitHub into `public_html`, and the root `.htaccess` serves only the `public/`
+folder from there. Everything else (code, settings, database tools) can never be opened in a browser.
+
+### First time
+
+1. **Connect GitHub in Hostinger:** hPanel → Websites → your site → Advanced → **Git**.
+   Repository `https://github.com/EricBaidoo/BMI.git` (for a private repo, add the SSH key Hostinger
+   shows as a deploy key in GitHub → Settings → Deploy keys), branch **main**, folder `public_html`
+   (it must be empty the first time). Press **Create**, then **Deploy**.
+2. **Turn on automatic deployment:** in the same Git screen, enable Auto Deployment and copy the
+   webhook URL. In GitHub → repo Settings → **Webhooks** → Add webhook, paste it, content type
+   `application/json`, "Just the push event". From now on every push to `main` updates the site.
+3. **Create the database:** hPanel → Databases → MySQL → create a database and user. Then copy the
+   content across: on your PC run `php database/backup.php`, and import the `.sql.gz` file it made
+   in Hostinger's **phpMyAdmin** (Import tab). This brings over pages, sermons, settings and admin accounts.
+4. **Create the settings file:** hPanel → File Manager → `public_html` → new file `.env`
+   (next to `README.md`, not inside `public/`). Copy `.env.example` into it and fill in:
+   - `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://bmiglobal.org`
+   - `APP_SECRET`: a long random value (e.g. from a password manager)
+   - `DB_HOST=localhost`, and the database name, user and password from step 3
+   - Email: `MAIL_TRANSPORT=smtp`, `MAIL_HOST=smtp.hostinger.com`, `MAIL_PORT=587`,
+     `MAIL_ENCRYPTION=tls`, and the login of a Hostinger mailbox (e.g. no-reply@bmiglobal.org)
+   - `ALERT_EMAIL`: who should hear about site errors
+   The `.env` file is not in Git, so deployments never overwrite or expose it.
+5. **SSL:** hPanel → Security → SSL: make sure the free certificate is active.
+6. **Finish in the admin:** sign in at `https://bmiglobal.org/admin/login.php` → **Website Updates**.
+   Press "Back up and apply updates" if any are listed, then work through the **Site health** list
+   until everything says OK.
+7. **Check it from your PC (optional):** `php bin/smoke-test.php https://bmiglobal.org`.
+   It only reads pages; every check should pass.
+
+### Every update after that
+
+1. Push to `main` on GitHub. Hostinger deploys it within a minute.
+2. Open Admin → **Website Updates**: confirm the version matches the latest GitHub commit, and press
+   "Back up and apply updates" if any database updates are listed (a backup is taken automatically first).
+
+### Backups and clean-up
+
+- Hostinger takes its own daily backups of files and databases (hPanel → Files → Backups).
+- Admin → Website Updates → **Download a backup** saves a copy of the database to your computer
+  whenever you like; one is also taken automatically before every database update.
+- Old messages are deleted automatically once a day when staff sign in, as the Privacy Policy promises.
+  No cron job is needed.
+- Photos uploaded through the admin live only on the server (`public/assets/image/…`), not in GitHub.
+  Hostinger's backups cover them; deployments never delete them.
 
 ## Serving Ghana and the USA
 
@@ -101,7 +138,7 @@ already run on the live site; add a new one instead.
   (Paystack payment page for Ghana, Stripe Payment Link for the USA), so card data never touches this site.
   The tax-deductible wording appears only when a US 501(c)(3) name and EIN are entered.
 - **Privacy:** the Privacy Policy covers Ghana's Data Protection Act and US state privacy laws.
-  Messages are deleted after `MESSAGE_RETENTION_MONTHS` (default 24) by `database/purge.php`.
+  Messages are deleted after `MESSAGE_RETENTION_MONTHS` (default 24) automatically (daily, when staff sign in).
   For a deletion request, use Admin → Inbox → "Find everything from one person".
 - **Cloudflare (recommended for speed in both countries):**
   1. Add the domain to Cloudflare (free plan is enough to start) and switch the nameservers.
